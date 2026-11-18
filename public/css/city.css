@@ -1,0 +1,922 @@
+/* ============================================================
+   REAL MOMENTS — CITY EDITORIAL DESIGN SYSTEM
+   Exact replication of the 6 user design screenshots:
+   - Dark theme (#1f1f1f / #232323)
+   - Italic serif category tags (*Lifestyle*, *Travel*, *Style*)
+   - Modern clean sans-serif titles (Plus Jakarta Sans)
+   - Diamond bullet excerpts (❖)
+   - Rounded pill buttons ("View Post")
+   - 5 Distinct Section Layouts:
+     1. Full-bleed Hero with side arrows & script logo
+     2. Tiles Style 1: 1 Tall Left + 4 Right (2x2 grid)
+     3. Tiles Style 2: 2 Stacked Left + 1 Tall Center + 2 Stacked Right
+     4. Tiles Style 3: 2 Asymmetric Top (60/40) + 3 Equal Bottom
+     5. Grid Style 4: 3x2 Vertical Cards with Share footers
+     6. Blog Split Stream: 50/50 horizontal cards with video badge & share
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600;1,700&family=Caveat:wght@600;700&display=swap');
+
+/* ── DESIGN TOKENS ────────────────────────────────────────── */
+:root {
+  --bg-dark:         #1f1f1f;   /* Signature Real Moments dark background */
+  --bg-card:         #242424;   /* Elevated card background */
+  --text-white:      #ffffff;   /* Pure white headings */
+  --text-muted:      #a8a8a8;   /* Soft slate secondary */
+  --text-dim:        #787878;   /* Dim metadata */
+  --border-dark:     rgba(255, 255, 255, 0.08); /* Hairline dark divider */
+  --border-light:    rgba(255, 255, 255, 0.15);
+
+  --font-sans:       'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-italic-cat: 'Cormorant Garamond', Georgia, serif;
+  --font-script:     'Caveat', cursive, serif;
+
+  --container-width: 1200px;
+  --container-wide:  1400px;
+  --container-blog:  1040px;
+}
+
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background-color: var(--bg-dark);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-white);
+  background-color: var(--bg-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Universal rule: ensure all media images in city pages have object-fit: cover */
+img,
+.tile-card-img,
+.rm-grid-card-img,
+.rm-blog-media img,
+[class*="-media"] img,
+[class*="-img"] img,
+[class*="__media"] img,
+[class*="__img"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ── CONTAINERS ───────────────────────────────────────────── */
+.rm-container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.rm-container-wide {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.rm-container-blog {
+  width: 100%;
+  max-width: var(--container-blog);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* ── REUSABLE UI ELEMENTS ─────────────────────────────────── */
+/* Category Tag (Italic Serif) */
+.cat-italic {
+  font-family: var(--font-italic-cat);
+  font-style: italic;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-white);
+  margin-bottom: 8px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+/* Pill Button ("View Post") */
+.btn-pill {
+  display: inline-block;
+  background-color: #333333;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 8px 22px;
+  border-radius: 50px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  border: none;
+  margin-top: 14px;
+}
+
+.btn-pill:hover {
+  background-color: #444444;
+  transform: translateY(-1px);
+}
+
+/* Share Links (Share →  Facebook  X  Pinterest) */
+.post-share-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 18px;
+}
+
+.post-share-inline .share-txt {
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.post-share-inline a {
+  color: var(--text-muted);
+  transition: color 0.2s;
+  font-size: 0.85rem;
+}
+
+.post-share-inline a:hover {
+  color: #ffffff;
+}
+
+/* Section Header Bar */
+.section-head {
+  text-align: center;
+  padding: 70px 0 35px;
+}
+
+.section-head-title {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   1. HERO SECTION (Image 6)
+   Clean, full-bleed hero with script logo, arrows, and pill
+   ════════════════════════════════════════════════════════════ */
+.rm-hero-wrap {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: none;
+  background-color: #0d0d0d;
+  overflow: hidden;
+}
+
+/* Top Floating Header */
+.rm-header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 24px 30px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+}
+
+.rm-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.rm-menu-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 6px;
+  transition: opacity 0.2s;
+}
+
+.rm-menu-btn:hover {
+  opacity: 0.7;
+}
+
+/* Center Logo: clean sans + cursive script (real Moments style) */
+.rm-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.rm-logo-text {
+  font-family: var(--font-sans);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.rm-logo-script {
+  font-family: var(--font-script);
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-left: 2px;
+}
+
+.rm-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 1rem;
+}
+
+.rm-header-right a, .rm-header-right button {
+  color: #ffffff;
+  transition: opacity 0.2s;
+}
+
+.rm-header-right a:hover, .rm-header-right button:hover {
+  opacity: 0.7;
+}
+
+/* Submenu Bar under Logo */
+.rm-subnav {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  z-index: 95;
+  display: flex;
+  justify-content: center;
+}
+
+.rm-subnav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 26px;
+  background: transparent;
+}
+
+.rm-subnav-list li a {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.2s;
+}
+
+.rm-subnav-list li a:hover {
+  color: #ffffff;
+}
+
+/* Hero Background Slide */
+.rm-hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.rm-hero-slide.active {
+  opacity: 1;
+}
+
+.rm-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.2) 40%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+}
+
+/* Hero Content (Bottom Left) */
+.rm-hero-content {
+  position: absolute;
+  bottom: 60px;
+  left: 50px;
+  max-width: 680px;
+  z-index: 10;
+}
+
+.rm-hero-title {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.18;
+  color: #ffffff;
+  margin: 6px 0 16px;
+  letter-spacing: -0.5px;
+}
+
+/* Nav Arrows (Dark semi-transparent side bars) */
+.rm-hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 20;
+  transition: background-color 0.2s ease;
+}
+
+.rm-hero-arrow:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.rm-hero-arrow.prev { left: 0; }
+.rm-hero-arrow.next { right: 0; }
+
+/* Slide Indicator Dots (Bottom Right) */
+.rm-hero-dots {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.rm-hero-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.rm-hero-dot.active {
+  background: #ffffff;
+  transform: scale(1.3);
+}
+
+/* ════════════════════════════════════════════════════════════
+   2. SECTION 1 — TILES STYLE 1 (Image 2)
+   1 Tall Left + 4 Right in a 2x2 Grid
+   ════════════════════════════════════════════════════════════ */
+.rm-tiles-1 {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: 250px 250px;
+  gap: 16px;
+}
+
+.tile-card {
+  position: relative;
+  overflow: hidden;
+  background-color: #111;
+  cursor: pointer;
+}
+
+.tile-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.tile-card:hover .tile-card-img {
+  transform: scale(1.05);
+}
+
+.tile-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.tile-card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+}
+
+.rm-tiles-1 .tile-tall {
+  grid-row: span 2;
+}
+
+.rm-tiles-1 .tile-tall .tile-card-body {
+  padding: 34px;
+}
+
+.tile-tall .tile-title {
+  font-size: 1.85rem;
+  line-height: 1.22;
+}
+
+.tile-title {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.28;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   3. SECTION 2 — TILES STYLE 2 (Image 3)
+   2 Stacked Left + 1 Tall Middle + 2 Stacked Right
+   ════════════════════════════════════════════════════════════ */
+.rm-tiles-2 {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;
+  grid-template-rows: 240px 240px;
+  gap: 16px;
+}
+
+.rm-tiles-2 .tile-tall {
+  grid-row: span 2;
+}
+
+.rm-tiles-2 .tile-tall .tile-card-body {
+  padding: 34px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   4. SECTION 3 — TILES STYLE 3 (Image 5)
+   2 Asymmetric Top (60/40) + 3 Equal Bottom
+   ════════════════════════════════════════════════════════════ */
+.rm-tiles-3-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.rm-tiles-3-top .tile-card {
+  height: 340px;
+}
+
+.rm-tiles-3-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.rm-tiles-3-bottom .tile-card {
+  height: 260px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   5. SECTION 4 — GRID STYLE (Image 4)
+   3 Columns x 2 Rows with Inline Share Footer
+   ════════════════════════════════════════════════════════════ */
+.rm-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.rm-grid-card {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+  background-color: #111;
+  cursor: pointer;
+}
+
+.rm-grid-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.rm-grid-card:hover .rm-grid-card-img {
+  transform: scale(1.05);
+}
+
+.rm-grid-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+.rm-grid-card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+}
+
+.rm-grid-card-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   6. SECTION 5 — SIGNATURE BLOG STREAM (Image 1)
+   Two separate boxes (Image Box & Context Box), reduced height (~40%),
+   seamless background matching page
+   ════════════════════════════════════════════════════════════ */
+.rm-blog-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-bottom: 70px;
+}
+
+.rm-blog-card {
+  display: flex;
+  align-items: stretch;
+  gap: 36px;
+  background: transparent;
+  min-height: auto;
+}
+
+/* Box 1: Image Box (Left ~46%, Height ~250px - increased by 20%) */
+.rm-blog-media {
+  flex: 0 0 46%;
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  background-color: #111111;
+}
+
+.rm-blog-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.rm-blog-card:hover .rm-blog-media img {
+  transform: scale(1.04);
+}
+
+/* Video badge top-left */
+.rm-media-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  z-index: 2;
+}
+
+/* Box 2: Context / Text Box (Right, Seamless background) */
+.rm-blog-content {
+  flex: 1;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rm-blog-content .cat-italic {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.rm-blog-title {
+  font-family: var(--font-sans);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  margin: 4px 0 10px;
+  letter-spacing: -0.3px;
+}
+
+.rm-blog-title a:hover {
+  color: var(--text-muted);
+}
+
+/* Excerpt with Diamond Bullet ❖ */
+.rm-blog-excerpt {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rm-blog-excerpt .bullet {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   7. FOOTER & MODALS
+   ════════════════════════════════════════════════════════════ */
+.rm-footer {
+  border-top: 1px solid var(--border-dark);
+  padding: 60px 0 40px;
+  text-align: center;
+  background-color: #171717;
+}
+
+.rm-footer-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.rm-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.rm-footer-nav a {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.rm-footer-nav a:hover {
+  color: #ffffff;
+}
+
+.rm-footer-copy {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* Offcanvas Drawer */
+.rm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.rm-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rm-offcanvas {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 340px;
+  background: #181818;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.rm-offcanvas.open {
+  transform: translateX(0);
+}
+
+.rm-offcanvas-close {
+  align-self: flex-end;
+  font-size: 1.6rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.rm-offcanvas-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 20px 0 10px;
+}
+
+.rm-offcanvas-menu {
+  list-style: none;
+  margin-bottom: 25px;
+}
+
+.rm-offcanvas-menu li a {
+  display: block;
+  padding: 10px 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  border-bottom: 1px solid var(--border-dark);
+}
+
+.rm-city-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.rm-city-link {
+  display: block;
+  padding: 8px 10px;
+  background: #222;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-white);
+  border-radius: 4px;
+}
+
+.rm-city-link:hover, .rm-city-link.active {
+  background: #444;
+}
+
+/* Search Modal */
+.rm-search-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 18, 18, 0.96);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.rm-search-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rm-search-wrap {
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+}
+
+.rm-search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #ffffff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 10px 0;
+  outline: none;
+}
+
+.rm-search-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  font-size: 2rem;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* ════════════════════════════════════════════════════════════
+   8. RESPONSIVE BREAKPOINTS
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .rm-tiles-1 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .rm-tiles-1 .tile-tall {
+    grid-column: span 2;
+    height: 350px;
+  }
+  .rm-tiles-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rm-tiles-2 .tile-tall {
+    grid-column: span 2;
+    height: 350px;
+  }
+  .rm-subnav-list {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rm-subnav {
+    display: none;
+  }
+  .rm-hero-content {
+    left: 24px;
+    right: 24px;
+    bottom: 30px;
+  }
+  .rm-hero-title {
+    font-size: 1.8rem;
+  }
+  .rm-tiles-1, .rm-tiles-2, .rm-tiles-3-top, .rm-tiles-3-bottom, .rm-grid-cards {
+    grid-template-columns: 1fr;
+  }
+  .rm-tiles-1 .tile-tall, .rm-tiles-2 .tile-tall {
+    grid-column: span 1;
+    height: 300px;
+  }
+  .rm-blog-card {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .rm-blog-media {
+    flex: 0 0 auto;
+    height: 190px;
+    width: 100%;
+  }
+  .rm-blog-content {
+    padding: 0;
+  }
+  .rm-blog-title {
+    font-size: 1.25rem;
+  }
+}

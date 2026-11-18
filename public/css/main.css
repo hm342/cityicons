@@ -1,0 +1,1402 @@
+/* ============================================================
+   CITYICON — MAIN HOMEPAGE DESIGN
+   Exact user layout specification with Vogue India aesthetic:
+   1. Header: Left Menu, Center "CITYICON", Right Subscribe & Search
+   2. Submenu: City-wise navigation bar
+   3. Big Banner: Large dominant news story with details
+   4. City News Carousel Strip: Horizontal scrolling news across cities
+   5. City Section 1 (Bhavnagar): Full-height big news (left) + Scrollable 6-8 news list (right)
+   6. City Section 2 (Mumbai): Same split layout with scrollable list
+   7. City Section 3 (Ahmedabad): Full-width cinematic image banner + Carousel below
+   8. City Section 4 (Jaipur & Delhi): 4-Column Vogue grid
+   9. Footer: Vogue style with all cities directory
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,800;0,6..96,900;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ── DESIGN TOKENS ────────────────────────────────────────── */
+:root {
+  --vogue-white:       #ffffff;
+  --vogue-black:       #000000;
+  --vogue-text:        #121212;
+  --vogue-muted:       #757575;
+  --vogue-border:      #e2e2e2;
+  --vogue-red:         #B51622;
+  --vogue-bg-light:    #f8f8f8;
+
+  --font-didot:        'Bodoni Moda', 'Didot', 'Playfair Display', Georgia, serif;
+  --font-garamond:     'Cormorant Garamond', Georgia, serif;
+  --font-sans:         'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --container:         1320px;
+  --container-wide:    1320px;
+  --container-pad:     28px;
+  --section-gap:       72px;
+}
+
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background-color: var(--vogue-white);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--vogue-black);
+  background-color: var(--vogue-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Universal rule: ensure all media images strictly fill container with object-fit: cover */
+img,
+picture img,
+.hero-big-banner__img-wrap img,
+.city-news-mini-card__img img,
+.vogue-sticky-lead__card img,
+.vogue-sticky-lead__img,
+.vogue-sub-card__media img,
+.city-cinema-banner img,
+.city-cinema-card__media img,
+.vogue-4col-card__media img,
+.city-4col-card__media img,
+[class*="-media"] img,
+[class*="-img"] img,
+[class*="__media"] img,
+[class*="__img"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ── CONTAINERS ───────────────────────────────────────────── */
+.vogue-container,
+.vogue-container-wide {
+  width: 100%;
+  max-width: var(--container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+/* ── SHARED TYPOGRAPHY & RUBRICS ──────────────────────────── */
+.vogue-rubric {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.vogue-rubric--red {
+  color: var(--vogue-red);
+}
+
+.vogue-byline {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--vogue-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.vogue-byline .dot::before {
+  content: '·';
+  font-weight: bold;
+}
+
+/* Section Header (e.g. BHAVNAGAR, MUMBAI) */
+.section-hed-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--vogue-black);
+  padding-bottom: 10px;
+  margin: 0 0 24px;
+}
+
+.section-hed-title {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+}
+
+.section-hed-link {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease;
+}
+
+.section-hed-link:hover {
+  transform: translateX(4px);
+}
+
+/* ════════════════════════════════════════════════════════════
+   1. HEADER
+   Left: Menu | Center: CITYICON | Right: Subscribe & Search
+   ════════════════════════════════════════════════════════════ */
+.site-master-header {
+  background-color: var(--vogue-white);
+  border-bottom: 1px solid var(--vogue-border);
+  position: relative;
+  z-index: 900;
+}
+
+.header-main-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 18px 0;
+}
+
+/* Left: Menu */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+}
+
+.menu-toggle-btn .burger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.menu-toggle-btn .burger-icon span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--vogue-black);
+}
+
+/* Center: Logo (Only CITYICON) */
+.header-center {
+  text-align: center;
+}
+
+.cityicon-main-logo {
+  font-family: var(--font-didot);
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  line-height: 0.95;
+  display: block;
+}
+
+/* Right: Subscribe & Search */
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.btn-header-subscribe {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  border: 1px solid var(--vogue-black);
+  padding: 8px 18px;
+  transition: all 0.2s ease;
+}
+
+.btn-header-subscribe:hover {
+  background-color: var(--vogue-black);
+  color: var(--vogue-white);
+}
+
+.btn-header-search {
+  font-size: 1.1rem;
+  color: var(--vogue-black);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+}
+
+/* ════════════════════════════════════════════════════════════
+   2. CITY-WISE MENU BAR (Sticky Subnavigation)
+   ════════════════════════════════════════════════════════════ */
+.city-navbar {
+  background-color: var(--vogue-white);
+  border-bottom: 1px solid var(--vogue-border);
+  position: sticky;
+  top: 0;
+  z-index: 850;
+}
+
+.city-navbar__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.city-navbar__list::-webkit-scrollbar {
+  display: none;
+}
+
+.city-navbar__item a {
+  display: block;
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  white-space: nowrap;
+  position: relative;
+}
+
+.city-navbar__item a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background-color: var(--vogue-black);
+  transition: all 0.2s ease;
+}
+
+.city-navbar__item:hover a::after,
+.city-navbar__item.active a::after {
+  left: 16px;
+  right: 16px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   3. BIG BANNER HERO (Dominant News Story with Details)
+   ════════════════════════════════════════════════════════════ */
+.hero-section-wrap {
+  margin-top: 36px;
+  margin-bottom: var(--section-gap);
+}
+
+.hero-big-banner {
+  padding-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+/* Cover image in unified container — 1.5x height */
+.hero-big-banner__img-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(840px, 92vh, 1150px);
+  overflow: hidden;
+  background-color: var(--vogue-black);
+  cursor: pointer;
+}
+
+.hero-big-banner__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-big-banner:hover .hero-big-banner__img-wrap img {
+  transform: scale(1.025);
+}
+
+/* Elegant top gradient to guarantee brand name visibility */
+.hero-big-banner__top-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.18) 60%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Right side top CITYICONS name inside the image */
+.hero-big-banner__brand-stamp {
+  position: absolute;
+  top: clamp(24px, 3.5vw, 36px);
+  right: clamp(24px, 4vw, 44px);
+  z-index: 5;
+  font-family: var(--font-didot);
+  font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 9px;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  line-height: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Bottom gradient overlay to make description inside image crisp and readable */
+.hero-big-banner__bottom-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0.65) 70%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Main description container INSIDE the image at the bottom */
+.hero-big-banner__content-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  padding: 0 clamp(24px, 4vw, 48px) clamp(24px, 3.5vh, 40px);
+}
+
+.hero-big-banner__content-box {
+  max-width: 960px;
+}
+
+.hero-big-banner__content-box .hero-big-banner__hed {
+  font-family: var(--font-didot);
+  font-size: clamp(2.3rem, 4.4vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.12;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-wrap: balance;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+
+/* Other things OUT of the image (underneath the image) */
+.hero-big-banner__details {
+  padding-top: 22px;
+  cursor: pointer;
+  max-width: 960px;
+}
+
+.hero-big-banner__details .vogue-rubric {
+  margin-bottom: 8px;
+}
+
+.hero-big-banner__details .hero-big-banner__dek {
+  font-family: var(--font-garamond);
+  font-size: clamp(1.2rem, 1.45vw, 1.4rem);
+  line-height: 1.55;
+  color: #2b2b2b;
+  margin: 0 0 12px;
+  transition: color 0.2s ease;
+}
+
+.hero-big-banner:hover .hero-big-banner__details .hero-big-banner__dek {
+  color: var(--vogue-black);
+}
+
+.hero-big-banner__details .vogue-byline {
+  color: var(--vogue-muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   4. CITY NEWS CAROUSEL / TICKER BAR
+   Horizontal track where city news items scroll continuously
+   ════════════════════════════════════════════════════════════ */
+.city-news-strip-section {
+  background-color: var(--vogue-bg-light);
+  border-top: 1px solid var(--vogue-border);
+  border-bottom: 1px solid var(--vogue-border);
+  padding: 32px 0;
+  margin-bottom: var(--section-gap);
+}
+
+.news-strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.news-strip-title {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+}
+
+.news-strip-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.strip-control-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--vogue-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--vogue-white);
+}
+
+.strip-control-btn:hover {
+  background-color: var(--vogue-black);
+  color: var(--vogue-white);
+}
+
+.city-news-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.city-news-track::-webkit-scrollbar {
+  display: none;
+}
+
+.city-news-mini-card {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vogue-white);
+  border: 1px solid var(--vogue-border);
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.city-news-mini-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.city-news-mini-card__img {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  background-color: var(--vogue-bg-light);
+}
+
+.city-news-mini-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.city-news-mini-card:hover .city-news-mini-card__img img {
+  transform: scale(1.05);
+}
+
+.city-news-mini-card__city {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-red);
+  margin-bottom: 4px;
+}
+
+.city-news-mini-card__hed {
+  font-family: var(--font-didot);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--vogue-black);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════════════════════════
+   5. VOGUE STICKY SPLIT LAYOUT (BHAVNAGAR & MUMBAI)
+   Left: Fixed / Sticky Lead Story with Full-bleed Image & Dark Overlay
+   Right: Natural Page-Scroll 2-Column Grid of EXACTLY 6 Stories
+   ════════════════════════════════════════════════════════════ */
+.city-edition-section {
+  margin-bottom: var(--section-gap);
+}
+
+.vogue-sticky-section {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 36px;
+  align-items: stretch;
+  margin-bottom: 0;
+  position: relative;
+}
+
+/* Left Column: Stretches with the right 6-story grid to provide scroll distance */
+.vogue-sticky-col {
+  position: relative;
+  height: 100%;
+}
+
+/* Sticky Lead Card: Stays fixed/pinned as user scrolls down the page */
+.vogue-sticky-lead {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 100px);
+  max-height: 680px;
+  min-height: 520px;
+  width: 100%;
+  z-index: 10;
+}
+
+.vogue-sticky-lead__card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--vogue-black);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.vogue-sticky-lead__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vogue-sticky-lead__card:hover .vogue-sticky-lead__img {
+  transform: scale(1.03);
+}
+
+/* Editorial Dark Gradient overlay at bottom for crisp white typography */
+.vogue-sticky-lead__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.18) 35%,
+    rgba(0, 0, 0, 0.78) 75%,
+    rgba(0, 0, 0, 0.94) 100%
+  );
+  pointer-events: none;
+}
+
+.vogue-sticky-lead__content {
+  position: relative;
+  z-index: 2;
+  padding: 36px 32px;
+  text-align: center;
+  color: var(--vogue-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vogue-sticky-lead__rubric {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 14px;
+}
+
+.vogue-sticky-lead__hed {
+  font-family: var(--font-sans);
+  font-size: clamp(1.35rem, 1.85vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-wrap: balance;
+  transition: opacity 0.2s ease;
+}
+
+.vogue-sticky-lead__card:hover .vogue-sticky-lead__hed {
+  opacity: 0.9;
+}
+
+.vogue-sticky-lead__byline {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── RIGHT COLUMN: 2-COLUMN GRID OF EXACTLY 6 STORIES ──────── */
+.vogue-scroll-right-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px 22px;
+  align-content: start;
+}
+
+.vogue-sub-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background: var(--vogue-white);
+  transition: opacity 0.2s ease;
+}
+
+.vogue-sub-card:hover {
+  opacity: 0.85;
+}
+
+.vogue-sub-card__media {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background-color: var(--vogue-bg-light);
+  margin-bottom: 14px;
+}
+
+.vogue-sub-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vogue-sub-card:hover .vogue-sub-card__media img {
+  transform: scale(1.035);
+}
+
+.vogue-sub-card__rubric {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.vogue-sub-card__hed {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--vogue-black);
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vogue-sub-card__byline {
+  margin-top: auto;
+  font-family: var(--font-sans);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vogue-sub-card__byline span:first-child {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+}
+
+.vogue-sub-card__date {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--vogue-muted);
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .vogue-sticky-section {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .vogue-sticky-lead {
+    position: relative;
+    top: 0;
+    height: 440px;
+  }
+}
+
+@media (max-width: 580px) {
+  .vogue-scroll-right-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .vogue-sticky-lead {
+    height: 380px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   6. CITY SECTION LAYOUT 2 (e.g. AHMEDABAD)
+   Full-Screen / Cinematic Image Banner + Carousel of other news below
+   ════════════════════════════════════════════════════════════ */
+.city-cinema-section {
+  margin-bottom: var(--section-gap);
+}
+
+/* Big Cinematic Banner */
+.city-cinema-banner {
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 65vh, 650px);
+  overflow: hidden;
+  background-color: var(--vogue-black);
+  cursor: pointer;
+  margin-bottom: 28px;
+}
+
+.city-cinema-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.city-cinema-banner:hover img {
+  transform: scale(1.03);
+}
+
+.city-cinema-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+}
+
+.city-cinema-content {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  right: 40px;
+  max-width: 820px;
+  color: var(--vogue-white);
+  z-index: 2;
+}
+
+.city-cinema-content .vogue-rubric {
+  color: var(--vogue-white);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  padding-bottom: 2px;
+}
+
+.city-cinema-hed {
+  font-family: var(--font-didot);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--vogue-white);
+  margin: 8px 0 12px;
+}
+
+.city-cinema-dek {
+  font-family: var(--font-garamond);
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+/* Horizontal Carousel Below */
+.city-cinema-carousel-wrap {
+  position: relative;
+}
+
+.city-cinema-carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.city-cinema-carousel-track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+}
+
+.city-cinema-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.city-cinema-card {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.city-cinema-card__media {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: var(--vogue-bg-light);
+  margin-bottom: 12px;
+}
+
+.city-cinema-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.city-cinema-card:hover .city-cinema-card__media img {
+  transform: scale(1.05);
+}
+
+.city-cinema-card__hed {
+  font-family: var(--font-didot);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--vogue-black);
+  margin-bottom: 6px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   7. CITY SECTION LAYOUT 3 (e.g. JAIPUR & DELHI)
+/* ════════════════════════════════════════════════════════════
+   8. LAST SECTION: VOGUE 4-COLUMN COLLECTION GRID (WEDDINGS)
+   Matches exact user screenshot: 1:1 square media, bold sans titles,
+   stacked author + date, and album icon badge on card 2.
+   ════════════════════════════════════════════════════════════ */
+.vogue-weddings-section {
+  margin-bottom: var(--section-gap);
+}
+
+.vogue-4col-grid,
+.city-4col-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 0;
+}
+
+.vogue-4col-card,
+.city-4col-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background: var(--vogue-white);
+  transition: opacity 0.2s ease;
+}
+
+.vogue-4col-card:hover,
+.city-4col-card:hover {
+  opacity: 0.85;
+}
+
+.vogue-4col-card__media,
+.city-4col-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  overflow: hidden;
+  background-color: var(--vogue-bg-light);
+  margin-bottom: 14px;
+}
+
+.vogue-4col-card__media img,
+.city-4col-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vogue-4col-card:hover .vogue-4col-card__media img,
+.city-4col-card:hover .city-4col-card__media img {
+  transform: scale(1.035);
+}
+
+/* Gallery / Album icon badge in bottom-left corner */
+.vogue-card-badge-gallery {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 26px;
+  height: 26px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease;
+}
+
+.vogue-4col-card:hover .vogue-card-badge-gallery {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.vogue-4col-card__rubric {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.vogue-4col-card__hed,
+.city-4col-card__hed {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: -0.2px;
+  color: var(--vogue-black);
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vogue-4col-card__byline {
+  margin-top: auto;
+  font-family: var(--font-sans);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vogue-4col-card__author {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+}
+
+.vogue-4col-card__date {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: var(--vogue-muted);
+  text-transform: none;
+}
+
+/* ════════════════════════════════════════════════════════════
+   8. VOGUE INDIA FOOTER
+   Exact Condé Nast / Vogue India hierarchy
+   ════════════════════════════════════════════════════════════ */
+.vogue-footer {
+  background-color: var(--vogue-black);
+  color: var(--vogue-white);
+  padding: 70px 0 50px;
+  margin-top: 0;
+}
+
+.vogue-footer__logo-wrap {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.vogue-footer-logo {
+  font-family: var(--font-didot);
+  font-size: 4rem;
+  font-weight: 400;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--vogue-white);
+  line-height: 1;
+}
+
+.vogue-footer__social {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  font-size: 1.1rem;
+  margin-bottom: 35px;
+}
+
+.vogue-footer__social a {
+  color: var(--vogue-white);
+  transition: opacity 0.2s;
+}
+
+.vogue-footer__cities-title {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 14px;
+}
+
+.vogue-footer__cities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-bottom: 40px;
+}
+
+.vogue-footer__cities a {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.2s;
+}
+
+.vogue-footer__cities a:hover {
+  color: var(--vogue-white);
+}
+
+.vogue-footer__legal {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 25px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+}
+
+/* ════════════════════════════════════════════════════════════
+   9. OFFCANVAS DRAWER & SEARCH MODAL
+   ════════════════════════════════════════════════════════════ */
+.vogue-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.vogue-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vogue-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 380px;
+  max-width: 85vw;
+  background-color: var(--vogue-white);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  padding: 35px 30px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.vogue-drawer.open {
+  transform: translateX(0);
+}
+
+.vogue-drawer__close {
+  align-self: flex-end;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--vogue-black);
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.vogue-drawer__title {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--vogue-muted);
+  margin: 20px 0 10px;
+}
+
+.vogue-drawer__menu {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.vogue-drawer__menu li a {
+  display: block;
+  padding: 12px 0;
+  font-family: var(--font-didot);
+  font-size: 1.45rem;
+  color: var(--vogue-black);
+  border-bottom: 1px solid var(--vogue-border);
+}
+
+.vogue-drawer__city-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.vogue-drawer__city-chip {
+  display: block;
+  padding: 10px 8px;
+  border: 1px solid var(--vogue-border);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.vogue-drawer__city-chip:hover {
+  background-color: var(--vogue-black);
+  color: var(--vogue-white);
+  border-color: var(--vogue-black);
+}
+
+/* Search Modal */
+.vogue-search-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.98);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.vogue-search-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vogue-search-wrap {
+  width: 90%;
+  max-width: 650px;
+  position: relative;
+}
+
+.vogue-search-close {
+  position: absolute;
+  top: -60px;
+  right: 0;
+  font-size: 2.2rem;
+  color: var(--vogue-black);
+  cursor: pointer;
+}
+
+.vogue-search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--vogue-black);
+  font-family: var(--font-didot);
+  font-size: 2.2rem;
+  color: var(--vogue-black);
+  padding: 12px 0;
+  outline: none;
+}
+
+/* ════════════════════════════════════════════════════════════
+   10. RESPONSIVE BREAKPOINTS
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .vogue-sticky-section {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .vogue-sticky-lead {
+    position: relative;
+    top: 0;
+    height: 460px;
+  }
+  .vogue-4col-grid,
+  .city-4col-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero-big-banner__img-wrap {
+    height: clamp(800px, 88vh, 980px);
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-toggle-btn span:last-child {
+    display: none;
+  }
+  .btn-header-subscribe {
+    padding: 6px 10px;
+    font-size: 0.6rem;
+  }
+  .cityicon-main-logo {
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+  }
+  .hero-big-banner__img-wrap {
+    height: clamp(660px, 82vh, 820px);
+  }
+  .hero-big-banner__brand-stamp {
+    top: 20px;
+    right: 20px;
+    font-size: 1.35rem;
+    letter-spacing: 5px;
+  }
+  .hero-big-banner__content-overlay {
+    padding-bottom: 20px;
+  }
+  .hero-big-banner__content-box .hero-big-banner__hed {
+    font-size: 1.85rem;
+    margin-bottom: 0;
+  }
+  .hero-big-banner__details {
+    padding-top: 16px;
+  }
+  .hero-big-banner__details .hero-big-banner__dek {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .vogue-sticky-lead {
+    height: 380px;
+  }
+  .city-cinema-banner {
+    height: 320px;
+  }
+  .city-cinema-content {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+  .city-cinema-hed {
+    font-size: 1.65rem;
+  }
+  .vogue-4col-grid,
+  .city-4col-grid {
+    grid-template-columns: 1fr;
+  }
+}

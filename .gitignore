@@ -1,0 +1,65 @@
+# Laravel Environment & Secrets
+.env
+.env.backup
+.env.production
+.env.*.local
+auth.json
+
+# Composer & NPM dependencies
+/vendor
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Vite & Assets
+/public/build
+/public/hot
+/public/storage
+/public/fonts-manifest.dev.json
+
+# Storage & Framework Cache
+*.log
+/storage/logs/*
+!/storage/logs/.gitignore
+
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+
+/storage/app/*
+!/storage/app/.gitignore
+!/storage/app/public
+/storage/app/public/*
+!/storage/app/public/.gitignore
+
+/storage/*.key
+/storage/pail
+
+# IDEs & OS Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+/.idea
+/.vscode
+/.fleet
+/.cursor
+/.zed
+/.nova
+/.codex
+
+# Testing & Helpers
+.phpunit.result.cache
+/.phpunit.cache
+_ide_helper.php
+_ide_helper_models.php
+.phpactor.json
+Homestead.json
+Homestead.yaml

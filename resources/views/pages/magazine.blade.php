@@ -1,98 +1,86 @@
 @php
-  $cName = isset($city) ? $city->name : 'Bhavnagar';
-  $cSlug = isset($city) ? $city->slug : 'bhavnagar';
+  $cName = isset($city) ? (is_object($city) ? $city->name : ucfirst($city)) : 'Bhavnagar';
+  $cSlug = isset($city) ? (is_object($city) ? $city->slug : strtolower($city)) : 'bhavnagar';
   $isFlagship = ($cSlug === 'bhavnagar');
 @endphp
 
-<x-layouts.app :title="$cName . ' Icons Magazine — Stories designed to outlast the feed'" :city="$city ?? null">
+<x-layouts.app :title="$cName . ' Icons Magazine — Stories designed to outlast the feed · CITYICONS'" :city="$city ?? null" :darkTheme="true" :transparentHeader="true">
 
-  <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
-    <div class="vogue-container">
+  <!-- Real Moments Subpage Navigation Header -->
+  <x-city-header :city="$city" active="magazine" />
+
+  <main style="padding: 40px 0 80px;">
+    <div class="rm-container">
       
-      <!-- Section Header -->
-      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
-          <span class="vogue-rubric vogue-rubric--red">
-            {{ strtoupper($cName) }} · CURATED PRINT &amp; DIGITAL EDITION
-          </span>
-          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-            &larr; Back to {{ $cName }} Subsite
-          </a>
-        </div>
-        <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          {{ $cName }} Icons Magazine
-        </h1>
-        <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
-          Stories designed to outlast the feed.
-        </p>
-        <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          {{ $cName }} Icons Magazine presents selected profiles, verified journeys and defining stories from the city in a curated editorial format. Each edition contributes to a growing archive of {{ $cName }} and its people.
+      <!-- Page Header -->
+      <div class="rm-page-header">
+        <span class="section-head-title">{{ strtoupper($cName) }} · CURATED PRINT &amp; DIGITAL EDITION</span>
+        <h1 class="rm-page-header-title">{{ $cName }} Icons Magazine</h1>
+        <p class="rm-page-header-sub">Stories designed to last beyond the feed.</p>
+        <p class="rm-page-header-desc">
+          {{ $cName }} Icons Magazine presents selected profiles, verified journeys and defining stories from the city in a curated editorial format. Each edition contributes to a permanent archive of {{ $cName }} and its people.
         </p>
       </div>
 
-      <!-- Current Magazine Showcase Banner (From Database) -->
+      <!-- Current Magazine Showcase Banner -->
       @if($currentIssue)
-        <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:48px; background:var(--vogue-bg-light); border:1px solid var(--vogue-border); padding:clamp(28px, 4vw, 56px); margin-bottom:48px; align-items:center;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:48px; background:#242424; border:1px solid rgba(255,255,255,0.08); padding:clamp(32px, 5vw, 56px); border-radius:4px; margin-bottom:60px; align-items:center;">
           <div>
-            <span class="vogue-rubric vogue-rubric--red" style="margin-bottom:12px;">
-              CURRENT ISSUE · ISSUE #{{ str_pad($currentIssue->issue_number, 2, '0', STR_PAD_LEFT) }}
+            <span class="cat-italic" style="color:var(--vogue-red); font-size:1.15rem; margin-bottom:12px;">
+              Current Edition · Issue #{{ str_pad($currentIssue->issue_number, 2, '0', STR_PAD_LEFT) }}
             </span>
-            <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.2vw, 2.8rem); font-weight:400; line-height:1.15; margin-bottom:16px;">
+            <h2 style="font-family:var(--font-sans); font-size:clamp(2rem, 3.2vw, 2.8rem); font-weight:700; line-height:1.2; margin:10px 0 16px; color:#ffffff;">
               {{ $currentIssue->title }}
             </h2>
-            <p style="font-family:var(--font-garamond); font-size:1.2rem; line-height:1.65; color:#333; margin-bottom:24px;">
+            <p style="font-family:var(--font-sans); font-size:1.05rem; line-height:1.65; color:var(--text-muted); margin-bottom:24px;">
               {{ $currentIssue->description }}
             </p>
 
             <div style="display:flex; gap:14px; flex-wrap:wrap;">
-              <a href="{{ url('/' . $cSlug . '/stories') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
+              <a href="{{ url('/' . $cSlug . '/stories') }}" class="btn-pill" style="background:var(--vogue-red); padding:12px 28px; margin-top:0;">
                 Explore {{ $cName }} Stories
               </a>
-              <a href="{{ url('/' . $cSlug . '/nominate') }}" style="display:inline-block; border:1px solid var(--vogue-black); color:var(--vogue-black); font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
+              <a href="{{ url('/' . $cSlug . '/nominate') }}" class="btn-pill" style="background:#333333; padding:12px 28px; margin-top:0;">
                 Nominate for Next Issue
               </a>
             </div>
           </div>
 
-          <div>
-            <div style="position:relative; aspect-ratio:3/4; overflow:hidden; box-shadow:0 16px 36px rgba(0,0,0,0.18); background:#000; border-radius:4px;">
+          <div style="text-align:center;">
+            <div style="position:relative; aspect-ratio:3/4; max-width:340px; margin:0 auto; overflow:hidden; box-shadow:0 18px 40px rgba(0,0,0,0.6); background:#000; border-radius:4px;">
               <img src="{{ $currentIssue->cover_image ?: 'https://images.unsplash.com/photo-1706285654021-4b2f69f0e773?w=1000&q=85' }}" alt="{{ $currentIssue->title }}" style="width:100%; height:100%; object-fit:cover;">
-              <div style="position:absolute; top:24px; right:24px; font-family:var(--font-didot); font-size:1.6rem; font-weight:700; letter-spacing:6px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.5);">CITYICONS</div>
-              <div style="position:absolute; bottom:24px; left:24px; right:24px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.7);">
-                <span style="font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; background:var(--vogue-red); padding:3px 10px;">ISSUE {{ $currentIssue->issue_number }}</span>
-                <div style="font-family:var(--font-didot); font-size:1.4rem; margin-top:8px;">{{ $currentIssue->published_date ? $currentIssue->published_date->format('F Y') : 'Flagship Edition' }}</div>
-              </div>
+              <div style="position:absolute; top:20px; right:20px; font-family:var(--font-sans); font-size:1.3rem; font-weight:800; letter-spacing:4px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.6);">CITYICONS</div>
             </div>
           </div>
         </div>
       @endif
 
-      <!-- Previous Issues Archive Grid -->
-      @if($previousIssues && $previousIssues->count() > 0)
-        <div style="margin-bottom:48px;">
-          <h3 style="font-family:var(--font-didot); font-size:1.8rem; margin-bottom:20px;">Previous Print Issues</h3>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px;">
-            @foreach($previousIssues as $prev)
-              <div style="background:#fff; border:1px solid var(--vogue-border); padding:16px; border-radius:4px;">
-                <div style="aspect-ratio:3/4; overflow:hidden; border-radius:3px; margin-bottom:12px;">
-                  <img src="{{ $prev->cover_image }}" alt="{{ $prev->title }}" style="width:100%; height:100%; object-fit:cover;">
+      <!-- Previous Archive Editions -->
+      @if(isset($pastIssues) && $pastIssues->count() > 0)
+        <div>
+          <div class="section-head" style="padding:0 0 24px;">
+            <span class="section-head-title">ARCHIVE EDITIONS</span>
+            <h3 style="font-family:var(--font-sans); font-size:1.6rem; font-weight:700; color:#fff; margin-top:8px;">Explore Past Issues</h3>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:24px;">
+            @foreach($pastIssues as $issue)
+              <div style="background:#242424; border:1px solid rgba(255,255,255,0.06); border-radius:4px; overflow:hidden;">
+                <div style="aspect-ratio:3/4; overflow:hidden; position:relative;">
+                  <img src="{{ $issue->cover_image ?: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80' }}" alt="{{ $issue->title }}" style="width:100%; height:100%; object-fit:cover;">
                 </div>
-                <span class="badge" style="background:#111; color:#fff; font-size:0.65rem;">ISSUE #{{ $prev->issue_number }}</span>
-                <h4 style="font-family:var(--font-didot); font-size:1.1rem; margin:6px 0;">{{ $prev->title }}</h4>
-                <div style="font-size:0.75rem; color:var(--vogue-muted);">{{ $prev->published_date ? $prev->published_date->format('F Y') : '' }}</div>
+                <div style="padding:16px;">
+                  <span class="cat-italic" style="font-size:0.9rem;">Issue #{{ $issue->issue_number }}</span>
+                  <h4 style="font-family:var(--font-sans); font-size:1.05rem; font-weight:700; margin:4px 0 8px; color:#fff;">{{ $issue->title }}</h4>
+                  <div style="font-size:0.75rem; color:var(--text-dim);">{{ $issue->month_name }} {{ $issue->year }}</div>
+                </div>
               </div>
             @endforeach
           </div>
         </div>
       @endif
 
-      <!-- Disclaimer -->
-      <div style="border-left:3px solid var(--vogue-red); padding-left:20px; font-size:0.85rem; color:#666; line-height:1.6;">
-        <strong style="color:var(--vogue-black); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px;">Editorial Selection Policy</strong>
-        Magazine inclusion is based on editorial relevance, available space and publication planning. A previously published digital profile does not guarantee magazine inclusion.
-      </div>
-
     </div>
-  </section>
+  </main>
 
 </x-layouts.app>

@@ -5,46 +5,34 @@
   $baseRoute = url('/' . $cSlug . '/in-' . $cSlug);
 @endphp
 
-<x-layouts.app :title="'In ' . $cName . ' — Events, culture and moments shaping the city · CITYICONS'" :city="$city ?? null" activeCity="in-city">
+<x-layouts.app :title="'In ' . $cName . ' — Events, culture and moments shaping the city · CITYICONS'" :city="$city ?? null" :darkTheme="true" :transparentHeader="true">
 
-  <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
-    <div class="vogue-container">
+  <!-- Real Moments Subpage Navigation Header -->
+  <x-city-header :city="$city" active="in-city" />
+
+  <main style="padding: 40px 0 80px;">
+    <div class="rm-container">
       
-      <!-- Section Header -->
-      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
-          <span class="vogue-rubric vogue-rubric--red">
-            {{ strtoupper($cName) }} · CULTURAL DISPATCHES &amp; LIVING MOMENTS
-          </span>
-          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-            &larr; Back to {{ $cName }} Subsite
-          </a>
-        </div>
-        
-        <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          In {{ $cName }}
-        </h1>
-        
-        <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
-          The city, as it happens. Selective coverage of notable events, performances, exhibitions, conversations and cultural moments across {{ $cName }}.
-        </p>
-        <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6; margin-bottom:8px;">
-          In {{ $cName }} documents notable events, performances, exhibitions, conversations and cultural moments through an independent editorial lens. Coverage is selective and based on relevance, public interest, experience and long-term documentation value.
+      <!-- Page Header -->
+      <div class="rm-page-header">
+        <span class="section-head-title">{{ strtoupper($cName) }} · CULTURAL DISPATCHES &amp; LIVING MOMENTS</span>
+        <h1 class="rm-page-header-title">In {{ $cName }}</h1>
+        <p class="rm-page-header-sub">The city, as it happens.</p>
+        <p class="rm-page-header-desc">
+          Selective coverage of notable events, performances, exhibitions, conversations and cultural moments across {{ $cName }}. Documented through an independent editorial lens.
         </p>
         <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-red); margin-top:8px;">
-          Event coverage may be independent or commercially supported. Paid associations are clearly disclosed.
+          Paid associations are clearly disclosed.
         </div>
       </div>
 
       <!-- Search & Category Filters Bar -->
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; padding:18px 0; border-bottom:1px solid var(--vogue-border); margin-bottom:36px;">
-        <!-- Categories Filter -->
-        <div style="display:flex; flex-wrap:wrap; gap:12px; font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
-          <span style="color:var(--vogue-muted);">Filter:</span>
-          <a href="{{ $baseRoute }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All In {{ $cName }}</a>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div class="rm-filter-bar" style="margin-bottom:0;">
+          <a href="{{ $baseRoute }}" class="rm-filter-pill {{ !request('category') ? 'is-active' : '' }}">All In {{ $cName }}</a>
           @if(isset($categories))
             @foreach($categories->take(6) as $cat)
-              · <a href="{{ $baseRoute . '?category=' . $cat->slug }}" style="{{ request('category') === $cat->slug ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">
+              <a href="{{ $baseRoute . '?category=' . $cat->slug }}" class="rm-filter-pill {{ request('category') === $cat->slug ? 'is-active' : '' }}">
                 {{ $cat->name }}
               </a>
             @endforeach
@@ -53,52 +41,47 @@
 
         <!-- Search Input -->
         <form method="GET" action="{{ $baseRoute }}" style="width:100%; max-width:320px; display:flex;">
-          <input type="text" name="q" value="{{ request('q') }}" placeholder="Search in {{ $cName }}..." style="width:100%; padding:10px 14px; border:1px solid var(--vogue-border); font-family:inherit; font-size:0.85rem;">
-          <button type="submit" style="background:var(--vogue-black); color:#fff; border:none; padding:0 16px; cursor:pointer;"><i class="fas fa-search"></i></button>
+          <input type="text" name="q" value="{{ request('q') }}" placeholder="Search in {{ $cName }}..." 
+                 style="width:100%; padding:10px 14px; background:#242424; border:1px solid rgba(255,255,255,0.12); color:#fff; font-family:inherit; font-size:0.85rem; border-radius:4px 0 0 4px; outline:none;">
+          <button type="submit" style="background:var(--vogue-red); color:#fff; border:none; padding:0 18px; cursor:pointer; border-radius:0 4px 4px 0;">
+            <i class="fas fa-search"></i>
+          </button>
         </form>
       </div>
 
-      <!-- Real Database Feed Grid (4 columns) -->
-      @if($articles && $articles->count() > 0)
-        <div class="vogue-4col-grid" style="margin-bottom:40px;">
+      <!-- Real Moments 3-Column Card Grid -->
+      @if($articles->count() > 0)
+        <div class="rm-grid-cards">
           @foreach($articles as $art)
-            <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
-              <div class="vogue-card__img-wrap">
-                <img src="{{ $art->cover_image ?: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80' }}" alt="{{ $art->title }}" loading="lazy">
-              </div>
-              <div class="vogue-card__body" style="padding-top:12px;">
-                <div style="display:flex; gap:6px; align-items:center; margin-bottom:4px;">
-                  <span class="vogue-rubric vogue-rubric--red">{{ $art->category ? $art->category->name : 'DISPATCH' }}</span>
-                  <span style="font-size:0.625rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-muted);">· {{ $cName }}</span>
-                </div>
-                <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.15rem; font-weight:600; line-height:1.3; margin:4px 0 6px;">
-                  {{ $art->title }}
-                </h3>
-                <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:8px;">
-                  {{ Str::limit($art->excerpt ?: strip_tags($art->content), 95) }}
-                </p>
-                <div class="vogue-card__byline" style="font-size:0.75rem; color:var(--vogue-muted);">
-                  By {{ $art->author_name ?? 'Editorial Staff' }} · {{ $art->read_time ?? '4 min read' }} · {{ $art->created_at ? $art->created_at->format('M d, Y') : 'Recent' }}
+            <a href="{{ url('/article/' . $art->id) }}" class="rm-grid-card">
+              <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" class="rm-grid-card-img" loading="lazy">
+              <div class="rm-grid-card-overlay"></div>
+              <div class="rm-grid-card-body">
+                <span class="cat-italic">{{ $art->category ? $art->category->name : 'Culture' }}</span>
+                <h3 class="rm-grid-card-title">{{ $art->title }}</h3>
+                <div class="post-share-inline">
+                  <span class="share-txt">Explore Moment &rarr;</span>
+                  <span style="margin-left:auto; font-size:0.75rem; color:var(--text-dim);">
+                    {{ $art->published_at ? $art->published_at->format('M d, Y') : 'Recent' }}
+                  </span>
                 </div>
               </div>
-            </article>
+            </a>
           @endforeach
         </div>
 
-        <div>
+        <!-- Pagination -->
+        <div class="rm-pagination">
           {{ $articles->links() }}
         </div>
       @else
-        <div style="text-align:center; padding:60px 20px; color:var(--vogue-muted);">
-          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No dispatches or moments published for In {{ $cName }} matching your query yet.</p>
-          <a href="{{ $baseRoute }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">Reset Filter</a>
+        <div style="background:#242424; border:1px solid rgba(255,255,255,0.08); padding:48px; border-radius:4px; text-align:center; color:var(--text-muted);">
+          <p style="font-size:1.1rem; margin-bottom:14px;">No living culture moments found matching your query.</p>
+          <a href="{{ $baseRoute }}" class="btn-pill" style="background:var(--vogue-red);">Reset Filters</a>
         </div>
       @endif
 
     </div>
-  </section>
-
-  <!-- Official Nomination CTA -->
-  <x-nomination-cta />
+  </main>
 
 </x-layouts.app>

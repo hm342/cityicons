@@ -5,99 +5,68 @@
   $baseRoute = url('/' . $cSlug . '/rising');
 @endphp
 
-<x-layouts.app :title="'Rising — ' . $cName . ' Rising: Next-generation leadership, emerging work and forward momentum'" :city="$city ?? null">
+<x-layouts.app :title="'Rising — ' . $cName . ' Rising Talent: The names building what comes next.'" :city="$city ?? null" :darkTheme="true" :transparentHeader="true">
 
-  <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
-    <div class="vogue-container">
+  <!-- Real Moments Subpage Navigation Header -->
+  <x-city-header :city="$city" active="rising" />
+
+  <main style="padding: 40px 0 80px;">
+    <div class="rm-container">
       
-      <!-- Section Header -->
-      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
-          <span class="vogue-rubric vogue-rubric--red">
-            {{ strtoupper($cName) }} RISING · {{ $isFlagship ? 'NEXT-GEN VANGUARD' : 'CITY EDITION' }}
-          </span>
-          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-            &larr; Back to {{ $cName }} Subsite
-          </a>
-        </div>
-        <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          {{ $cName }} Rising
-        </h1>
-        <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
-          Credible beginnings. Meaningful potential.
-        </p>
-        <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          Rising documents emerging individuals who have demonstrated genuine achievement, consistent work and a credible future trajectory with roots in or impact on {{ $cName }}. Selection is not determined by age, popularity or follower count alone. Every profile must be supported by verifiable progress.
+      <!-- Page Header -->
+      <div class="rm-page-header">
+        <span class="section-head-title">{{ strtoupper($cName) }} RISING · {{ $isFlagship ? 'FLAGSHIP ARCHIVE' : 'CITY EDITION' }}</span>
+        <h1 class="rm-page-header-title">{{ $cName }} Rising</h1>
+        <p class="rm-page-header-sub">The names building what comes next.</p>
+        <p class="rm-page-header-desc">
+          Rising documents emerging individuals with genuine achievement, credible potential and a growing body of work. Documenting the future changemakers, artists, creators, and entrepreneurs of {{ $cName }}.
         </p>
         <div style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); margin-top:8px;">
-          Recognition cannot be purchased.
+          Editorial Selection · Zero Commercial Influence
         </div>
       </div>
 
       <!-- Categories Filter Bar -->
-      <div style="display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:36px; padding:16px 0; border-bottom:1px solid var(--vogue-border); font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
-        <span style="color:var(--vogue-muted);">Filter by Field:</span>
-        <a href="{{ $baseRoute }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All Rising</a>
+      <div class="rm-filter-bar">
+        <a href="{{ $baseRoute }}" class="rm-filter-pill {{ !request('category') ? 'is-active' : '' }}">All Rising</a>
         @foreach($categories as $cat)
-          · <a href="{{ $baseRoute . '?category=' . $cat->slug }}" style="{{ request('category') === $cat->slug ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">
+          <a href="{{ $baseRoute . '?category=' . $cat->slug }}" class="rm-filter-pill {{ request('category') === $cat->slug ? 'is-active' : '' }}">
             {{ $cat->name }}
           </a>
         @endforeach
       </div>
 
-      <!-- Real Database People Grid -->
+      <!-- Real Database People Grid in Real Moments Grid Cards -->
       @if($people->count() > 0)
-        <div class="vogue-sticky-section">
-          <!-- Sticky Lead -->
-          @if($lead)
-            <div class="vogue-sticky-col">
-              <article class="vogue-sticky-lead">
-                <div class="vogue-card vogue-card--lead" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($lead->slug ?: $lead->id)) }}'">
-                  <div class="vogue-card__img-wrap">
-                    <img src="{{ $lead->portrait_image ?: $lead->cover_image }}" alt="{{ $lead->name }}" loading="lazy">
-                  </div>
-                  <div class="vogue-card__body">
-                    <span class="vogue-rubric vogue-rubric--red">{{ $lead->category ? $lead->category->name : 'RISING' }}</span>
-                    <h2 class="vogue-card__title">{{ $lead->name }}</h2>
-                    <p class="vogue-card__excerpt">{{ $lead->tagline }}</p>
-                    <div class="vogue-card__byline">{{ $lead->profession }}{{ $lead->organization ? ' · ' . $lead->organization : '' }}</div>
-                  </div>
+        <div class="rm-grid-cards">
+          @foreach($people as $person)
+            <a href="{{ url('/person/' . ($person->slug ?: $person->id)) }}" class="rm-grid-card">
+              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" class="rm-grid-card-img" loading="lazy">
+              <div class="rm-grid-card-overlay"></div>
+              <div class="rm-grid-card-body">
+                <span class="cat-italic">{{ $person->category ? $person->category->name : 'Rising' }}</span>
+                <h3 class="rm-grid-card-title">{{ $person->name }}</h3>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:10px;">{{ $person->profession ?? 'Emerging Contributor' }}</p>
+                <div class="post-share-inline">
+                  <span class="share-txt">View Profile &rarr;</span>
                 </div>
-              </article>
-            </div>
-          @endif
-
-          <!-- Rest of People Grid -->
-          <div class="vogue-scroll-right-grid">
-            @foreach($people->slice(1) as $person)
-              <article class="vogue-card vogue-card--sub" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
-                <div class="vogue-card__img-wrap">
-                  <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
-                </div>
-                <div class="vogue-card__body">
-                  <span class="vogue-rubric">{{ $person->category ? $person->category->name : 'RISING' }}</span>
-                  <h3 class="vogue-card__title">{{ $person->name }}</h3>
-                  <div class="vogue-card__byline">{{ $person->profession }}</div>
-                </div>
-              </article>
-            @endforeach
-          </div>
+              </div>
+            </a>
+          @endforeach
         </div>
 
-        <div style="margin-top:36px;">
+        <!-- Pagination -->
+        <div class="rm-pagination">
           {{ $people->links() }}
         </div>
       @else
-        <div style="text-align:center; padding:60px 20px; color:var(--vogue-muted);">
-          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No Rising profiles published for {{ $cName }} under this category yet.</p>
-          <a href="{{ $baseRoute }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">View All {{ $cName }} Rising</a>
+        <div style="background:#242424; border:1px solid rgba(255,255,255,0.08); padding:48px; border-radius:4px; text-align:center; color:var(--text-muted);">
+          <p style="font-size:1.1rem; margin-bottom:14px;">No rising talent found matching this field in {{ $cName }}.</p>
+          <a href="{{ $baseRoute }}" class="btn-pill" style="background:var(--vogue-red);">View All Rising</a>
         </div>
       @endif
 
     </div>
-  </section>
-
-  <!-- Nomination CTA -->
-  <x-nomination-cta />
+  </main>
 
 </x-layouts.app>

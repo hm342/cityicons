@@ -1,102 +1,78 @@
 @php
-  $cName = isset($city) ? $city->name : 'National';
-  $cSlug = isset($city) ? $city->slug : null;
+  $cName = isset($city) ? (is_object($city) ? $city->name : ucfirst($city)) : 'Bhavnagar';
+  $cSlug = isset($city) ? (is_object($city) ? $city->slug : strtolower($city)) : 'bhavnagar';
   $isCitySpecific = !empty($cSlug);
-  $baseRoute = $isCitySpecific ? url('/' . $cSlug . '/stories') : url('/stories');
+  $baseRoute = url('/' . $cSlug . '/stories');
 @endphp
 
-<x-layouts.app :title="'Stories — ' . ($isCitySpecific ? $cName . ' Editorial Stories' : 'National Editorial Stories')" :city="$city ?? null">
+<x-layouts.app :title="'Stories — ' . $cName . ' Editorial Profiles & Features · CITYICONS'" :city="$city ?? null" :darkTheme="true" :transparentHeader="true">
 
-  <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
-    <div class="vogue-container">
+  <!-- Real Moments Subpage Navigation Header -->
+  <x-city-header :city="$city" active="stories" />
+
+  <main style="padding: 40px 0 80px;">
+    <div class="rm-container">
       
-      <!-- Section Header -->
-      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
-          <span class="vogue-rubric vogue-rubric--red">
-            {{ strtoupper($cName) }} · LONG-FORM PROFILES &amp; FEATURES
-          </span>
-          @if($isCitySpecific)
-            <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-              &larr; Back to {{ $cName }} Subsite
-            </a>
-          @endif
-        </div>
-        <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          {{ $isCitySpecific ? $cName . ' Stories' : 'National Stories' }}
-        </h1>
-        <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
-          {{ $isCitySpecific ? 'People, journeys and ideas from ' . $cName . '.' : 'Defining narratives and profiles across Indian cities.' }}
-        </p>
-        <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          Explore long-form profiles, cultural narratives, city stories and editorial features documenting meaningful work and defining moments.
+      <!-- Page Header -->
+      <div class="rm-page-header">
+        <span class="section-head-title">{{ strtoupper($cName) }} · LONG-FORM PROFILES &amp; FEATURES</span>
+        <h1 class="rm-page-header-title">{{ $cName }} Stories</h1>
+        <p class="rm-page-header-sub">The complete story beyond the headline.</p>
+        <p class="rm-page-header-desc">
+          Explore profiles, cultural narratives, city stories and editorial features documenting meaningful work and defining journeys connected to {{ $cName }}.
         </p>
       </div>
 
       <!-- Search & Filters -->
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; padding:18px 0; border-bottom:1px solid var(--vogue-border); margin-bottom:36px;">
-        <!-- Category & Section Filters -->
-        <div style="display:flex; flex-wrap:wrap; gap:12px; font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
-          <a href="{{ $baseRoute }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All Stories</a> ·
-          @if($isCitySpecific)
-            <a href="{{ url('/' . $cSlug . '/icons') }}" style="color:var(--vogue-black);">{{ $cName }} Icons</a> ·
-            <a href="{{ url('/' . $cSlug . '/rising') }}" style="color:var(--vogue-black);">{{ $cName }} Rising</a> ·
-            <a href="{{ url('/' . $cSlug . '/the-list') }}" style="color:var(--vogue-black);">The List</a>
-          @else
-            <a href="{{ url('/icons') }}" style="color:var(--vogue-black);">Icons</a> ·
-            <a href="{{ url('/rising') }}" style="color:var(--vogue-black);">Rising</a> ·
-            <a href="{{ url('/the-list') }}" style="color:var(--vogue-black);">The List</a> ·
-            <a href="{{ url('/magazine') }}" style="color:var(--vogue-black);">Magazine</a>
-          @endif
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div class="rm-filter-bar" style="margin-bottom:0;">
+          <a href="{{ $baseRoute }}" class="rm-filter-pill {{ !request('category') ? 'is-active' : '' }}">All Stories</a>
+          <a href="{{ url('/' . $cSlug . '/icons') }}" class="rm-filter-pill">Icons</a>
+          <a href="{{ url('/' . $cSlug . '/rising') }}" class="rm-filter-pill">Rising</a>
+          <a href="{{ url('/' . $cSlug . '/the-list') }}" class="rm-filter-pill">The List</a>
         </div>
 
         <!-- Search Input -->
         <form method="GET" action="{{ $baseRoute }}" style="width:100%; max-width:320px; display:flex;">
-          <input type="text" name="q" value="{{ request('q') }}" placeholder="Search stories..." style="width:100%; padding:10px 14px; border:1px solid var(--vogue-border); font-family:inherit; font-size:0.85rem;">
-          <button type="submit" style="background:var(--vogue-black); color:#fff; border:none; padding:0 16px; cursor:pointer;"><i class="fas fa-search"></i></button>
+          <input type="text" name="q" value="{{ request('q') }}" placeholder="Search stories..." 
+                 style="width:100%; padding:10px 14px; background:#242424; border:1px solid rgba(255,255,255,0.12); color:#fff; font-family:inherit; font-size:0.85rem; border-radius:4px 0 0 4px; outline:none;">
+          <button type="submit" style="background:var(--vogue-red); color:#fff; border:none; padding:0 18px; cursor:pointer; border-radius:0 4px 4px 0;">
+            <i class="fas fa-search"></i>
+          </button>
         </form>
       </div>
 
-      <!-- Real Database Feed Grid (4 columns) -->
+      <!-- Real Database Feed Grid (3 columns Real Moments grid) -->
       @if($stories->count() > 0)
-        <div class="vogue-4col-grid" style="margin-bottom:40px;">
+        <div class="rm-grid-cards">
           @foreach($stories as $story)
-            <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-              <div class="vogue-card__img-wrap">
-                <img src="{{ $story->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $story->title }}" loading="lazy">
-              </div>
-              <div class="vogue-card__body" style="padding-top:12px;">
-                <div style="display:flex; gap:6px; align-items:center; margin-bottom:4px;">
-                  <span class="vogue-rubric vogue-rubric--red">{{ $story->category ? $story->category->name : 'STORY' }}</span>
-                  @if($story->city)
-                    <span style="font-size:0.625rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-muted);">· {{ $story->city->name }}</span>
-                  @endif
-                </div>
-                <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.15rem; font-weight:600; line-height:1.3; margin:4px 0 6px;">
-                  {{ $story->title }}
-                </h3>
-                <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:8px;">
-                  {{ Str::limit($story->excerpt, 90) }}
-                </p>
-                <div class="vogue-card__byline" style="font-size:0.75rem; color:var(--vogue-muted);">
-                  By {{ $story->author_name ?? 'Editorial Staff' }} · {{ $story->read_time ?? '5 min read' }}
+            <a href="{{ url('/article/' . $story->id) }}" class="rm-grid-card">
+              <img src="{{ $story->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $story->title }}" class="rm-grid-card-img" loading="lazy">
+              <div class="rm-grid-card-overlay"></div>
+              <div class="rm-grid-card-body">
+                <span class="cat-italic">{{ $story->category ? $story->category->name : 'Story' }}</span>
+                <h3 class="rm-grid-card-title">{{ $story->title }}</h3>
+                <div class="post-share-inline">
+                  <span class="share-txt">Read Story &rarr;</span>
+                  <span style="margin-left:auto; font-size:0.75rem; color:var(--text-dim);">{{ $story->read_time ?? '5 min' }}</span>
                 </div>
               </div>
-            </article>
+            </a>
           @endforeach
         </div>
 
-        <div>
+        <!-- Pagination -->
+        <div class="rm-pagination">
           {{ $stories->links() }}
         </div>
       @else
-        <div style="text-align:center; padding:60px 20px; color:var(--vogue-muted);">
-          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No stories found matching your query.</p>
-          <a href="{{ $baseRoute }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">Reset Search</a>
+        <div style="background:#242424; border:1px solid rgba(255,255,255,0.08); padding:48px; border-radius:4px; text-align:center; color:var(--text-muted);">
+          <p style="font-size:1.1rem; margin-bottom:14px;">No stories found matching your query.</p>
+          <a href="{{ $baseRoute }}" class="btn-pill" style="background:var(--vogue-red);">View All Stories</a>
         </div>
       @endif
 
     </div>
-  </section>
+  </main>
 
 </x-layouts.app>

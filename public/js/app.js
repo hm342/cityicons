@@ -221,19 +221,67 @@ document.addEventListener('DOMContentLoaded', () => {
     startTimer();
   }
 
-  // ── 7. STICKY FLOATING HEADER ─────────────────────────────────
-  const floatingHeader = document.querySelector('.rm-header-overlay') || document.getElementById('rm-floating-header');
-  if (floatingHeader) {
+  // ── 7. AUTHENTIC REAL MOMENTS SMART STICKY NAVIGATION ───────────
+  const rmHeaders = document.querySelectorAll('.rm-header-overlay, .rm-subpage-header');
+  if (rmHeaders.length > 0) {
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    let scrollDelta = 0;
+    const scrollThreshold = 80;
+
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 45) {
-        floatingHeader.classList.add('is-sticky');
-      } else {
-        floatingHeader.classList.remove('is-sticky');
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const isDown = currentScrollY > lastScrollY;
+
+      rmHeaders.forEach(header => {
+        if (currentScrollY > 50) {
+          header.classList.add('is-sticky');
+        } else {
+          header.classList.remove('is-sticky', 'sticky-nav-hidden', 'sticky-nav-visible');
+        }
+
+        if (currentScrollY > 180) {
+          if (isDown) {
+            scrollDelta = 0;
+            header.classList.add('sticky-nav-hidden');
+            header.classList.remove('sticky-nav-visible');
+          } else {
+            scrollDelta += (lastScrollY - currentScrollY);
+            if (scrollDelta > scrollThreshold) {
+              header.classList.remove('sticky-nav-hidden');
+              header.classList.add('sticky-nav-visible');
+            }
+          }
+        } else {
+          header.classList.remove('sticky-nav-hidden');
+        }
+      });
+
+      lastScrollY = Math.max(0, currentScrollY);
+    }, { passive: true });
+  }
+
+  // ── 8. PARALLAX SCROLL ON HERO & EDITORIAL MEDIA ─────────────────
+  const parallaxMedia = document.querySelectorAll('.rm-hero-slide-bg img, .slide-parallax img');
+  if (parallaxMedia.length > 0) {
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+          if (scrollY < window.innerHeight * 1.5) {
+            const offset = scrollY * 0.22;
+            parallaxMedia.forEach(img => {
+              img.style.transform = `scale(1.05) translate3d(0, ${offset}px, 0)`;
+            });
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     }, { passive: true });
   }
 
-  // ── 8. FLOATING BACK TO TOP BUTTON (Images 2 & 3) ─────────────
+  // ── 9. FLOATING BACK TO TOP BUTTON ──────────────────────────────
   const btnBackToTop = document.getElementById('rm-back-to-top');
   if (btnBackToTop) {
     window.addEventListener('scroll', () => {
@@ -249,5 +297,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 
 

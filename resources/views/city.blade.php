@@ -36,14 +36,18 @@
         <span class="rm-logo-script">Moments</span>
       @endif
     </div>
-    <div class="rm-offcanvas-title">Categories</div>
+    <div class="rm-offcanvas-title">City Editorial</div>
     <ul class="rm-offcanvas-menu">
+      <li><a href="{{ url('/' . $cityId . '/icons') }}">Icons Directory</a></li>
+      <li><a href="{{ url('/' . $cityId . '/rising') }}">Rising Talent</a></li>
+      <li><a href="{{ url('/' . $cityId . '/stories') }}">City Stories</a></li>
+      <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List Archive</a></li>
+      <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine Edition</a></li>
       <li><a href="#sec-culture">Culture &amp; Heritage</a></li>
       <li><a href="#sec-food">Culinary &amp; Taste</a></li>
       <li><a href="#sec-fashion">Fashion &amp; Craft</a></li>
-      <li><a href="#sec-people">People &amp; Voices</a></li>
-      <li><a href="#sec-dispatches">Editorial Dispatches</a></li>
-      <li><a href="{{ url('/') }}">← All India Magazine</a></li>
+      <li><a href="{{ url('/' . $cityId . '/nominate') }}" style="color:#d4af37; font-weight:700;">Nominate an Icon</a></li>
+      <li><a href="{{ url('/') }}" style="color:rgba(255,255,255,0.7);">← All India Portal</a></li>
     </ul>
 
     <div class="rm-offcanvas-title">City Editions</div>
@@ -89,11 +93,13 @@
     <!-- Submenu Bar under Logo -->
     <nav class="rm-subnav">
       <ul class="rm-subnav-list">
+        <li><a href="{{ url('/' . $cityId . '/icons') }}">Icons</a></li>
+        <li><a href="{{ url('/' . $cityId . '/rising') }}">Rising</a></li>
+        <li><a href="{{ url('/' . $cityId . '/stories') }}">Stories</a></li>
+        <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List</a></li>
+        <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine</a></li>
         <li><a href="#sec-culture">Culture</a></li>
         <li><a href="#sec-food">Food</a></li>
-        <li><a href="#sec-fashion">Fashion</a></li>
-        <li><a href="#sec-people">People</a></li>
-        <li><a href="#sec-dispatches">Dispatches</a></li>
         <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
       </ul>
     </nav>
@@ -215,7 +221,7 @@
 
   <!-- ══ SECTION 4: DOCUMENTED CITIZENS & PEOPLE (3x2 Grid with Share Footers) ══ -->
   <section id="sec-people" class="section-head">
-    <div class="section-head-title">— {{ $cityName }} People &amp; Voices —</div>
+    <div class="section-head-title">— {{ $cityName }} Icons &amp; People —</div>
   </section>
   <div class="rm-container">
     <div class="rm-grid-cards" id="grid-section-4">

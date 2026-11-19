@@ -14,18 +14,16 @@
   <!-- Main Navigation -->
   <div class="vogue-drawer__title">Editorial Sections</div>
   <ul class="vogue-drawer__menu">
-    <li><a href="{{ url('/') }}">Home</a></li>
-    <li><a href="{{ url('/icons') }}">Icons</a></li>
-    <li><a href="{{ url('/rising') }}">Rising</a></li>
-    <li><a href="{{ url('/voices') }}">Voices</a></li>
-    <li><a href="{{ url('/stories') }}">Stories</a></li>
+    <li><a href="{{ url('/') }}">National Home</a></li>
+    <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar Subsite (Flagship)</a></li>
+    <li><a href="{{ url('/icons') }}">Icons Directory</a></li>
+    <li><a href="{{ url('/rising') }}">Rising Talent</a></li>
+    <li><a href="{{ url('/stories') }}">Editorial Stories</a></li>
     <li><a href="{{ url('/the-list') }}">The List</a></li>
-    <li><a href="{{ url('/magazine') }}">Magazine</a></li>
-    <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
-    <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
+    <li><a href="{{ url('/magazine') }}">Magazine Archive</a></li>
     <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
-    <li><a href="{{ url('/about') }}">About Platform</a></li>
-    <li><a href="{{ url('/nominate') }}" style="color:var(--vogue-red); font-weight:700;">Nominate a Story</a></li>
+    <li><a href="{{ url('/about') }}">About CityIcons</a></li>
+    <li><a href="{{ url('/nominate') }}" style="color:var(--vogue-red); font-weight:700;">Nominate an Icon</a></li>
   </ul>
 
   <!-- City Editions Directory -->

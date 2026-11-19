@@ -10,19 +10,23 @@ use Illuminate\Http\Request;
 class ArticleFrontendController extends Controller
 {
     /**
-     * Display long-form stories feed with search and filters.
-     * SQL-injection safe parameterized querying.
+     * Display city-scoped long-form stories feed (e.g. /bhavnagar/stories).
      */
-    public function stories(Request $request)
+    public function cityStories($citySlug, Request $request)
     {
+        $city = City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = City::where('slug', 'bhavnagar')->firstOrFail();
+        }
+
         $categories = Category::orderBy('name')->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
         $query = Article::with(['category', 'city', 'tags'])
             ->published()
+            ->where('city_id', $city->id)
             ->latest();
 
-        // Parameterized search preventing SQL injection
         if ($request->filled('q')) {
             $term = $request->q;
             $query->where(function ($b) use ($term) {
@@ -39,13 +43,50 @@ class ArticleFrontendController extends Controller
             });
         }
 
-        if ($request->filled('section')) {
-            $query->where('section', $request->section);
+        $stories = $query->paginate(12)->withQueryString();
+
+        return view('pages.stories', compact('city', 'stories', 'categories', 'cities'));
+    }
+
+    /**
+     * Display long-form stories feed across all cities.
+     */
+    public function stories(Request $request)
+    {
+        $categories = Category::orderBy('name')->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get();
+
+        $query = Article::with(['category', 'city', 'tags'])
+            ->published()
+            ->latest();
+
+        if ($request->filled('q')) {
+            $term = $request->q;
+            $query->where(function ($b) use ($term) {
+                $b->where('title', 'like', "%{$term}%")
+                  ->orWhere('excerpt', 'like', "%{$term}%")
+                  ->orWhere('author_name', 'like', "%{$term}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $catSlug = $request->category;
+            $query->whereHas('category', function ($q) use ($catSlug) {
+                $q->where('slug', $catSlug);
+            });
+        }
+
+        if ($request->filled('city')) {
+            $cSlug = $request->city;
+            $query->whereHas('city', function ($q) use ($cSlug) {
+                $q->where('slug', $cSlug);
+            });
         }
 
         $stories = $query->paginate(12)->withQueryString();
+        $city = null;
 
-        return view('pages.stories', compact('stories', 'categories', 'cities'));
+        return view('pages.stories', compact('city', 'stories', 'categories', 'cities'));
     }
 
     /**
@@ -53,26 +94,11 @@ class ArticleFrontendController extends Controller
      */
     public function inBhavnagar(Request $request)
     {
-        $bhavnagarCity = City::where('slug', 'bhavnagar')->first();
-        $bhavnagarCityId = $bhavnagarCity ? $bhavnagarCity->id : null;
-
-        $articles = Article::with(['category', 'city', 'tags'])
-            ->published()
-            ->where(function ($q) use ($bhavnagarCityId) {
-                $q->where('section', 'in-bhavnagar');
-                if ($bhavnagarCityId) {
-                    $q->orWhere('city_id', $bhavnagarCityId);
-                }
-            })
-            ->latest()
-            ->paginate(12);
-
-        return view('pages.in-bhavnagar', compact('articles'));
+        return redirect('/bhavnagar');
     }
 
     /**
      * Display a single editorial article by ID or slug.
-     * Eager loads author, category, city, tags, and related stories.
      */
     public function show(Request $request, $id = null)
     {

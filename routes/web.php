@@ -27,36 +27,17 @@ use App\Http\Controllers\Admin\MagazineEditionController;
 use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\SettingController;
 
-// ── 1. MAIN HOMEPAGE (BHAVNAGAR ICONS) ────────────────────────
+// ── 1. MAIN HOMEPAGE: ALL-INDIA CITYICONS PORTAL (Vogue Luxury Editorial UI) ──
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/index.html', function () {
     return redirect()->route('home');
 });
 
-// ── 2. EDITORIAL DIRECTORY PAGES (PAGES 7 - 14) ───────────────
-Route::get('/icons', [DirectoryController::class, 'icons'])->name('icons');
-Route::get('/rising', [DirectoryController::class, 'rising'])->name('rising');
-Route::get('/voices', [DirectoryController::class, 'voices'])->name('voices');
-Route::get('/person/{slug}', [DirectoryController::class, 'showPerson'])->name('person.show');
-Route::get('/icon/{slug}', [DirectoryController::class, 'showPerson'])->name('icon.show');
-Route::get('/stories', [ArticleFrontendController::class, 'stories'])->name('stories');
-Route::get('/the-list', [DirectoryController::class, 'theList'])->name('the-list');
-Route::get('/magazine', [MagazineFrontendController::class, 'index'])->name('magazine');
-Route::get('/in-bhavnagar', [ArticleFrontendController::class, 'inBhavnagar'])->name('in-bhavnagar');
-Route::get('/featured-brands', [BrandFrontendController::class, 'index'])->name('featured-brands');
-
-// ── 3. INFORMATION & INTERACTION (PAGES 15 - 17) ──────────────
+// ── 2. GLOBAL / MAIN SITE INFORMATION & INTERACTION ─────────────
 Route::get('/about', function () {
     return view('pages.about', ['active' => 'about']);
 })->name('about');
-
-Route::get('/nominate', function () {
-    return view('pages.nominate', ['active' => 'nominate']);
-})->name('nominate');
-
-Route::post('/nominate', [PublicNominationController::class, 'store'])->name('nominate.submit');
-Route::post('/newsletter', [PublicNewsletterController::class, 'store'])->name('newsletter.submit');
 
 Route::get('/contact', function () {
     return view('pages.contact', ['active' => 'contact']);
@@ -64,42 +45,70 @@ Route::get('/contact', function () {
 
 Route::get('/search', [SearchFrontendController::class, 'search'])->name('search');
 
-// ── 4. POLICIES & STANDARDS (PAGES 18 - 31) ───────────────────
 Route::get('/policies/{slug?}', function ($slug = 'editorial') {
     return view('pages.policy', ['slug' => strtolower($slug)]);
 })->name('policy.show');
+
+Route::post('/nominate', [PublicNominationController::class, 'store'])->name('nominate.submit');
+Route::post('/newsletter', [PublicNewsletterController::class, 'store'])->name('newsletter.submit');
+
+// ── 3. UNIVERSAL READERS (PERSON PROFILES & ARTICLES) ───────────
+Route::get('/person/{slug}', [DirectoryController::class, 'showPerson'])->name('person.show');
+Route::get('/icon/{slug}', [DirectoryController::class, 'showPerson'])->name('icon.show');
+Route::get('/article', [ArticleFrontendController::class, 'show'])->name('article.show.query');
+Route::get('/article/{id}', [ArticleFrontendController::class, 'show'])->name('article.show');
+Route::get('/article.html', function () {
+    return redirect()->route('article.show', ['id' => request('id')]);
+});
+
+// ── 4. FALLBACK / ROOT ALIASES (REDIRECTS TO BHAVNAGAR FLAGSHIP) ──
+Route::get('/icons', [DirectoryController::class, 'icons'])->name('icons');
+Route::get('/rising', [DirectoryController::class, 'rising'])->name('rising');
+Route::get('/voices', [DirectoryController::class, 'voices'])->name('voices'); // Voices removed, redirects to icons
+Route::get('/stories', [ArticleFrontendController::class, 'stories'])->name('stories');
+Route::get('/the-list', [DirectoryController::class, 'theList'])->name('the-list');
+Route::get('/magazine', [MagazineFrontendController::class, 'index'])->name('magazine');
+Route::get('/nominate', function () {
+    return redirect('/bhavnagar/nominate');
+})->name('nominate');
+Route::get('/featured-brands', [BrandFrontendController::class, 'index'])->name('featured-brands');
+Route::get('/in-bhavnagar', function () {
+    return redirect('/bhavnagar');
+})->name('in-bhavnagar');
 
 // ── 5. LEGACY CITY ALIASES & REDIRECTS (Redirect /cities/{city} -> /{city}) ──
 Route::get('/cities/{city}', function ($city) {
     return redirect('/' . strtolower($city), 301);
 });
-
 Route::get('/cities/{city}.html', function ($city) {
     return redirect('/' . strtolower($city), 301);
 });
-
 Route::get('/city/{city}', function ($city) {
     return redirect('/' . strtolower($city), 301);
 });
-
 Route::get('/city/{city}.html', function ($city) {
     return redirect('/' . strtolower($city), 301);
 });
-
 Route::get('/bhavnagar.html', function () {
     return redirect('/bhavnagar', 301);
 });
-
 Route::get('/bhavnagar-icons', function () {
     return redirect('/bhavnagar', 301);
 });
 
-// ── 6. ARTICLE READING VIEW ───────────────────────────────────
-Route::get('/article', [ArticleFrontendController::class, 'show'])->name('article.show.query');
-Route::get('/article/{id}', [ArticleFrontendController::class, 'show'])->name('article.show');
-
-Route::get('/article.html', function () {
-    return redirect()->route('article.show', ['id' => request('id')]);
+// ── 6. CITY-SCOPED ARCHIVES (e.g. /bhavnagar/icons, /mumbai/rising, etc.) ──
+Route::get('/{city}/icons', [DirectoryController::class, 'cityIcons'])->name('city.icons');
+Route::get('/{city}/rising', [DirectoryController::class, 'cityRising'])->name('city.rising');
+Route::get('/{city}/voices', function ($city) {
+    return redirect('/' . strtolower($city) . '/icons');
+});
+Route::get('/{city}/stories', [ArticleFrontendController::class, 'cityStories'])->name('city.stories');
+Route::get('/{city}/the-list', [DirectoryController::class, 'cityTheList'])->name('city.the-list');
+Route::get('/{city}/magazine', [MagazineFrontendController::class, 'cityMagazine'])->name('city.magazine');
+Route::get('/{city}/nominate', [PublicNominationController::class, 'cityNominate'])->name('city.nominate');
+Route::get('/{city}/featured-brands', [BrandFrontendController::class, 'cityBrands'])->name('city.brands');
+Route::get('/{city}/in-bhavnagar', function ($city) {
+    return redirect('/' . strtolower($city));
 });
 
 // ── 7. ADMIN PANEL ROUTES ─────────────────────────────────────
@@ -162,4 +171,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/{city}', [CityFrontendController::class, 'show'])
     ->where('city', '^(?!admin|storage|up|icons|rising|voices|stories|the-list|magazine|in-bhavnagar|featured-brands|about|nominate|contact|search|policies|article|newsletter|person|icon)[a-zA-Z0-9\-]+$')
     ->name('city.show');
-

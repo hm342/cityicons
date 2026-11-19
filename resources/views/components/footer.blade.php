@@ -37,14 +37,12 @@
       <div>
         <div style="font-size:0.6875rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:#ffffff; margin-bottom:14px;">Explore</div>
         <ul style="list-style:none; font-size:0.8rem; line-height:2.2; color:rgba(255,255,255,0.65);">
-          <li><a href="{{ url('/icons') }}">Icons</a></li>
-          <li><a href="{{ url('/rising') }}">Rising</a></li>
-          <li><a href="{{ url('/voices') }}">Voices</a></li>
-          <li><a href="{{ url('/stories') }}">Stories</a></li>
+          <li><a href="{{ url('/icons') }}">Icons Directory</a></li>
+          <li><a href="{{ url('/rising') }}">Rising Stars</a></li>
+          <li><a href="{{ url('/stories') }}">National Stories</a></li>
           <li><a href="{{ url('/the-list') }}">The List</a></li>
           <li><a href="{{ url('/magazine') }}">Magazine</a></li>
-          <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
-          <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
+          <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar Subsite</a></li>
           <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
         </ul>
       </div>

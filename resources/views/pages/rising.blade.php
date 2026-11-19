@@ -1,19 +1,33 @@
-<x-layouts.app title="Rising — Next-generation leadership, emerging work and forward momentum">
+@php
+  $cName = isset($city) ? $city->name : 'Bhavnagar';
+  $cSlug = isset($city) ? $city->slug : 'bhavnagar';
+  $isFlagship = ($cSlug === 'bhavnagar');
+  $baseRoute = url('/' . $cSlug . '/rising');
+@endphp
+
+<x-layouts.app :title="'Rising — ' . $cName . ' Rising: Next-generation leadership, emerging work and forward momentum'">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <span class="vogue-rubric vogue-rubric--red">BHAVNAGAR RISING · NEXT-GEN VANGUARD</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric vogue-rubric--red">
+            {{ strtoupper($cName) }} RISING · {{ $isFlagship ? 'NEXT-GEN VANGUARD' : 'CITY EDITION' }}
+          </span>
+          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+            &larr; Back to {{ $cName }} Subsite
+          </a>
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          Rising
+          {{ $cName }} Rising
         </h1>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
           Next-generation leadership, emerging work and forward momentum.
         </p>
         <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          Rising highlights individuals and ventures establishing their footprint, building new institutions, driving innovation or demonstrating exceptional trajectory with roots in or impact on Bhavnagar.
+          Rising highlights individuals and ventures establishing their footprint, building new institutions, driving innovation or demonstrating exceptional trajectory with roots in or impact on {{ $cName }}.
         </p>
         <div style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); margin-top:8px;">
           Recognition cannot be purchased.
@@ -23,9 +37,9 @@
       <!-- Categories Filter Bar -->
       <div style="display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:36px; padding:16px 0; border-bottom:1px solid var(--vogue-border); font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
         <span style="color:var(--vogue-muted);">Filter by Field:</span>
-        <a href="{{ url('/rising') }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All Rising</a>
+        <a href="{{ $baseRoute }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All Rising</a>
         @foreach($categories as $cat)
-          · <a href="{{ url('/rising?category=' . $cat->slug) }}" style="{{ request('category') === $cat->slug ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">
+          · <a href="{{ $baseRoute . '?category=' . $cat->slug }}" style="{{ request('category') === $cat->slug ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">
             {{ $cat->name }}
           </a>
         @endforeach
@@ -75,8 +89,8 @@
         </div>
       @else
         <div style="text-align:center; padding:60px 20px; color:var(--vogue-muted);">
-          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No Rising profiles published under this category yet.</p>
-          <a href="{{ url('/rising') }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">View All Rising</a>
+          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No Rising profiles published for {{ $cName }} under this category yet.</p>
+          <a href="{{ $baseRoute }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">View All {{ $cName }} Rising</a>
         </div>
       @endif
 

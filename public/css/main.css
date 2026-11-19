@@ -1590,3 +1590,146 @@ button {
   line-height: 1.8;
   color: #222222;
 }
+
+/* ════════════════════════════════════════════════════════════
+   CITIES NETWORK EXPLORER GRID & CARDS (VOGUE EDITORIAL)
+   Uniform 4:5 ratio boxes for all city edition cards
+   ════════════════════════════════════════════════════════════ */
+.cities-network-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.city-network-card {
+  position: relative;
+  aspect-ratio: 4 / 5 !important;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: var(--vogue-black);
+  cursor: pointer;
+  isolation: isolate;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.city-network-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center !important;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+.city-network-card:hover .city-network-card__img {
+  transform: scale(1.06);
+}
+
+.city-network-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.05) 30%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.city-network-card__badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 3;
+}
+
+.city-network-card__badge .vogue-rubric {
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: 1px;
+  font-size: 0.625rem;
+  letter-spacing: 2px;
+  margin-bottom: 0;
+}
+
+.city-network-card__badge--flagship .vogue-rubric {
+  background-color: var(--vogue-red);
+  color: #ffffff !important;
+}
+
+.city-network-card__body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: clamp(20px, 3vw, 28px);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-network-card__state {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 4px;
+}
+
+.city-network-card__name {
+  font-family: var(--font-didot);
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 8px;
+  letter-spacing: 0.5px;
+}
+
+.city-network-card__meta {
+  font-family: var(--font-garamond);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 14px;
+}
+
+.city-network-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 3px;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+}
+
+.city-network-card:hover .city-network-card__cta {
+  border-color: #ffffff;
+  color: var(--vogue-red);
+}
+
+@media (max-width: 768px) {
+  .cities-network-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+

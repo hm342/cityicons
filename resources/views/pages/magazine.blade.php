@@ -1,19 +1,32 @@
-<x-layouts.app title="Bhavnagar Icons Magazine — Stories designed to outlast the feed">
+@php
+  $cName = isset($city) ? $city->name : 'Bhavnagar';
+  $cSlug = isset($city) ? $city->slug : 'bhavnagar';
+  $isFlagship = ($cSlug === 'bhavnagar');
+@endphp
+
+<x-layouts.app :title="$cName . ' Icons Magazine — Stories designed to outlast the feed'">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
-        <span class="vogue-rubric vogue-rubric--red">CURATED PRINT &amp; DIGITAL EDITION</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric vogue-rubric--red">
+            {{ strtoupper($cName) }} · CURATED PRINT &amp; DIGITAL EDITION
+          </span>
+          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+            &larr; Back to {{ $cName }} Subsite
+          </a>
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          Bhavnagar Icons Magazine
+          {{ $cName }} Icons Magazine
         </h1>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
           Stories designed to outlast the feed.
         </p>
         <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          Bhavnagar Icons Magazine presents selected profiles, verified journeys and defining stories from the city in a curated editorial format. Each edition contributes to a growing archive of Bhavnagar and its people.
+          {{ $cName }} Icons Magazine presents selected profiles, verified journeys and defining stories from the city in a curated editorial format. Each edition contributes to a growing archive of {{ $cName }} and its people.
         </p>
       </div>
 
@@ -32,10 +45,10 @@
             </p>
 
             <div style="display:flex; gap:14px; flex-wrap:wrap;">
-              <a href="{{ url('/stories') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
-                Explore Edition Stories
+              <a href="{{ url('/' . $cSlug . '/stories') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
+                Explore {{ $cName }} Stories
               </a>
-              <a href="{{ url('/nominate') }}" style="display:inline-block; border:1px solid var(--vogue-black); color:var(--vogue-black); font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
+              <a href="{{ url('/' . $cSlug . '/nominate') }}" style="display:inline-block; border:1px solid var(--vogue-black); color:var(--vogue-black); font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 28px; text-decoration:none;">
                 Nominate for Next Issue
               </a>
             </div>
@@ -73,7 +86,7 @@
         </div>
       @endif
 
-      <!-- Disclaimer (Page 12) -->
+      <!-- Disclaimer -->
       <div style="border-left:3px solid var(--vogue-red); padding-left:20px; font-size:0.85rem; color:#666; line-height:1.6;">
         <strong style="color:var(--vogue-black); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px;">Editorial Selection Policy</strong>
         Magazine inclusion is based on editorial relevance, available space and publication planning. A previously published digital profile does not guarantee magazine inclusion.

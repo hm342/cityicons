@@ -1,25 +1,46 @@
-<x-layouts.app title="Nominate A Story — Bhavnagar Icons">
+@php
+  $cName = isset($city) ? $city->name : 'All India';
+  $cSlug = isset($city) ? $city->slug : null;
+  $isCitySpecific = !empty($cSlug);
+@endphp
+
+<x-layouts.app :title="'Nominate A Story — ' . ($isCitySpecific ? $cName . ' Icons' : 'CityIcons Network')">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <span class="vogue-rubric vogue-rubric--red">EDITORIAL NOMINATION</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric vogue-rubric--red">
+            {{ strtoupper($cName) }} · EDITORIAL NOMINATION
+          </span>
+          @if($isCitySpecific)
+            <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+              &larr; Back to {{ $cName }} Subsite
+            </a>
+          @endif
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 3.8rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          Nominate A Story
+          Nominate A Story @if($isCitySpecific) for {{ $cName }} @endif
         </h1>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 1.8vw, 1.5rem); color:var(--vogue-black); line-height:1.3;">
           Help us discover people worth documenting.
         </p>
       </div>
 
+      @if(session('success'))
+        <div style="background:#eaf8ef; border:1px solid #2e7d32; color:#1b5e20; padding:18px 24px; margin-bottom:30px; font-size:0.95rem; font-weight:600;">
+          {{ session('success') }}
+        </div>
+      @endif
+
       <div style="display:grid; grid-template-columns:1.8fr 1fr; gap:48px; align-items:start;">
         
         <!-- Nomination Form -->
         <div style="background:#ffffff; border:1px solid var(--vogue-border); padding: clamp(24px, 4vw, 44px);">
           <p style="font-family:var(--font-garamond); font-size:1.15rem; line-height:1.6; color:#333; margin-bottom:28px;">
-            You may nominate yourself or another individual for editorial consideration by Bhavnagar Icons. Nominations are reviewed based on city connection, body of work, verifiable achievement, contribution and editorial relevance.
+            You may nominate yourself or another individual for editorial consideration by CityIcons. Nominations are reviewed based on city connection, body of work, verifiable achievement, contribution and editorial relevance.
           </p>
 
           <form action="{{ url('/nominate') }}" method="POST" enctype="multipart/form-data">
@@ -48,8 +69,8 @@
                 <input type="text" name="profession" required style="width:100%; padding:12px; border:1px solid var(--vogue-border); font-family:inherit; font-size:0.9rem;">
               </div>
               <div>
-                <label style="display:block; font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">Connection to Bhavnagar *</label>
-                <input type="text" name="city_connection" placeholder="e.g. Born, residing, institution, legacy" required style="width:100%; padding:12px; border:1px solid var(--vogue-border); font-family:inherit; font-size:0.9rem;">
+                <label style="display:block; font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;">City Connection *</label>
+                <input type="text" name="city_connection" value="{{ $isCitySpecific ? $cName : '' }}" placeholder="e.g. {{ $isCitySpecific ? $cName : 'Bhavnagar, Mumbai, Surat' }}" required style="width:100%; padding:12px; border:1px solid var(--vogue-border); font-family:inherit; font-size:0.9rem;">
               </div>
             </div>
 
@@ -125,7 +146,7 @@
               </div>
             </div>
 
-            <!-- Consent & Checkboxes (Page 16) -->
+            <!-- Consent & Checkboxes -->
             <h3 style="font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--vogue-black); margin-bottom:14px;">
               3. Consent &amp; Confirmations
             </h3>
@@ -168,7 +189,7 @@
           </form>
         </div>
 
-        <!-- Sidebar Notice (Page 17) -->
+        <!-- Sidebar Notice -->
         <div>
           <div style="background:var(--vogue-bg-light); border:1px solid var(--vogue-border); padding:28px; margin-bottom:24px;">
             <span class="vogue-rubric vogue-rubric--red" style="font-size:0.65rem;">EDITORIAL POLICY</span>
@@ -176,7 +197,7 @@
               Important Notice
             </h3>
             <p style="font-size:0.85rem; line-height:1.6; color:#444; margin-bottom:12px;">
-              Bhavnagar Icons retains complete editorial independence over selection, category, framing, presentation and publication timing.
+              CityIcons retains complete editorial independence over selection, category, framing, presentation and publication timing.
             </p>
             <p style="font-size:0.85rem; line-height:1.6; color:#444; margin-bottom:12px;">
               A nomination is a starting point, not a promise of publication.

@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use App\Models\Category;
+use App\Models\City;
 use Illuminate\Http\Request;
 
 class DirectoryController extends Controller
 {
     /**
-     * Display Icons Directory with eager loaded relations.
+     * Display City-scoped Icons Directory (e.g. /bhavnagar/icons).
      */
-    public function icons(Request $request)
+    public function cityIcons($citySlug, Request $request)
     {
+        $city = City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = City::where('slug', 'bhavnagar')->firstOrFail();
+        }
+
         $categories = Category::orderBy('name')->get();
 
         $query = Person::with(['category', 'city', 'tags'])
             ->published()
+            ->where('city_id', $city->id)
             ->icons()
             ->orderBy('sort_order')
             ->latest();
@@ -31,18 +38,32 @@ class DirectoryController extends Controller
         $people = $query->paginate(12)->withQueryString();
         $lead = $people->first();
 
-        return view('pages.icons', compact('people', 'lead', 'categories'));
+        return view('pages.icons', compact('city', 'people', 'lead', 'categories'));
     }
 
     /**
-     * Display Rising Stars Directory with eager loaded relations.
+     * Fallback redirect for /icons -> /bhavnagar/icons
      */
-    public function rising(Request $request)
+    public function icons(Request $request)
     {
+        return redirect('/bhavnagar/icons' . ($request->getQueryString() ? '?' . $request->getQueryString() : ''));
+    }
+
+    /**
+     * Display City-scoped Rising Stars Directory (e.g. /bhavnagar/rising).
+     */
+    public function cityRising($citySlug, Request $request)
+    {
+        $city = City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = City::where('slug', 'bhavnagar')->firstOrFail();
+        }
+
         $categories = Category::orderBy('name')->get();
 
         $query = Person::with(['category', 'city', 'tags'])
             ->published()
+            ->where('city_id', $city->id)
             ->rising()
             ->orderBy('sort_order')
             ->latest();
@@ -57,47 +78,44 @@ class DirectoryController extends Controller
         $people = $query->paginate(12)->withQueryString();
         $lead = $people->first();
 
-        return view('pages.rising', compact('people', 'lead', 'categories'));
+        return view('pages.rising', compact('city', 'people', 'lead', 'categories'));
     }
 
     /**
-     * Display Voices Directory with eager loaded relations.
+     * Fallback redirect for /rising -> /bhavnagar/rising
+     */
+    public function rising(Request $request)
+    {
+        return redirect('/bhavnagar/rising' . ($request->getQueryString() ? '?' . $request->getQueryString() : ''));
+    }
+
+    /**
+     * Voices page removal: redirect to Icons
      */
     public function voices(Request $request)
     {
-        $categories = Category::orderBy('name')->get();
-
-        $query = Person::with(['category', 'city', 'tags'])
-            ->published()
-            ->voices()
-            ->orderBy('sort_order')
-            ->latest();
-
-        if ($request->filled('category')) {
-            $catSlug = $request->category;
-            $query->whereHas('category', function ($q) use ($catSlug) {
-                $q->where('slug', $catSlug);
-            });
-        }
-
-        $people = $query->paginate(12)->withQueryString();
-
-        return view('pages.voices', compact('people', 'categories'));
+        return redirect('/bhavnagar/icons');
     }
 
     /**
-     * Display The List monthly archive.
+     * Display City-scoped The List monthly archive (e.g. /bhavnagar/the-list).
      */
-    public function theList(Request $request)
+    public function cityTheList($citySlug, Request $request)
     {
+        $city = City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = City::where('slug', 'bhavnagar')->firstOrFail();
+        }
+
         $currentYear = (int) date('Y');
         $currentMonth = (int) date('n');
 
         $selectedYear = (int) $request->input('year', $currentYear);
         $selectedMonth = (int) $request->input('month', $currentMonth);
 
-        // Fetch distinct available archives
+        // Fetch distinct available archives for this city
         $availableArchives = Person::published()
+            ->where('city_id', $city->id)
             ->whereNotNull('year')
             ->whereNotNull('month')
             ->select('year', 'month')
@@ -106,30 +124,39 @@ class DirectoryController extends Controller
             ->orderBy('month', 'desc')
             ->get();
 
-        // Query people for the specific month/year
         $query = Person::with(['category', 'city'])
             ->published()
+            ->where('city_id', $city->id)
             ->where('year', $selectedYear)
             ->where('month', $selectedMonth)
             ->orderBy('name', 'asc');
 
         $entries = $query->get();
 
-        // If no records for selected date, fetch any recent entries so page is never completely empty
         if ($entries->isEmpty()) {
             $entries = Person::with(['category', 'city'])
                 ->published()
+                ->where('city_id', $city->id)
                 ->orderBy('name', 'asc')
                 ->take(12)
                 ->get();
         }
 
         return view('pages.the-list', compact(
+            'city',
             'entries',
             'selectedYear',
             'selectedMonth',
             'availableArchives'
         ));
+    }
+
+    /**
+     * Fallback redirect for /the-list -> /bhavnagar/the-list
+     */
+    public function theList(Request $request)
+    {
+        return redirect('/bhavnagar/the-list' . ($request->getQueryString() ? '?' . $request->getQueryString() : ''));
     }
 
     /**
@@ -166,4 +193,3 @@ class DirectoryController extends Controller
         return view('pages.person', compact('person', 'relatedArticles', 'morePeople'));
     }
 }
-

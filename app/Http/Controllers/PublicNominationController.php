@@ -73,4 +73,17 @@ class PublicNominationController extends Controller
 
         return back()->with('success', 'Thank you. Your nomination has been submitted and recorded for editorial review.');
     }
+
+    /**
+     * Display city-scoped nomination page (e.g. /bhavnagar/nominate).
+     */
+    public function cityNominate($citySlug)
+    {
+        $city = \App\Models\City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = \App\Models\City::where('slug', 'bhavnagar')->first();
+        }
+
+        return view('pages.nominate', ['active' => 'nominate', 'city' => $city]);
+    }
 }

@@ -3,7 +3,11 @@
 <aside class="vogue-drawer" id="vogue-drawer">
   <button class="vogue-drawer__close" id="btn-close-drawer" aria-label="Close menu">&times;</button>
   
-  <div style="font-family:var(--font-didot); font-size:2.4rem; letter-spacing:5px; line-height:1; margin-bottom:6px;">CITYICONS</div>
+  <div style="margin-bottom:14px;">
+    <a href="{{ url('/') }}" aria-label="CityIcons Home">
+      <img src="{{ asset('images/logo-cityicons.png') }}" alt="City Icons" style="height:46px; width:auto; display:block; object-fit:contain;">
+    </a>
+  </div>
   <div style="font-size:0.6875rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--vogue-red); margin-bottom:4px;">Bhavnagar Icons · Flagship Edition</div>
   <p style="font-family:var(--font-garamond); font-size:0.95rem; font-style:italic; color:var(--vogue-muted); margin-bottom:24px;">Selected with purpose. Documented with responsibility.</p>
   

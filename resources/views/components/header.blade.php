@@ -17,8 +17,10 @@
 
       <!-- Center: Brand Logo & Edition -->
       <div class="header-center">
-        <a href="{{ url('/') }}" class="cityicon-main-logo">CITYICONS</a>
-        <div style="font-family:var(--font-sans); font-size:0.625rem; font-weight:800; letter-spacing:3.5px; text-transform:uppercase; color:var(--vogue-muted); margin-top:4px;">
+        <a href="{{ url('/') }}" class="cityicon-main-logo" aria-label="CityIcons Home">
+          <img src="{{ asset('images/logo-cityicons.png') }}" alt="City Icons" class="cityicon-logo-img">
+        </a>
+        <div class="cityicon-header-tagline">
           Bhavnagar Icons <span style="color:var(--vogue-red); margin:0 4px;">·</span> Flagship Edition
         </div>
       </div>

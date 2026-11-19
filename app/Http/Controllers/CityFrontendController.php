@@ -14,10 +14,6 @@ class CityFrontendController extends Controller
      */
     public function show($slug)
     {
-        if (strtolower($slug) === 'bhavnagar') {
-            return redirect()->route('home');
-        }
-
         $city = City::where('slug', strtolower($slug))->firstOrFail();
 
         // Lead story

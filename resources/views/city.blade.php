@@ -9,9 +9,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{ $cityName }} Moments — Visual Stories, Culture, Food, and Lifestyle in {{ $cityName }}.">
-  <title>{{ $cityName }} Moments — CITYICON</title>
+  <title>{{ $cityId === 'bhavnagar' ? 'Bhavnagar Icons — Flagship Edition · CITYICONS' : $cityName . ' Moments — CITYICONS' }}</title>
   <link rel="stylesheet" href="{{ asset('css/city.css') }}">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙</text></svg>">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body data-city="{{ $cityId }}">
@@ -21,8 +22,14 @@
   <aside class="rm-offcanvas" id="offcanvas-drawer">
     <button class="rm-offcanvas-close" id="btn-close-offcanvas">&times;</button>
     <div class="rm-logo" style="margin-bottom:20px;">
-      <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
-      <span class="rm-logo-script">Moments</span>
+      @if($cityId === 'bhavnagar')
+        <a href="{{ url('/cities/bhavnagar') }}" style="display:inline-block; text-decoration:none;">
+          <img src="{{ asset('images/logo-bhavnagar.png') }}" alt="Bhavnagar Icons" class="rm-logo-img">
+        </a>
+      @else
+        <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
+        <span class="rm-logo-script">Moments</span>
+      @endif
     </div>
     <div class="rm-offcanvas-title">Categories</div>
     <ul class="rm-offcanvas-menu">
@@ -55,9 +62,13 @@
         </div>
 
         <!-- Center: Logo -->
-        <a href="{{ url('/cities/' . $cityId) }}" class="rm-logo">
-          <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
-          <span class="rm-logo-script">Moments</span>
+        <a href="{{ url('/cities/' . $cityId) }}" class="rm-logo" aria-label="{{ $cityName }} Icons">
+          @if($cityId === 'bhavnagar')
+            <img src="{{ asset('images/logo-bhavnagar-white.png') }}" alt="Bhavnagar Icons" class="rm-logo-img">
+          @else
+            <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
+            <span class="rm-logo-script">Moments</span>
+          @endif
         </a>
 
         <!-- Right: Search & All India link -->
@@ -217,9 +228,13 @@
   <!-- ══ FOOTER ═══════════════════════════════════════════════ -->
   <footer class="rm-footer">
     <div class="rm-container">
-      <a href="{{ url('/cities/' . $cityId) }}" class="rm-footer-logo">
-        <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
-        <span class="rm-logo-script">Moments</span>
+      <a href="{{ url('/cities/' . $cityId) }}" class="rm-footer-logo" aria-label="{{ $cityName }} Icons">
+        @if($cityId === 'bhavnagar')
+          <img src="{{ asset('images/logo-bhavnagar-white.png') }}" alt="Bhavnagar Icons" class="rm-footer-logo-img">
+        @else
+          <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
+          <span class="rm-logo-script">Moments</span>
+        @endif
       </a>
       <div class="rm-footer-nav">
         <a href="#hero-section">Home</a>
@@ -231,7 +246,7 @@
         <a href="{{ url('/') }}">All India Edition</a>
       </div>
       <div class="rm-footer-copy">
-        &copy; {{ date('Y') }} {{ $cityName }} Moments · CITYICON Magazine.
+        &copy; {{ date('Y') }} {{ $cityId === 'bhavnagar' ? 'Bhavnagar Icons' : $cityName . ' Moments' }} · CITYICONS Magazine.
       </div>
     </div>
   </footer>

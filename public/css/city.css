@@ -250,8 +250,16 @@ button {
 /* Center Logo: clean sans + cursive script (real Moments style) */
 .rm-logo {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 4px;
+}
+
+.rm-logo-img {
+  height: clamp(38px, 5vw, 54px);
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
 }
 
 .rm-logo-text {
@@ -695,9 +703,18 @@ button {
 
 .rm-footer-logo {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
   gap: 4px;
   margin-bottom: 16px;
+}
+
+.rm-footer-logo-img {
+  height: clamp(34px, 4.5vw, 48px);
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  display: inline-block;
 }
 
 .rm-footer-nav {

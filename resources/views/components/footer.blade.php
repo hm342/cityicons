@@ -3,8 +3,10 @@
   <div class="vogue-container">
     
     <!-- Top Brand Block -->
-    <div class="vogue-footer__logo-wrap" style="margin-bottom:20px;">
-      <div class="vogue-footer-logo" style="margin-bottom:8px;">CITYICONS</div>
+    <div class="vogue-footer__logo-wrap" style="margin-bottom:24px; text-align:center;">
+      <a href="{{ url('/') }}" style="display:inline-block; margin-bottom:12px;" aria-label="CityIcons Home">
+        <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="City Icons" style="height:clamp(48px, 5.5vw, 68px); width:auto; display:block; margin:0 auto; object-fit:contain;">
+      </a>
       <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--vogue-red); margin-bottom:6px;">
         Bhavnagar Icons · Flagship Edition
       </div>

@@ -6,7 +6,8 @@
   <meta name="description" content="{{ $description ?? "CITYICON — India's Premier City Magazine. Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities." }}">
   <title>{{ $title ?? "CITYICONS — India's City Magazine" }}</title>
   
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙</text></svg>">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
   <style>

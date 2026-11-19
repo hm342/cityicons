@@ -237,20 +237,40 @@ button {
   background-color: var(--vogue-black);
 }
 
-/* Center: Logo (Only CITYICON) */
+/* Center: Logo (CITYICONS) */
 .header-center {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cityicon-main-logo {
-  font-family: var(--font-didot);
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-  font-weight: 400;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  color: var(--vogue-black);
-  line-height: 0.95;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.cityicon-logo-img {
+  height: clamp(52px, 6vw, 76px);
+  width: auto;
+  max-width: 100%;
   display: block;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.cityicon-header-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--vogue-muted);
+  margin-top: 6px;
 }
 
 /* Right: Subscribe & Search */

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editorial Sign In — CityIcons Administration</title>
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,7 +152,7 @@
 
   <div class="login-container">
     <div class="login-brand">
-      <div class="login-emblem">CI</div>
+      <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="City Icons" style="height:52px; width:auto; display:block; margin:0 auto 16px; object-fit:contain;">
       <h1 class="login-title">CITYICONS</h1>
       <div class="login-subtitle">Editorial Administration</div>
     </div>

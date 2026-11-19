@@ -4,11 +4,13 @@
     <div class="vogue-container">
       
       <!-- Section Header -->
-      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+      <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:20px; margin-bottom:30px;">
         <span class="vogue-rubric vogue-rubric--red">CULTURAL DISPATCH · LIVE CITY COVERAGE</span>
-        <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          In Bhavnagar
-        </h1>
+        <div style="margin:16px 0 16px;">
+          <a href="{{ url('/in-bhavnagar') }}" style="display:inline-block; text-decoration:none;">
+            <img src="{{ asset('images/logo-bhavnagar.png') }}" alt="Bhavnagar Icons" style="height:clamp(48px, 6vw, 70px); width:auto; display:block; object-fit:contain;">
+          </a>
+        </div>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
           Events, culture and moments shaping the city.
         </p>

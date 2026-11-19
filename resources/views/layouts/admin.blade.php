@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>{{ $title ?? 'Dashboard' }} — CityIcons Editorial Administration</title>
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,12 +60,19 @@
       overflow-y: auto;
     }
     .admin-brand {
-      padding: 24px 20px;
+      padding: 20px 18px;
       border-bottom: 1px solid #222228;
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
+    }
+    .admin-brand__img {
+      height: 32px;
+      width: auto;
+      max-width: 100px;
+      object-fit: contain;
+      display: block;
     }
     .admin-brand__badge {
       background: var(--primary);
@@ -438,7 +447,7 @@
   <!-- Sidebar -->
   <aside class="admin-sidebar">
     <a href="{{ route('admin.dashboard') }}" class="admin-brand">
-      <div class="admin-brand__badge">CI</div>
+      <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="City Icons" class="admin-brand__img">
       <div class="admin-brand__text">
         <span class="admin-brand__title">CITYICONS</span>
         <span class="admin-brand__sub">Editorial Control</span>

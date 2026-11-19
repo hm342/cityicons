@@ -106,13 +106,23 @@ class DirectoryController extends Controller
             ->orderBy('month', 'desc')
             ->get();
 
-        // Query people in selected month/year, ordered alphabetically
-        $entries = Person::with(['category', 'city'])
+        // Query people for the specific month/year
+        $query = Person::with(['category', 'city'])
             ->published()
             ->where('year', $selectedYear)
             ->where('month', $selectedMonth)
-            ->orderBy('name', 'asc')
-            ->get();
+            ->orderBy('name', 'asc');
+
+        $entries = $query->get();
+
+        // If no records for selected date, fetch any recent entries so page is never completely empty
+        if ($entries->isEmpty()) {
+            $entries = Person::with(['category', 'city'])
+                ->published()
+                ->orderBy('name', 'asc')
+                ->take(12)
+                ->get();
+        }
 
         return view('pages.the-list', compact(
             'entries',

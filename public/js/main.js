@@ -1,263 +1,38 @@
-// ============================================================
-// CITYICON — MAIN HOMEPAGE JAVASCRIPT
-// Binds data to the exact user homepage architecture
-// ============================================================
+/* ==========================================================================
+   CITYICONS — Main Website JavaScript & Seamless AJAX Filter Engine
+   High-performance, zero-bloat vanilla JS for drawer, search & AJAX filtering.
+   ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const D = CITYICON_DATA;
 
-  function articleUrl(id) {
-    return `/article?id=${id}`;
+  // ── 1. TOP PROGRESS BAR ─────────────────────────────────────────
+  const progressBar = document.getElementById('site-progress-bar');
+  let progressTimer = null;
+  let currentAbortController = null;
+
+  function startProgress() {
+    if (!progressBar) return;
+    clearTimeout(progressTimer);
+    progressBar.style.opacity = '1';
+    progressBar.style.width = '30%';
+    progressTimer = setTimeout(() => {
+      progressBar.style.width = '75%';
+    }, 150);
   }
 
-  function cityUrl(cId) {
-    return `/cities/${cId}`;
+  function finishProgress() {
+    if (!progressBar) return;
+    clearTimeout(progressTimer);
+    progressBar.style.width = '100%';
+    setTimeout(() => {
+      progressBar.style.opacity = '0';
+      setTimeout(() => {
+        progressBar.style.width = '0%';
+      }, 200);
+    }, 200);
   }
 
-  function formatDate(dStr) {
-    const d = new Date(dStr);
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-  }
-
-  function getSlice(arr, count, fallback) {
-    let res = [...arr];
-    if (res.length < count) {
-      res = res.concat(fallback.filter(f => !res.includes(f)));
-    }
-    return res.slice(0, count);
-  }
-
-  // ── 1. BIG BANNER HERO (बड़ा बैनर) ─────────────────────────
-  const heroBanner = document.getElementById('hero-banner');
-  const coverArticle = D.articles.find(a => a.isCover) || D.articles[0];
-
-  if (heroBanner && coverArticle) {
-    heroBanner.innerHTML = `
-      <div class="hero-big-banner__img-wrap" onclick="location.href='${articleUrl(coverArticle.id)}'">
-        <img src="${coverArticle.image}" alt="${coverArticle.title}">
-        <!-- Top gradient for contrast -->
-        <div class="hero-big-banner__top-shade"></div>
-        <!-- Right side top CITYICONS name inside the image -->
-        <div class="hero-big-banner__brand-stamp">CITYICONS</div>
-        <!-- Bottom gradient shade for text readability -->
-        <div class="hero-big-banner__bottom-shade"></div>
-
-        <!-- Main description INSIDE the image at the bottom -->
-        <div class="hero-big-banner__content-overlay">
-          <div class="hero-big-banner__content-box">
-            <h1 class="hero-big-banner__hed">${coverArticle.title}</h1>
-          </div>
-        </div>
-      </div>
-
-      <!-- Others things OUT of the image (underneath the image) -->
-      <div class="hero-big-banner__details" onclick="location.href='${articleUrl(coverArticle.id)}'">
-        <span class="vogue-rubric vogue-rubric--red">${coverArticle.category} · Cover Feature</span>
-        <p class="hero-big-banner__dek">${coverArticle.excerpt}</p>
-        <div class="vogue-byline">
-          <span>By ${coverArticle.author}</span>
-          <span class="dot"></span>
-          <span>${formatDate(coverArticle.date)}</span>
-          <span class="dot"></span>
-          <span>${coverArticle.readTime || '8 min read'}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  // ── 2. CITY NEWS HORIZONTAL CAROUSEL (क्रॉसेल बार) ────────
-  const cityNewsTrack = document.getElementById('city-news-track');
-  if (cityNewsTrack) {
-    // Gather 1 story from each city for the continuous city dispatch
-    const cityDispatches = [];
-    D.cities.forEach(city => {
-      const art = D.articles.find(a => a.city === city.id);
-      if (art) {
-        cityDispatches.push({ ...art, cityName: city.name });
-      }
-    });
-
-    cityNewsTrack.innerHTML = cityDispatches.map(a => `
-      <div class="city-news-mini-card" onclick="location.href='${articleUrl(a.id)}'">
-        <div class="city-news-mini-card__img">
-          <img src="${a.image}" alt="${a.title}" loading="lazy">
-        </div>
-        <span class="city-news-mini-card__city">${a.cityName}</span>
-        <h3 class="city-news-mini-card__hed">${a.title}</h3>
-      </div>
-    `).join('');
-
-    const btnStripPrev = document.getElementById('btn-strip-prev');
-    const btnStripNext = document.getElementById('btn-strip-next');
-    if (btnStripPrev) btnStripPrev.addEventListener('click', () => cityNewsTrack.scrollBy({ left: -320, behavior: 'smooth' }));
-    if (btnStripNext) btnStripNext.addEventListener('click', () => cityNewsTrack.scrollBy({ left: 320, behavior: 'smooth' }));
-  }
-
-  // ── 3. CITY SECTION 1: BHAVNAGAR ───────────────────────────
-  // Sticky Lead Story (Left) + 6-Story Grid (Right: 2 cols x 3 rows)
-  const bhavLead = document.getElementById('bhavnagar-lead');
-  const bhavGrid = document.getElementById('bhavnagar-grid-6');
-  const bhavArticles = getSlice(D.articles.filter(a => a.city === 'bhavnagar'), 7, D.articles);
-
-  if (bhavLead && bhavGrid && bhavArticles.length >= 1) {
-    const mainBhav = bhavArticles[0];
-    const sideBhav = bhavArticles.slice(1, 7); // Exactly 6 stories on the right side
-
-    bhavLead.innerHTML = `
-      <div class="vogue-sticky-lead__card" onclick="location.href='${articleUrl(mainBhav.id)}'">
-        <img class="vogue-sticky-lead__img" src="${mainBhav.image}" alt="${mainBhav.title}" loading="lazy">
-        <div class="vogue-sticky-lead__overlay"></div>
-        <div class="vogue-sticky-lead__content">
-          <span class="vogue-sticky-lead__rubric">${mainBhav.category} · Bhavnagar</span>
-          <h2 class="vogue-sticky-lead__hed">${mainBhav.title}</h2>
-          <div class="vogue-sticky-lead__byline">BY ${mainBhav.author.toUpperCase()}</div>
-        </div>
-      </div>
-    `;
-
-    bhavGrid.innerHTML = sideBhav.map(a => `
-      <article class="vogue-sub-card" onclick="location.href='${articleUrl(a.id)}'">
-        <div class="vogue-sub-card__media">
-          <img src="${a.image}" alt="${a.title}" loading="lazy">
-        </div>
-        <span class="vogue-sub-card__rubric">${a.category}</span>
-        <h3 class="vogue-sub-card__hed">${a.title}</h3>
-        <div class="vogue-sub-card__byline">
-          <span>BY ${a.author.toUpperCase()}</span>
-          <span class="vogue-sub-card__date">${formatDate(a.date)}</span>
-        </div>
-      </article>
-    `).join('');
-  }
-
-  // ── 4. CITY SECTION 2: MUMBAI ──────────────────────────────
-  // Sticky Lead Story (Left) + 6-Story Grid (Right: 2 cols x 3 rows)
-  const mumbaiLead = document.getElementById('mumbai-lead');
-  const mumbaiGrid = document.getElementById('mumbai-grid-6');
-  const mumbaiArticles = getSlice(D.articles.filter(a => a.city === 'mumbai'), 7, D.articles);
-
-  if (mumbaiLead && mumbaiGrid && mumbaiArticles.length >= 1) {
-    const mainMum = mumbaiArticles[0];
-    const sideMum = mumbaiArticles.slice(1, 7); // Exactly 6 stories on the right side
-
-    mumbaiLead.innerHTML = `
-      <div class="vogue-sticky-lead__card" onclick="location.href='${articleUrl(mainMum.id)}'">
-        <img class="vogue-sticky-lead__img" src="${mainMum.image}" alt="${mainMum.title}" loading="lazy">
-        <div class="vogue-sticky-lead__overlay"></div>
-        <div class="vogue-sticky-lead__content">
-          <span class="vogue-sticky-lead__rubric">${mainMum.category} · Mumbai</span>
-          <h2 class="vogue-sticky-lead__hed">${mainMum.title}</h2>
-          <div class="vogue-sticky-lead__byline">BY ${mainMum.author.toUpperCase()}</div>
-        </div>
-      </div>
-    `;
-
-    mumbaiGrid.innerHTML = sideMum.map(a => `
-      <article class="vogue-sub-card" onclick="location.href='${articleUrl(a.id)}'">
-        <div class="vogue-sub-card__media">
-          <img src="${a.image}" alt="${a.title}" loading="lazy">
-        </div>
-        <span class="vogue-sub-card__rubric">${a.category}</span>
-        <h3 class="vogue-sub-card__hed">${a.title}</h3>
-        <div class="vogue-sub-card__byline">
-          <span>BY ${a.author.toUpperCase()}</span>
-          <span class="vogue-sub-card__date">${formatDate(a.date)}</span>
-        </div>
-      </article>
-    `).join('');
-  }
-
-  // ── 5. CITY SECTION 3: AHMEDABAD (Cinematic Banner + Carousel Below) ──
-  const ahmdBanner = document.getElementById('ahmedabad-cinema-banner');
-  const ahmdTrack = document.getElementById('ahmedabad-cinema-track');
-  const ahmdArticles = getSlice(D.articles.filter(a => a.city === 'ahmedabad'), 6, D.articles);
-
-  if (ahmdBanner && ahmdTrack && ahmdArticles.length >= 2) {
-    const cinemaMain = ahmdArticles[0];
-    const cinemaOthers = ahmdArticles.slice(1);
-
-    ahmdBanner.innerHTML = `
-      <img src="${cinemaMain.image}" alt="${cinemaMain.title}" onclick="location.href='${articleUrl(cinemaMain.id)}'">
-      <div class="city-cinema-overlay"></div>
-      <div class="city-cinema-content" onclick="location.href='${articleUrl(cinemaMain.id)}'">
-        <span class="vogue-rubric">${cinemaMain.category} · Ahmedabad Showcase</span>
-        <h2 class="city-cinema-hed">${cinemaMain.title}</h2>
-        <p class="city-cinema-dek">${cinemaMain.excerpt}</p>
-        <div class="vogue-byline" style="color:rgba(255,255,255,0.8); margin-top:10px;">
-          <span>By ${cinemaMain.author}</span>
-          <span class="dot"></span>
-          <span>${formatDate(cinemaMain.date)}</span>
-        </div>
-      </div>
-    `;
-
-    ahmdTrack.innerHTML = cinemaOthers.map(a => `
-      <article class="city-cinema-card" onclick="location.href='${articleUrl(a.id)}'">
-        <div class="city-cinema-card__media">
-          <img src="${a.image}" alt="${a.title}" loading="lazy">
-        </div>
-        <span class="vogue-rubric" style="font-size:0.625rem;">${a.category}</span>
-        <h3 class="city-cinema-card__hed">${a.title}</h3>
-        <div class="vogue-byline">
-          <span>By ${a.author}</span>
-        </div>
-      </article>
-    `).join('');
-
-    const btnAhmdPrev = document.getElementById('btn-ahmd-prev');
-    const btnAhmdNext = document.getElementById('btn-ahmd-next');
-    if (btnAhmdPrev) btnAhmdPrev.addEventListener('click', () => ahmdTrack.scrollBy({ left: -320, behavior: 'smooth' }));
-    if (btnAhmdNext) btnAhmdNext.addEventListener('click', () => ahmdTrack.scrollBy({ left: 320, behavior: 'smooth' }));
-  }
-
-  // ── 6. LAST SECTION: WEDDINGS & CELEBRATIONS (4-Column Collection Grid) ──
-  const weddingsGrid = document.getElementById('weddings-4col-grid') || document.getElementById('jaipur-4col-grid');
-  const weddingArticles = D.articles.filter(a => a.id >= 1101 && a.id <= 1104);
-  const display4 = weddingArticles.length === 4 
-    ? weddingArticles 
-    : getSlice(D.articles.filter(a => a.category.toLowerCase() === 'weddings'), 4, D.articles);
-
-  if (weddingsGrid && display4.length >= 4) {
-    weddingsGrid.innerHTML = display4.map(a => `
-      <article class="vogue-4col-card" onclick="location.href='${articleUrl(a.id)}'">
-        <div class="vogue-4col-card__media">
-          <img src="${a.image}" alt="${a.title}" loading="lazy">
-          ${a.hasGallery ? `
-            <span class="vogue-card-badge-gallery" aria-label="Gallery">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M8 21h13V8"></path>
-              </svg>
-            </span>
-          ` : ''}
-        </div>
-        <span class="vogue-4col-card__rubric">${a.category}</span>
-        <h3 class="vogue-4col-card__hed">${a.title}</h3>
-        <div class="vogue-4col-card__byline">
-          <span class="vogue-4col-card__author">BY ${a.author.toUpperCase()}</span>
-          <span class="vogue-4col-card__date">${formatDate(a.date)}</span>
-        </div>
-      </article>
-    `).join('');
-  }
-
-  // ── 7. FOOTER & DRAWER CITY LINKS ──────────────────────────
-  const footerCities = document.getElementById('footer-cities-list');
-  const drawerCities = document.getElementById('drawer-cities-grid');
-
-  if (footerCities) {
-    footerCities.innerHTML = D.cities.map(c => `
-      <a href="${cityUrl(c.id)}">${c.name}</a>
-    `).join(' · ');
-  }
-
-  if (drawerCities) {
-    drawerCities.innerHTML = D.cities.map(c => `
-      <a href="${cityUrl(c.id)}" class="vogue-drawer__city-chip">${c.name}</a>
-    `).join('');
-  }
-
-  // ── 8. OFFCANVAS DRAWER & SEARCH MODAL ─────────────────────
+  // ── 2. OFFCANVAS SLIDEOUT DRAWER ────────────────────────────────
   const drawer = document.getElementById('vogue-drawer');
   const overlay = document.getElementById('vogue-overlay');
   const btnOpenDrawer = document.getElementById('btn-open-drawer');
@@ -266,71 +41,335 @@ document.addEventListener('DOMContentLoaded', () => {
   function openDrawer() {
     if (drawer) drawer.classList.add('open');
     if (overlay) overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeDrawer() {
     if (drawer) drawer.classList.remove('open');
     if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   if (btnOpenDrawer) btnOpenDrawer.addEventListener('click', openDrawer);
   if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', closeDrawer);
   if (overlay) overlay.addEventListener('click', closeDrawer);
 
-  // Search Modal
+  // Close drawer on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDrawer();
+      closeSearch();
+    }
+  });
+
+  // ── 3. SEARCH MODAL & LIVE DATABASE SEARCH ──────────────────────
   const searchModal = document.getElementById('vogue-search-modal');
   const btnOpenSearch = document.getElementById('btn-open-search');
   const btnCloseSearch = document.getElementById('btn-close-search');
   const searchInput = document.getElementById('vogue-search-input');
   const searchResults = document.getElementById('vogue-search-results');
+  let searchDebounceTimer = null;
 
-  if (btnOpenSearch && searchModal) {
-    btnOpenSearch.addEventListener('click', () => {
+  function openSearch() {
+    if (searchModal) {
       searchModal.classList.add('open');
       setTimeout(() => searchInput && searchInput.focus(), 150);
-    });
+    }
   }
 
-  if (btnCloseSearch && searchModal) {
-    btnCloseSearch.addEventListener('click', () => {
-      searchModal.classList.remove('open');
-    });
+  function closeSearch() {
+    if (searchModal) searchModal.classList.remove('open');
   }
 
+  if (btnOpenSearch) btnOpenSearch.addEventListener('click', openSearch);
+  if (btnCloseSearch) btnCloseSearch.addEventListener('click', closeSearch);
   if (searchModal) {
     searchModal.addEventListener('click', (e) => {
-      if (e.target === searchModal) searchModal.classList.remove('open');
+      if (e.target === searchModal) closeSearch();
     });
   }
 
   if (searchInput && searchResults) {
     searchInput.addEventListener('input', () => {
-      const q = searchInput.value.toLowerCase().trim();
+      clearTimeout(searchDebounceTimer);
+      const q = searchInput.value.trim();
+
       if (q.length < 2) {
         searchResults.innerHTML = '';
         return;
       }
-      const matches = D.articles.filter(a =>
-        a.title.toLowerCase().includes(q) ||
-        a.category.toLowerCase().includes(q) ||
-        (a.city && a.city.toLowerCase().includes(q)) ||
-        (a.excerpt && a.excerpt.toLowerCase().includes(q))
-      );
 
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<p style="color:#777;text-align:center;padding:1.5rem;font-family:\'Plus Jakarta Sans\',sans-serif;">No stories found.</p>';
+      searchResults.innerHTML = '<div style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;"><i class="fas fa-spinner fa-spin"></i> Searching editorial archive...</div>';
+
+      searchDebounceTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`/search?q=${encodeURIComponent(q)}&json=1`, {
+            headers: { 'Accept': 'application/json' }
+          });
+          if (!res.ok) throw new Error('Search failed');
+          const data = await res.json();
+
+          const allMatches = [];
+
+          if (data.articles && data.articles.length > 0) {
+            data.articles.forEach(a => {
+              allMatches.push(`
+                <div onclick="location.href='${a.url}'" style="display:flex;gap:1.25rem;align-items:center;padding:1rem 0;border-bottom:1px solid #e2e2e2;cursor:pointer;">
+                  <img src="${a.image || 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=200&q=80'}" alt="" style="width:75px;height:55px;object-fit:cover;flex-shrink:0;border-radius:2px;">
+                  <div>
+                    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#e51a24;margin-bottom:0.25rem;">
+                      ${a.category}${a.city ? ' · ' + a.city.toUpperCase() : ''}
+                    </div>
+                    <div style="font-family:'Bodoni Moda',serif;font-size:1.1rem;color:#000;line-height:1.2;">
+                      ${a.title}
+                    </div>
+                  </div>
+                </div>
+              `);
+            });
+          }
+
+          if (data.people && data.people.length > 0) {
+            data.people.forEach(p => {
+              allMatches.push(`
+                <div onclick="location.href='${p.url}'" style="display:flex;gap:1.25rem;align-items:center;padding:1rem 0;border-bottom:1px solid #e2e2e2;cursor:pointer;">
+                  <img src="${p.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80'}" alt="" style="width:75px;height:55px;object-fit:cover;flex-shrink:0;border-radius:2px;">
+                  <div>
+                    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:0.25rem;">
+                      ${p.category} · DOCUMENTED PERSON
+                    </div>
+                    <div style="font-family:'Bodoni Moda',serif;font-size:1.1rem;color:#000;line-height:1.2;">
+                      ${p.name}
+                    </div>
+                    <div style="font-size:0.75rem;color:#777;margin-top:2px;">${p.profession || ''}</div>
+                  </div>
+                </div>
+              `);
+            });
+          }
+
+          if (allMatches.length === 0) {
+            searchResults.innerHTML = `<p style="color:#777;text-align:center;padding:1.5rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;">No stories or people found matching "${q}".</p>`;
+          } else {
+            searchResults.innerHTML = allMatches.join('') + `
+              <div style="text-align:center;padding:1rem 0;">
+                <a href="/search?q=${encodeURIComponent(q)}" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#e51a24;text-decoration:none;">
+                  View All Archive Results →
+                </a>
+              </div>
+            `;
+          }
+        } catch (err) {
+          searchResults.innerHTML = '<p style="color:#777;text-align:center;padding:1.5rem;font-size:0.85rem;">Press Enter to search.</p>';
+        }
+      }, 250);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const q = searchInput.value.trim();
+        if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
+      }
+    });
+  }
+
+  // ── 4. CITY NEWS TICKER CAROUSEL ────────────────────────────────
+  const cityNewsTrack = document.getElementById('city-news-track');
+  const btnStripPrev = document.getElementById('btn-strip-prev');
+  const btnStripNext = document.getElementById('btn-strip-next');
+
+  if (cityNewsTrack) {
+    if (btnStripPrev) {
+      btnStripPrev.addEventListener('click', () => {
+        cityNewsTrack.scrollBy({ left: -320, behavior: 'smooth' });
+      });
+    }
+    if (btnStripNext) {
+      btnStripNext.addEventListener('click', () => {
+        cityNewsTrack.scrollBy({ left: 320, behavior: 'smooth' });
+      });
+    }
+  }
+
+  // ── 5. SEAMLESS AJAX FILTER & PAGINATION ENGINE ──────────────────
+  // Loads filtered content smoothly without reloading header, city navbar, or footer
+  async function loadFrontendContent(url, pushState = true) {
+    if (currentAbortController) {
+      currentAbortController.abort();
+    }
+    currentAbortController = new AbortController();
+
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) {
+      window.location.href = url;
+      return;
+    }
+
+    startProgress();
+    mainContent.classList.add('is-filtering');
+
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-Frontend-AJAX': 'true',
+          'Accept': 'text/html, application/xhtml+xml, */*'
+        },
+        signal: currentAbortController.signal
+      });
+
+      if (!response.ok) {
+        window.location.href = url;
         return;
       }
 
-      searchResults.innerHTML = matches.map(a => `
-        <div onclick="location.href='${articleUrl(a.id)}'" style="display:flex;gap:1.25rem;align-items:center;padding:1rem 0;border-bottom:1px solid #e2e2e2;cursor:pointer;">
-          <img src="${a.image}" alt="" style="width:75px;height:55px;object-fit:cover;flex-shrink:0;">
-          <div>
-            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:#e51a24;margin-bottom:0.25rem;">${a.category}${a.city ? ' · ' + a.city.toUpperCase() : ''}</div>
-            <div style="font-family:'Bodoni Moda',serif;font-size:1.15rem;color:#000;">${a.title}</div>
-          </div>
-        </div>
-      `).join('');
-    });
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const newMain = doc.getElementById('main-content');
+      if (!newMain) {
+        window.location.href = url;
+        return;
+      }
+
+      // Update Page Title
+      if (doc.title) {
+        document.title = doc.title;
+      }
+
+      // Smoothly replace the main content area
+      mainContent.innerHTML = newMain.innerHTML;
+
+      // Re-evaluate script tags within newly injected content if any
+      const scripts = mainContent.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+        newScript.textContent = oldScript.textContent;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+
+      // Update URL in browser bar
+      if (pushState) {
+        window.history.pushState({ ajax: true, url }, '', url);
+      }
+
+      // Scroll smoothly to top of filter section if scrolled down
+      const section = mainContent.querySelector('.city-edition-section') || mainContent;
+      const rect = section.getBoundingClientRect();
+      if (rect.top < 0) {
+        window.scrollTo({
+          top: window.pageYOffset + rect.top - 80,
+          behavior: 'smooth'
+        });
+      }
+
+      // Re-bind ticker carousel if present on newly loaded page
+      const newTrack = document.getElementById('city-news-track');
+      const newPrev = document.getElementById('btn-strip-prev');
+      const newNext = document.getElementById('btn-strip-next');
+      if (newTrack && newPrev && newNext) {
+        newPrev.onclick = () => newTrack.scrollBy({ left: -320, behavior: 'smooth' });
+        newNext.onclick = () => newTrack.scrollBy({ left: 320, behavior: 'smooth' });
+      }
+
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+      console.error('AJAX Filter load error, falling back:', err);
+      window.location.href = url;
+    } finally {
+      mainContent.classList.remove('is-filtering');
+      finishProgress();
+    }
   }
+
+  // Intercept Filter Tabs & Pagination Click Events
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    // Ignore modified keys (Ctrl, Cmd, Shift, Alt)
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    // Ignore external or new tab links
+    if (link.target && link.target !== '_self') return;
+    if (link.hasAttribute('download')) return;
+    if (link.closest('[data-no-ajax]') || link.hasAttribute('data-no-ajax')) return;
+
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+    let targetUrl;
+    try {
+      targetUrl = new URL(link.href, window.location.href);
+    } catch (err) {
+      return;
+    }
+
+    // Must be same origin and NOT admin
+    if (targetUrl.origin !== window.location.origin) return;
+    if (targetUrl.pathname.startsWith('/admin')) return;
+
+    // Check if this is a filter link or pagination link inside main-content
+    const isInsideMain = !!link.closest('#main-content');
+    const hasFilterParams = targetUrl.searchParams.has('category') ||
+                            targetUrl.searchParams.has('section') ||
+                            targetUrl.searchParams.has('sort') ||
+                            targetUrl.searchParams.has('year') ||
+                            targetUrl.searchParams.has('month') ||
+                            targetUrl.searchParams.has('q') ||
+                            targetUrl.searchParams.has('page');
+
+    const isPagination = !!link.closest('.pagination') || !!link.closest('nav[role="navigation"]') || link.classList.contains('page-link');
+    const isFilterBar = !!link.closest('.vogue-filter-bar') || (isInsideMain && link.parentElement && link.parentElement.textContent.includes('Filter'));
+
+    // If it's a filter click, pagination click, or category tab inside main-content
+    if (isInsideMain && (hasFilterParams || isPagination || isFilterBar)) {
+      e.preventDefault();
+      loadFrontendContent(targetUrl.href, true);
+    }
+  });
+
+  // Intercept Filter & Search Form Submissions (GET forms)
+  document.addEventListener('submit', (e) => {
+    const form = e.target.closest('form');
+    if (!form) return;
+
+    if (form.hasAttribute('data-no-ajax') || form.closest('[data-no-ajax]')) return;
+
+    const method = (form.getAttribute('method') || 'GET').toUpperCase();
+    if (method !== 'GET') return; // Let POST mutations (nominate, newsletter) run natively
+
+    let targetUrl;
+    try {
+      targetUrl = new URL(form.action || window.location.href, window.location.href);
+    } catch (err) {
+      return;
+    }
+
+    if (targetUrl.origin !== window.location.origin || targetUrl.pathname.startsWith('/admin')) {
+      return;
+    }
+
+    const isInsideMain = !!form.closest('#main-content');
+    if (isInsideMain) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        if (value !== '') {
+          params.append(key, value);
+        }
+      }
+      const cleanUrl = targetUrl.pathname + (params.toString() ? '?' + params.toString() : '');
+      loadFrontendContent(cleanUrl, true);
+    }
+  });
+
+  // Handle browser Back / Forward Navigation
+  window.addEventListener('popstate', () => {
+    loadFrontendContent(window.location.href, false);
+  });
+
 });

@@ -86,8 +86,8 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        // 8. Site Settings (cached / key-value dictionary)
-        $settings = Setting::all()->pluck('value', 'key');
+        // 8. Site Settings (keyed array)
+        $settings = Setting::all()->pluck('value', 'key')->toArray();
 
         return view('home', compact(
             'coverArticle',

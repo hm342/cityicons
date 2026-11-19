@@ -48,6 +48,8 @@ class CityController extends Controller
 
         $city->update($validated);
 
+        \Illuminate\Support\Facades\Cache::forget('active_cities');
+
         return redirect()->route('admin.cities.index')->with('success', 'City edition updated successfully.');
     }
 }

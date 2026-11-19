@@ -9,9 +9,35 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+  <style>
+    /* Global Smooth AJAX Filter & Navigation Progress Bar */
+    #site-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #e51a24, #b51622);
+      z-index: 99999;
+      opacity: 0;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+      pointer-events: none;
+      box-shadow: 0 0 10px rgba(229, 26, 36, 0.6);
+    }
+    #main-content {
+      opacity: 1;
+      transition: opacity 0.18s ease-in-out;
+    }
+    #main-content.is-filtering {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+  </style>
   @stack('styles')
 </head>
 <body>
+  <!-- Global Top Progress Bar -->
+  <div id="site-progress-bar"></div>
 
   <!-- Offcanvas Slideout Drawer -->
   <x-drawer />
@@ -34,7 +60,6 @@
   <x-search-modal />
 
   <!-- Scripts -->
-  <script src="{{ asset('js/data.js') }}"></script>
   <script src="{{ asset('js/main.js') }}"></script>
   @stack('scripts')
 </body>

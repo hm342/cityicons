@@ -28,7 +28,7 @@ class SearchFrontendController extends Controller
                       ->orWhere('author_name', 'like', "%{$term}%");
                 })
                 ->latest()
-                ->take(15)
+                ->take(12)
                 ->get();
 
             $people = Person::with(['category', 'city'])
@@ -40,8 +40,30 @@ class SearchFrontendController extends Controller
                       ->orWhere('organization', 'like', "%{$term}%");
                 })
                 ->latest()
-                ->take(15)
+                ->take(12)
                 ->get();
+        }
+
+        // Live JSON response for search modal
+        if ($request->wantsJson() || $request->has('json')) {
+            return response()->json([
+                'articles' => $articles->map(fn($a) => [
+                    'id' => $a->id,
+                    'title' => $a->title,
+                    'category' => $a->category->name ?? 'Story',
+                    'city' => $a->city->name ?? null,
+                    'image' => $a->cover_image,
+                    'url' => url('/article/' . $a->id),
+                ]),
+                'people' => $people->map(fn($p) => [
+                    'id' => $p->id,
+                    'name' => $p->name,
+                    'profession' => $p->profession,
+                    'category' => $p->category->name ?? strtoupper($p->type),
+                    'image' => $p->portrait_image ?: $p->cover_image,
+                    'url' => url('/stories'),
+                ]),
+            ]);
         }
 
         return view('pages.search', compact('term', 'articles', 'people'));

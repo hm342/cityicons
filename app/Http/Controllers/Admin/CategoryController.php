@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
@@ -27,6 +28,8 @@ class CategoryController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         Category::create($validated);
 
+        Cache::forget('all_categories');
+
         return back()->with('success', 'Category created successfully.');
     }
 
@@ -44,6 +47,8 @@ class CategoryController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $category->update($validated);
 
+        Cache::forget('all_categories');
+
         return back()->with('success', 'Category updated successfully.');
     }
 
@@ -51,6 +56,8 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
+
+        Cache::forget('all_categories');
 
         return back()->with('success', 'Category deleted.');
     }

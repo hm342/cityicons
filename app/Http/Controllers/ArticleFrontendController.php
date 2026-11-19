@@ -105,20 +105,39 @@ class ArticleFrontendController extends Controller
             $city = City::where('slug', 'bhavnagar')->firstOrFail();
         }
 
-        $articles = Article::with(['category', 'city', 'tags'])
+        $categories = Category::orderBy('name')->get();
+
+        $query = Article::with(['category', 'city', 'tags'])
             ->published()
             ->where('city_id', $city->id)
-            ->latest()
-            ->paginate(12);
+            ->latest();
 
-        if ($articles->isEmpty()) {
+        if ($request->filled('category')) {
+            $catSlug = $request->category;
+            $query->whereHas('category', function ($q) use ($catSlug) {
+                $q->where('slug', $catSlug);
+            });
+        }
+
+        if ($request->filled('q')) {
+            $searchTerm = '%' . $request->q . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'LIKE', $searchTerm)
+                  ->orWhere('excerpt', 'LIKE', $searchTerm)
+                  ->orWhere('content', 'LIKE', $searchTerm);
+            });
+        }
+
+        $articles = $query->paginate(12)->withQueryString();
+
+        if ($articles->isEmpty() && !$request->filled('category') && !$request->filled('q')) {
             $articles = Article::with(['category', 'city', 'tags'])
                 ->published()
                 ->latest()
                 ->paginate(12);
         }
 
-        return view('pages.in-city', compact('city', 'articles'));
+        return view('pages.in-city', compact('city', 'articles', 'categories'));
     }
 
     /**

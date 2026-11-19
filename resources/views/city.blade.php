@@ -137,46 +137,7 @@
     </div>
   </section>
 
-  <!-- ══ 5. VOICES ══════════════════════════════════════════════ -->
-  <section class="city-edition-section" id="sec-voices" style="margin-bottom:var(--section-gap);">
-    <div class="vogue-container">
-      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
-        <div>
-          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · VOICES &amp; PERSPECTIVES</span>
-          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
-            Conversations worth preserving.
-          </h2>
-          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
-            Interviews, reflections and professional perspectives from people whose experiences help us understand the city and its changing identity.
-          </p>
-        </div>
-      </div>
 
-      <div class="vogue-4col-grid" style="margin-bottom:28px;">
-        @foreach($voicesPeople as $person)
-          <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
-            <div class="vogue-card__img-wrap" style="aspect-ratio:4/5;">
-              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy" style="object-fit:cover !important;">
-            </div>
-            <div class="vogue-card__body" style="padding-top:12px;">
-              <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'VOICE' }}</span>
-              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 6px;">{{ $person->name }}</h3>
-              <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:6px;">
-                {{ Str::limit($person->tagline ?: $person->bio, 80) }}
-              </p>
-              <div class="vogue-card__byline" style="font-size:0.8rem; color:var(--vogue-muted);">{{ $person->profession }}</div>
-            </div>
-          </article>
-        @endforeach
-      </div>
-
-      <div style="text-align:center;">
-        <a href="{{ url('/' . $cityId . '/voices') }}" class="vogue-btn-outline">
-          Explore Voices &rarr;
-        </a>
-      </div>
-    </div>
-  </section>
 
   <!-- ══ 6. STORIES ═════════════════════════════════════════════ -->
   <section class="city-edition-section" id="sec-stories" style="margin-bottom:var(--section-gap); background:var(--vogue-bg-light); padding:48px 0; border-top:1px solid var(--vogue-border); border-bottom:1px solid var(--vogue-border);">

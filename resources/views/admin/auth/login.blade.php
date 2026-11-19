@@ -122,6 +122,15 @@
       font-size: 13px;
       margin-bottom: 22px;
     }
+    .alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
     .login-footer {
       text-align: center;
       margin-top: 28px;
@@ -135,19 +144,6 @@
     .login-footer a:hover {
       color: #fff;
     }
-    .demo-credentials {
-      background: #111116;
-      border: 1px dashed #333344;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 11px;
-      color: #8f8fa0;
-      margin-top: 20px;
-      text-align: center;
-    }
-    .demo-credentials strong {
-      color: #e0e0ea;
-    }
   </style>
 </head>
 <body>
@@ -158,6 +154,12 @@
       <h1 class="login-title">CITYICONS</h1>
       <div class="login-subtitle">Editorial Administration</div>
     </div>
+
+    @if(session('success'))
+      <div class="alert-success">
+        <i class="fa-solid fa-circle-check" style="margin-right:6px;"></i> {{ session('success') }}
+      </div>
+    @endif
 
     @if($errors->any())
       <div class="alert-error">
@@ -171,29 +173,25 @@
       @csrf
 
       <div class="form-group">
-        <label class="form-label" for="email">Admin Email</label>
-        <input type="email" id="email" name="email" value="{{ old('email', 'admin@cityicons.in') }}" class="form-control" required autofocus placeholder="admin@cityicons.in">
+        <label class="form-label" for="email">Admin Email Address</label>
+        <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required autofocus placeholder="name@cityicons.in" autocomplete="email">
       </div>
 
       <div class="form-group">
         <label class="form-label" for="password">Password</label>
-        <input type="password" id="password" name="password" value="password123" class="form-control" required placeholder="••••••••">
+        <input type="password" id="password" name="password" class="form-control" required placeholder="Enter administrative password" autocomplete="current-password">
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-size:12px; color:#a0a0b0;">
         <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-          <input type="checkbox" name="remember" checked style="accent-color:var(--primary);">
-          <span>Remember session</span>
+          <input type="checkbox" name="remember" style="accent-color:var(--primary);">
+          <span>Keep me signed in</span>
         </label>
       </div>
 
       <button type="submit" class="login-btn">
-        <i class="fa-solid fa-lock" style="margin-right:8px;"></i> Access Editorial Panel
+        <i class="fa-solid fa-shield-halved" style="margin-right:8px;"></i> Sign In Securely
       </button>
-
-      <div class="demo-credentials">
-        Default Login: <strong>admin@cityicons.in</strong> / <strong>password123</strong>
-      </div>
     </form>
 
     <div class="login-footer">

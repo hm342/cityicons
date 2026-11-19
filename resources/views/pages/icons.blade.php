@@ -22,32 +22,63 @@
 
       <!-- Categories Filter Bar -->
       <div style="display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:36px; padding:16px 0; border-bottom:1px solid var(--vogue-border); font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
-        <span style="color:var(--vogue-muted);">Categories:</span>
-        <a href="#cat-all" style="color:var(--vogue-red);">All Icons</a> ·
-        <a href="#cat-business">Business</a> ·
-        <a href="#cat-arts">Arts</a> ·
-        <a href="#cat-education">Education</a> ·
-        <a href="#cat-healthcare">Healthcare</a> ·
-        <a href="#cat-sports">Sports</a> ·
-        <a href="#cat-public-service">Public Service</a> ·
-        <a href="#cat-innovation">Innovation</a> ·
-        <a href="#cat-social-impact">Social Impact</a>
+        <span style="color:var(--vogue-muted);">Filter by Field:</span>
+        <a href="{{ url('/icons') }}" style="{{ !request('category') ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">All Icons</a>
+        @foreach($categories as $cat)
+          · <a href="{{ url('/icons?category=' . $cat->slug) }}" style="{{ request('category') === $cat->slug ? 'color:var(--vogue-red);' : 'color:var(--vogue-black);' }}">
+            {{ $cat->name }}
+          </a>
+        @endforeach
       </div>
 
-      <!-- Stories Grid -->
-      <div class="vogue-sticky-section">
-        <!-- Sticky Lead Story -->
-        <div class="vogue-sticky-col">
-          <article class="vogue-sticky-lead" id="bhavnagar-lead">
-            <!-- Populated by main.js with sticky hero card -->
-          </article>
+      <!-- Real Database People Grid (Lead + Grid) -->
+      @if($people->count() > 0)
+        <div class="vogue-sticky-section">
+          <!-- Sticky Lead -->
+          @if($lead)
+            <div class="vogue-sticky-col">
+              <article class="vogue-sticky-lead">
+                <div class="vogue-card vogue-card--lead" style="cursor:pointer;" onclick="location.href='{{ url('/stories') }}'">
+                  <div class="vogue-card__img-wrap">
+                    <img src="{{ $lead->portrait_image ?: $lead->cover_image }}" alt="{{ $lead->name }}" loading="lazy">
+                  </div>
+                  <div class="vogue-card__body">
+                    <span class="vogue-rubric vogue-rubric--red">{{ $lead->category ? $lead->category->name : 'ICON' }}</span>
+                    <h2 class="vogue-card__title">{{ $lead->name }}</h2>
+                    <p class="vogue-card__excerpt">{{ $lead->tagline }}</p>
+                    <div class="vogue-card__byline">{{ $lead->profession }}{{ $lead->organization ? ' · ' . $lead->organization : '' }}</div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          @endif
+
+          <!-- Rest of People Grid -->
+          <div class="vogue-scroll-right-grid">
+            @foreach($people->slice(1) as $person)
+              <article class="vogue-card vogue-card--sub" style="cursor:pointer;" onclick="location.href='{{ url('/stories') }}'">
+                <div class="vogue-card__img-wrap">
+                  <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
+                </div>
+                <div class="vogue-card__body">
+                  <span class="vogue-rubric">{{ $person->category ? $person->category->name : 'ICON' }}</span>
+                  <h3 class="vogue-card__title">{{ $person->name }}</h3>
+                  <div class="vogue-card__byline">{{ $person->profession }}</div>
+                </div>
+              </article>
+            @endforeach
+          </div>
         </div>
 
-        <!-- 6 Stories Grid (2 columns x 3 rows) -->
-        <div class="vogue-scroll-right-grid" id="bhavnagar-grid-6">
-          <!-- Populated by main.js with stories -->
+        <div style="margin-top:36px;">
+          {{ $people->links() }}
         </div>
-      </div>
+      @else
+        <div style="text-align:center; padding:60px 20px; color:var(--vogue-muted);">
+          <p style="font-family:var(--font-garamond); font-size:1.2rem;">No Icons published under this category yet.</p>
+          <a href="{{ url('/icons') }}" style="color:var(--vogue-red); font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:8px; display:inline-block;">View All Icons</a>
+        </div>
+      @endif
 
     </div>
   </section>

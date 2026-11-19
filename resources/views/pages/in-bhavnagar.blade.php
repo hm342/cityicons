@@ -20,11 +20,39 @@
         </p>
       </div>
 
-      <!-- Cinematic Banner + Carousel Component -->
-      <x-cinema-section city-id="ahmedabad" city-name="Bhavnagar Cultural Showcase" />
+      <!-- Cinematic Banner + Carousel Component (Connected to Database) -->
+      <x-cinema-section city-id="bhavnagar" city-name="Bhavnagar Cultural Showcase" :articles="$articles" />
 
-      <!-- City News Strip -->
-      <x-city-news-strip />
+      <!-- All In-Bhavnagar Stories Grid -->
+      @if($articles && $articles->count() > 0)
+        <div style="margin-top:48px;">
+          <h2 style="font-family:var(--font-didot); font-size:1.8rem; font-weight:400; border-bottom:1px solid var(--vogue-border); padding-bottom:12px; margin-bottom:28px;">
+            Documented Moments &amp; Features
+          </h2>
+          <div class="vogue-4col-grid">
+            @foreach($articles as $art)
+              <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
+                <div class="vogue-card__img-wrap" style="height:220px; overflow:hidden; border-radius:4px;">
+                  <img src="{{ $art->cover_image ?: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80' }}" alt="{{ $art->title }}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div class="vogue-card__body" style="padding-top:10px;">
+                  <span class="vogue-rubric">{{ $art->category ? $art->category->name : 'DISPATCH' }}</span>
+                  <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.05rem; font-weight:600; line-height:1.3; margin:4px 0 6px;">
+                    {{ $art->title }}
+                  </h3>
+                  <div class="vogue-card__byline" style="font-size:0.75rem; color:var(--vogue-muted);">
+                    {{ $art->read_time ?? '4 min read' }} · {{ $art->created_at->format('M d, Y') }}
+                  </div>
+                </div>
+              </article>
+            @endforeach
+          </div>
+
+          <div style="margin-top:32px;">
+            {{ $articles->links() }}
+          </div>
+        </div>
+      @endif
 
     </div>
   </section>

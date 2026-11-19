@@ -1,8 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Frontend Controllers
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DirectoryController;
+use App\Http\Controllers\ArticleFrontendController;
+use App\Http\Controllers\MagazineFrontendController;
+use App\Http\Controllers\BrandFrontendController;
+use App\Http\Controllers\CityFrontendController;
+use App\Http\Controllers\SearchFrontendController;
 use App\Http\Controllers\PublicNominationController;
 use App\Http\Controllers\PublicNewsletterController;
+
+// Admin Controllers
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ArticleController;
@@ -17,46 +28,21 @@ use App\Http\Controllers\Admin\SubscriberController;
 use App\Http\Controllers\Admin\SettingController;
 
 // ── 1. MAIN HOMEPAGE (BHAVNAGAR ICONS) ────────────────────────
-Route::get('/', function () {
-    return view('home', ['activeCity' => 'home']);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/index.html', function () {
     return redirect()->route('home');
 });
 
 // ── 2. EDITORIAL DIRECTORY PAGES (PAGES 7 - 14) ───────────────
-Route::get('/icons', function () {
-    return view('pages.icons', ['active' => 'icons']);
-})->name('icons');
-
-Route::get('/rising', function () {
-    return view('pages.rising', ['active' => 'rising']);
-})->name('rising');
-
-Route::get('/voices', function () {
-    return view('pages.voices', ['active' => 'voices']);
-})->name('voices');
-
-Route::get('/stories', function () {
-    return view('pages.stories', ['active' => 'stories']);
-})->name('stories');
-
-Route::get('/the-list', function () {
-    return view('pages.the-list', ['active' => 'the-list']);
-})->name('the-list');
-
-Route::get('/magazine', function () {
-    return view('pages.magazine', ['active' => 'magazine']);
-})->name('magazine');
-
-Route::get('/in-bhavnagar', function () {
-    return view('pages.in-bhavnagar', ['active' => 'in-bhavnagar']);
-})->name('in-bhavnagar');
-
-Route::get('/featured-brands', function () {
-    return view('pages.featured-brands', ['active' => 'featured-brands']);
-})->name('featured-brands');
+Route::get('/icons', [DirectoryController::class, 'icons'])->name('icons');
+Route::get('/rising', [DirectoryController::class, 'rising'])->name('rising');
+Route::get('/voices', [DirectoryController::class, 'voices'])->name('voices');
+Route::get('/stories', [ArticleFrontendController::class, 'stories'])->name('stories');
+Route::get('/the-list', [DirectoryController::class, 'theList'])->name('the-list');
+Route::get('/magazine', [MagazineFrontendController::class, 'index'])->name('magazine');
+Route::get('/in-bhavnagar', [ArticleFrontendController::class, 'inBhavnagar'])->name('in-bhavnagar');
+Route::get('/featured-brands', [BrandFrontendController::class, 'index'])->name('featured-brands');
 
 // ── 3. INFORMATION & INTERACTION (PAGES 15 - 17) ──────────────
 Route::get('/about', function () {
@@ -74,9 +60,7 @@ Route::get('/contact', function () {
     return view('pages.contact', ['active' => 'contact']);
 })->name('contact');
 
-Route::get('/search', function () {
-    return view('pages.search', ['active' => 'search']);
-})->name('search');
+Route::get('/search', [SearchFrontendController::class, 'search'])->name('search');
 
 // ── 4. POLICIES & STANDARDS (PAGES 18 - 31) ───────────────────
 Route::get('/policies/{slug?}', function ($slug = 'editorial') {
@@ -84,25 +68,15 @@ Route::get('/policies/{slug?}', function ($slug = 'editorial') {
 })->name('policy.show');
 
 // ── 5. CITY EDITIONS NETWORK (MUMBAI, AHMEDABAD, ETC.) ────────
-Route::get('/cities/{city}', function ($city) {
-    if (strtolower($city) === 'bhavnagar') {
-        return redirect()->route('home');
-    }
-    return view('city', ['city' => strtolower($city)]);
-})->name('city.show');
+Route::get('/cities/{city}', [CityFrontendController::class, 'show'])->name('city.show');
 
 Route::get('/cities/{city}.html', function ($city) {
     return redirect()->route('city.show', ['city' => $city]);
 });
 
 // ── 6. ARTICLE READING VIEW ───────────────────────────────────
-Route::get('/article', function () {
-    return view('article', ['articleId' => request('id')]);
-})->name('article.show');
-
-Route::get('/article/{id}', function ($id) {
-    return view('article', ['articleId' => $id]);
-})->whereNumber('id');
+Route::get('/article', [ArticleFrontendController::class, 'show'])->name('article.show.query');
+Route::get('/article/{id}', [ArticleFrontendController::class, 'show'])->name('article.show');
 
 Route::get('/article.html', function () {
     return redirect()->route('article.show', ['id' => request('id')]);

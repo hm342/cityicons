@@ -1,3 +1,7 @@
+@props([
+  'brands' => collect()
+])
+
 <!-- ══ FEATURED BRANDS (Section 9 & 30 of Developer Handoff PDF) ══ -->
 <section id="sec-featured-brands" class="city-edition-section" style="margin-bottom:var(--section-gap);">
   <div class="vogue-container">
@@ -38,5 +42,32 @@
         </a>
       </div>
     </div>
+
+    <!-- Real Database Brand Partners Grid -->
+    @if($brands && $brands->count() > 0)
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+        @foreach($brands as $b)
+          <div style="background:#fff; border:1px solid var(--vogue-border); padding:24px; border-radius:4px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <span class="vogue-rubric" style="font-size:0.65rem; color:var(--vogue-muted);">
+                {{ $b->disclosure_text ?? 'PARTNER CONTENT' }}
+              </span>
+              <h4 style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; margin:6px 0 10px;">
+                {{ $b->name }}
+              </h4>
+              <p style="font-size:0.85rem; color:#555; line-height:1.6; margin-bottom:14px;">
+                {{ $b->description }}
+              </p>
+            </div>
+            @if($b->website_url)
+              <a href="{{ $b->website_url }}" target="_blank" rel="noopener noreferrer" style="font-size:0.72rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); text-decoration:none;">
+                Visit Partner Site <i class="fas fa-arrow-right" style="font-size:9px; margin-left:4px;"></i>
+              </a>
+            @endif
+          </div>
+        @endforeach
+      </div>
+    @endif
+
   </div>
 </section>

@@ -1,4 +1,8 @@
-<!-- ══ 4. CITY NEWS CAROUSEL / TICKER BAR ═══════════════════ -->
+@props([
+  'articles' => collect()
+])
+
+<!-- ══ CITY NEWS CAROUSEL / TICKER BAR ═══════════════════ -->
 <section class="city-news-strip-section">
   <div class="vogue-container">
     <div class="news-strip-header">
@@ -9,7 +13,17 @@
       </div>
     </div>
     <div class="city-news-track" id="city-news-track">
-      {{ $slot }}
+      @if($articles && $articles->count() > 0)
+        @foreach($articles as $art)
+          <div class="city-news-item" onclick="location.href='{{ url('/article/' . $art->id) }}'" style="cursor:pointer;">
+            <span class="news-item-city">{{ $art->category ? $art->category->name : 'DISPATCH' }}</span>
+            <span class="news-item-headline">{{ $art->title }}</span>
+            <span class="news-item-time">{{ $art->created_at->diffForHumans(null, true) }}</span>
+          </div>
+        @endforeach
+      @else
+        {{ $slot }}
+      @endif
     </div>
   </div>
 </section>

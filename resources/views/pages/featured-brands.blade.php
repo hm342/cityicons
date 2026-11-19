@@ -20,6 +20,37 @@
         </p>
       </div>
 
+      <!-- Active Database Brand Partners Showcase -->
+      @if($brands && $brands->count() > 0)
+        <div style="margin-bottom:48px;">
+          <h2 style="font-family:var(--font-didot); font-size:1.8rem; font-weight:400; margin-bottom:20px;">
+            Participating Commercial &amp; Heritage Partners
+          </h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+            @foreach($brands as $b)
+              <div style="background:#fff; border:1px solid var(--vogue-border); padding:24px; border-radius:4px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <span class="vogue-rubric" style="font-size:0.65rem; color:var(--vogue-muted);">
+                    {{ $b->disclosure_text ?? 'COMMERCIAL PARTNER' }}
+                  </span>
+                  <h3 style="font-family:var(--font-didot); font-size:1.35rem; font-weight:600; margin:6px 0 10px;">
+                    {{ $b->name }}
+                  </h3>
+                  <p style="font-size:0.9rem; color:#555; line-height:1.6; margin-bottom:16px;">
+                    {{ $b->description }}
+                  </p>
+                </div>
+                @if($b->website_url)
+                  <a href="{{ $b->website_url }}" target="_blank" rel="noopener noreferrer" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); text-decoration:none;">
+                    Visit Official Site <i class="fas fa-arrow-right" style="font-size:9px; margin-left:4px;"></i>
+                  </a>
+                @endif
+              </div>
+            @endforeach
+          </div>
+        </div>
+      @endif
+
       <!-- Formats & Commercial Options -->
       <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:48px; align-items:start; margin-bottom:48px;">
         
@@ -51,7 +82,7 @@
             <span class="vogue-rubric vogue-rubric--red" style="font-size:0.6rem;">STANDARDS &amp; INTEGRITY</span>
             <h3 style="font-family:var(--font-didot); font-size:1.3rem; margin-bottom:8px;">Commercial Disclosure</h3>
             <p style="font-family:var(--font-garamond); font-size:1.1rem; line-height:1.6; color:#333; margin-bottom:10px;">
-              Featured Brands is a paid commercial category. Payment provides visibility only. It does not provide Icon, Rising or Voices status.
+              {{ $disclosure ?? 'Featured Brands is a paid commercial category. Payment provides visibility only. It does not provide Icon, Rising or Voices status.' }}
             </p>
             <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-muted);">
               Every commercial feature carries unambiguous labels: FEATURED BRAND · PAID PARTNERSHIP · SPONSORED · ADVERTISEMENT · EVENT PARTNER.
@@ -77,10 +108,10 @@
           </div>
 
           <div style="display:flex; flex-direction:column; gap:12px;">
-            <a href="mailto:advertise@cityicons.in?subject=Collaboration%20Inquiry" style="display:block; text-align:center; background:var(--vogue-red); color:#fff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px;">
+            <a href="mailto:advertise@cityicons.in?subject=Collaboration%20Inquiry" style="display:block; text-align:center; background:var(--vogue-red); color:#fff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px; text-decoration:none;">
               Discuss Collaboration
             </a>
-            <a href="mailto:advertise@cityicons.in?subject=Media%20Kit%20Request" style="display:block; text-align:center; border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px;">
+            <a href="mailto:advertise@cityicons.in?subject=Media%20Kit%20Request" style="display:block; text-align:center; border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px; text-decoration:none;">
               Request Media Kit
             </a>
           </div>

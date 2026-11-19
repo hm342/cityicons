@@ -46,6 +46,14 @@
       display: flex;
       min-height: 100vh;
     }
+    img {
+      max-width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .admin-brand__img, [class*="logo"] img {
+      object-fit: contain !important;
+    }
 
     /* Sidebar */
     .admin-sidebar {

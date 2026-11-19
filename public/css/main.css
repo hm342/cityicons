@@ -64,26 +64,51 @@ img {
   object-position: center;
 }
 
-/* Universal rule: ensure all media images strictly fill container with object-fit: cover */
+/* Universal rule: ensure all media and content images strictly use object-fit: cover */
 img,
 picture img,
 .hero-big-banner__img-wrap img,
 .city-news-mini-card__img img,
+.vogue-card__img-wrap img,
+.vogue-card--lead .vogue-card__img-wrap img,
+.vogue-card--sub .vogue-card__img-wrap img,
 .vogue-sticky-lead__card img,
 .vogue-sticky-lead__img,
 .vogue-sub-card__media img,
 .city-cinema-banner img,
+.cinema-banner-card img,
+.cinema-carousel-item img,
 .city-cinema-card__media img,
 .vogue-4col-card__media img,
 .city-4col-card__media img,
+.article-lead-image img,
+.person-profile-page img,
 [class*="-media"] img,
 [class*="-img"] img,
 [class*="__media"] img,
-[class*="__img"] img {
-  width: 100%;
-  height: 100%;
+[class*="__img"] img,
+[class*="card"] img,
+[class*="banner"] img,
+[class*="portrait"] img,
+[class*="thumb"] img,
+[class*="avatar"] img {
   object-fit: cover !important;
   object-position: center;
+}
+
+/* Logos, emblems and brand stamps: strictly object-fit: contain */
+.cityicon-logo-img,
+.rm-logo-img,
+.rm-footer-logo-img,
+.vogue-footer__logo-wrap img,
+.vogue-drawer__logo-img,
+.admin-brand__img,
+.brand-logo-img,
+[class*="logo"] img,
+img[class*="logo"],
+[class*="stamp"] img {
+  object-fit: contain !important;
+  width: auto !important;
 }
 
 a {

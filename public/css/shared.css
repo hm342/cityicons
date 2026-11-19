@@ -67,16 +67,24 @@ img {
   object-position: center;
 }
 
-img,
+/* Universal rule: ensure all media images strictly use object-fit: cover */
 .article-card__img img,
 [class*="-media"] img,
 [class*="-img"] img,
 [class*="__media"] img,
-[class*="__img"] img {
+[class*="__img"] img,
+[class*="card"] img {
   width: 100%;
   height: 100%;
   object-fit: cover !important;
   object-position: center;
+}
+
+/* Logos: strictly object-fit: contain */
+[class*="logo"] img,
+img[class*="logo"] {
+  object-fit: contain !important;
+  width: auto !important;
 }
 a  { text-decoration: none; color: inherit; }
 ul { list-style: none; }

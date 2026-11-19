@@ -149,77 +149,80 @@ document.addEventListener('DOMContentLoaded', () => {
     startTimer();
   }
 
-  // ── 6. REAL MOMENTS FULLSCREEN HERO (Image 1) ─────────────────
-  const rmHeroFs = document.getElementById('rm-hero-fullscreen');
-  if (rmHeroFs) {
-    const fsSlides = rmHeroFs.querySelectorAll('.rm-hero-slide');
-    const fsDots = rmHeroFs.querySelectorAll('.rm-hero-dot-item');
-    const btnEdgePrev = document.getElementById('rm-edge-prev');
-    const btnEdgeNext = document.getElementById('rm-edge-next');
+  // ── 6. REAL MOMENTS HERO SLIDER & STICKY HEADER ───────────────
+  const rmHero = document.querySelector('.rm-hero-wrap') || document.getElementById('rm-hero-fullscreen');
+  if (rmHero) {
+    const slides = rmHero.querySelectorAll('.rm-hero-slide');
+    const dots = rmHero.querySelectorAll('.rm-hero-dot, .rm-hero-dot-item');
+    const btnPrev = rmHero.querySelector('.rm-hero-arrow.prev') || document.getElementById('rm-edge-prev');
+    const btnNext = rmHero.querySelector('.rm-hero-arrow.next') || document.getElementById('rm-edge-next');
 
-    let curFs = 0;
-    let fsInterval = null;
-    const totalFs = fsSlides.length;
+    let current = 0;
+    let timer = null;
+    const total = slides.length;
 
-    function goToFsSlide(idx) {
-      if (totalFs === 0) return;
-      fsSlides[curFs].classList.remove('is-active');
-      if (fsDots[curFs]) fsDots[curFs].classList.remove('is-active');
+    function activateSlide(idx) {
+      if (total === 0) return;
+      slides[current].classList.remove('active', 'is-active');
+      if (dots[current]) dots[current].classList.remove('active', 'is-active');
 
-      curFs = (idx + totalFs) % totalFs;
+      current = (idx + total) % total;
 
-      fsSlides[curFs].classList.add('is-active');
-      if (fsDots[curFs]) fsDots[curFs].classList.add('is-active');
+      slides[current].classList.add('active', 'is-active');
+      if (dots[current]) dots[current].classList.add('active', 'is-active');
     }
 
-    function nextFs() {
-      goToFsSlide(curFs + 1);
+    function next() {
+      activateSlide(current + 1);
     }
 
-    function prevFs() {
-      goToFsSlide(curFs - 1);
+    function prev() {
+      activateSlide(current - 1);
     }
 
-    if (btnEdgeNext) btnEdgeNext.addEventListener('click', () => {
-      nextFs();
-      resetFsTimer();
+    if (btnNext) btnNext.addEventListener('click', (e) => {
+      e.preventDefault();
+      next();
+      resetTimer();
     });
 
-    if (btnEdgePrev) btnEdgePrev.addEventListener('click', () => {
-      prevFs();
-      resetFsTimer();
+    if (btnPrev) btnPrev.addEventListener('click', (e) => {
+      e.preventDefault();
+      prev();
+      resetTimer();
     });
 
-    fsDots.forEach((dot, idx) => {
-      dot.addEventListener('click', () => {
-        goToFsSlide(idx);
-        resetFsTimer();
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        activateSlide(idx);
+        resetTimer();
       });
     });
 
-    function startFsTimer() {
-      if (totalFs > 1) {
-        fsInterval = setInterval(nextFs, 7000);
+    function startTimer() {
+      if (total > 1) {
+        timer = setInterval(next, 7000);
       }
     }
 
-    function stopFsTimer() {
-      if (fsInterval) clearInterval(fsInterval);
+    function stopTimer() {
+      if (timer) clearInterval(timer);
     }
 
-    function resetFsTimer() {
-      stopFsTimer();
-      startFsTimer();
+    function resetTimer() {
+      stopTimer();
+      startTimer();
     }
 
-    rmHeroFs.addEventListener('mouseenter', stopFsTimer);
-    rmHeroFs.addEventListener('mouseleave', startFsTimer);
+    rmHero.addEventListener('mouseenter', stopTimer);
+    rmHero.addEventListener('mouseleave', startTimer);
 
-    startFsTimer();
+    startTimer();
   }
 
-  // ── 7. STICKY FLOATING HEADER (Image 1) ───────────────────────
-  const floatingHeader = document.getElementById('rm-floating-header');
+  // ── 7. STICKY FLOATING HEADER ─────────────────────────────────
+  const floatingHeader = document.querySelector('.rm-header-overlay') || document.getElementById('rm-floating-header');
   if (floatingHeader) {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 45) {

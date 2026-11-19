@@ -49,7 +49,7 @@ class CityFrontendController extends Controller
 
         $heroArticle = $heroSlides->first();
 
-        // 2. Featured Icons (4 people: established professionals, creators, changemakers)
+        // 2. Featured Icons (5 items for 2 stacked left + 1 tall center + 2 stacked right collage)
         $featuredIcons = Person::with(['category', 'city'])
             ->published()
             ->where('city_id', $city->id)
@@ -58,58 +58,58 @@ class CityFrontendController extends Controller
             })
             ->orderBy('sort_order')
             ->latest()
-            ->take(4)
+            ->take(5)
             ->get();
 
-        if ($featuredIcons->count() < 4) {
+        if ($featuredIcons->count() < 5) {
             $moreIcons = Person::with(['category', 'city'])
                 ->published()
                 ->whereNotIn('id', $featuredIcons->pluck('id'))
                 ->orderBy('sort_order')
                 ->latest()
-                ->take(4 - $featuredIcons->count())
+                ->take(5 - $featuredIcons->count())
                 ->get();
             $featuredIcons = $featuredIcons->concat($moreIcons);
         }
 
-        // 3. Rising (4 emerging individuals building what comes next)
+        // 3. Rising (5 items for 1 tall left + 4 right 2x2 collage)
         $risingPeople = Person::with(['category', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->where('type', 'rising')
             ->orderBy('sort_order')
             ->latest()
-            ->take(4)
+            ->take(5)
             ->get();
 
-        if ($risingPeople->count() < 4) {
+        if ($risingPeople->count() < 5) {
             $excludeIds = array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray());
             $moreRising = Person::with(['category', 'city'])
                 ->published()
                 ->whereNotIn('id', $excludeIds)
                 ->orderBy('sort_order')
                 ->latest()
-                ->take(4 - $risingPeople->count())
+                ->take(5 - $risingPeople->count())
                 ->get();
             $risingPeople = $risingPeople->concat($moreRising);
         }
 
-        // 4. Stories (4 long-form profiles, city stories and editorial features)
+        // 4. Stories (5 items for 2 top asymmetric + 3 bottom equal collage)
         $excludeArticleIds = $heroArticle ? [$heroArticle->id] : [];
         $stories = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->whereNotIn('id', $excludeArticleIds)
             ->latest()
-            ->take(4)
+            ->take(5)
             ->get();
 
-        if ($stories->count() < 4) {
+        if ($stories->count() < 5) {
             $moreStories = Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->whereNotIn('id', array_merge($excludeArticleIds, $stories->pluck('id')->toArray()))
                 ->latest()
-                ->take(4 - $stories->count())
+                ->take(5 - $stories->count())
                 ->get();
             $stories = $stories->concat($moreStories);
         }
@@ -119,14 +119,14 @@ class CityFrontendController extends Controller
             ->published()
             ->where('city_id', $city->id)
             ->orderBy('name', 'asc')
-            ->take(8)
+            ->take(6)
             ->get();
 
         if ($listPeople->isEmpty()) {
             $listPeople = Person::with(['category', 'city'])
                 ->published()
                 ->orderBy('name', 'asc')
-                ->take(8)
+                ->take(6)
                 ->get();
         }
 
@@ -134,7 +134,7 @@ class CityFrontendController extends Controller
         $magazine = MagazineEdition::where('is_active', true)->latest()->first() 
             ?? MagazineEdition::latest()->first();
 
-        // 7. In [City] (Selective coverage of events, exhibitions, cultural moments)
+        // 7. In [City] (6 items for 3x2 vertical cards grid)
         $inCityStories = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
@@ -142,15 +142,15 @@ class CityFrontendController extends Controller
                 $q->whereIn('slug', ['events', 'culture', 'places', 'dispatch', 'in-city']);
             })
             ->latest()
-            ->take(4)
+            ->take(6)
             ->get();
 
-        if ($inCityStories->count() < 4) {
+        if ($inCityStories->count() < 6) {
             $moreInCity = Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->whereNotIn('id', $inCityStories->pluck('id'))
                 ->latest()
-                ->take(4 - $inCityStories->count())
+                ->take(6 - $inCityStories->count())
                 ->get();
             $inCityStories = $inCityStories->concat($moreInCity);
         }

@@ -2,311 +2,432 @@
   $cityId = is_object($city) ? $city->slug : ($city ?? 'bhavnagar');
   $cityName = is_object($city) ? $city->name : ucfirst($cityId);
   $isFlagship = ($cityId === 'bhavnagar');
-  $heroSlides = $heroSlides ?? collect();
-  $cultureStories = $cultureStories ?? collect();
-  $culinaryStories = $culinaryStories ?? collect();
-  $fashionStories = $fashionStories ?? collect();
-  $people = $people ?? collect();
-  $blogStories = $blogStories ?? collect();
+  $heroCover = ($heroArticle && $heroArticle->cover_image)
+    ? $heroArticle->cover_image
+    : 'https://images.unsplash.com/photo-1598511757337-fe2cafc31ba0?w=1600&q=85';
   $pageTitle = $cityName . ' Icons — ' . ($isFlagship ? 'Flagship Edition' : 'City Edition') . ' · CITYICONS';
 @endphp
 
 <x-layouts.app :title="$pageTitle" :city="$city" activeCity="city-home">
 
-  <!-- ══ 1. HERO CAROUSEL SLIDER SHOWCASE ══════════════════════ -->
-  <section class="city-home-section" style="padding-top:24px; padding-bottom:12px;">
+  <!-- ══ 1. HERO ════════════════════════════════════════════════ -->
+  <section class="hero-section-wrap" style="padding-top:20px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
-      <div class="city-hero-slider" id="city-hero-slider">
-        @forelse($heroSlides as $idx => $slide)
-          <div class="city-hero-slide {{ $idx === 0 ? 'active' : '' }}" style="background-image: url('{{ $slide->cover_image ?: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=1600&q=85' }}');" data-index="{{ $idx }}">
-            <div class="city-hero-overlay"></div>
-            <div class="city-hero-content">
-              <span class="vogue-rubric vogue-rubric--red" style="color:#ff5252; margin-bottom:8px; display:inline-block;">
-                {{ strtoupper($slide->category ? $slide->category->name : ($cityName . ' FEATURE STORY')) }} · {{ $isFlagship ? 'FLAGSHIP EDITION' : 'CITY EDITION' }}
-              </span>
-              <h1 class="city-hero-title">{{ $slide->title }}</h1>
-              <p class="city-hero-excerpt">
-                {{ Str::limit($slide->excerpt ?: strip_tags($slide->content), 170) }}
+      <div class="hero-big-banner" id="hero-banner">
+        
+        <!-- Cover Image with Balanced Proportions -->
+        <div class="hero-big-banner__img-wrap" onclick="location.href='{{ url('/' . $cityId . '/icons') }}'" style="cursor:pointer;">
+          <img src="{{ $heroCover }}" alt="{{ $cityName }}, Documented." loading="eager">
+          <div class="hero-big-banner__top-shade"></div>
+          <div class="hero-big-banner__brand-stamp">{{ strtoupper($cityName) }} ICONS</div>
+          <div class="hero-big-banner__bottom-shade"></div>
+
+          <!-- Main headline INSIDE the image at the bottom -->
+          <div class="hero-big-banner__content-overlay">
+            <div class="hero-big-banner__content-box">
+              <h1 class="hero-big-banner__hed">{{ $cityName }}, Documented.</h1>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description and Actions Below Image -->
+        <div class="hero-big-banner__details">
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} ICONS · {{ $isFlagship ? 'FLAGSHIP EDITION' : 'CITY EDITION' }}</span>
+          <p class="hero-big-banner__dek">Stories of the people, journeys and ideas shaping the city.</p>
+          <p style="font-family:var(--font-garamond); font-style:italic; font-size:1.15rem; color:var(--vogue-muted); margin-bottom:18px;">
+            Selected with purpose. Documented with responsibility.
+          </p>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+            <a href="{{ url('/' . $cityId . '/icons') }}" class="vogue-btn-solid">
+              Explore Icons &rarr;
+            </a>
+            <a href="{{ url('/' . $cityId . '/nominate') }}" class="vogue-btn-red">
+              Nominate a Story
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. INTRODUCTION ════════════════════════════════════════ -->
+  <x-editorial-intro
+    rubric="EDITORIAL MANIFESTO"
+    title="A city is shaped by its people."
+    lead="{{ $cityName }} Icons is an independent editorial platform documenting credible people, meaningful journeys and lasting contributions connected to {{ $cityName }}."
+    tagline="We focus on evidence, context and impact, not popularity alone."
+  />
+
+  <!-- ══ 3. FEATURED ICONS ══════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-featured-icons" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · FEATURED ICONS</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            People shaping {{ $cityName }} and beyond.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            Explore established professionals, creators, entrepreneurs, artists, athletes and changemakers whose work deserves a place in the city’s permanent record.
+          </p>
+        </div>
+      </div>
+
+      <div class="vogue-4col-grid" style="margin-bottom:28px;">
+        @foreach($featuredIcons as $person)
+          <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
+            <div class="vogue-card__img-wrap" style="aspect-ratio:4/5;">
+              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy" style="object-fit:cover !important;">
+            </div>
+            <div class="vogue-card__body" style="padding-top:12px;">
+              <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'ICON' }}</span>
+              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 6px;">{{ $person->name }}</h3>
+              <div class="vogue-card__byline" style="font-size:0.8rem; color:var(--vogue-muted);">{{ $person->profession ?? ($person->organization ?: 'Established Contributor') }}</div>
+            </div>
+          </article>
+        @endforeach
+      </div>
+
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/icons') }}" class="vogue-btn-outline">
+          Explore All Icons &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. RISING ══════════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-rising" style="margin-bottom:var(--section-gap); background:var(--vogue-bg-light); padding:48px 0; border-top:1px solid var(--vogue-border); border-bottom:1px solid var(--vogue-border);">
+    <div class="vogue-container">
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · RISING TALENT</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            The names building what comes next.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            Rising documents emerging individuals with genuine achievement, credible potential and a growing body of work.
+          </p>
+        </div>
+      </div>
+
+      <div class="vogue-4col-grid" style="margin-bottom:28px;">
+        @foreach($risingPeople as $person)
+          <article class="vogue-card" style="cursor:pointer; background:#fff; border:1px solid var(--vogue-border); padding-bottom:14px;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
+            <div class="vogue-card__img-wrap" style="aspect-ratio:4/5;">
+              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy" style="object-fit:cover !important;">
+            </div>
+            <div class="vogue-card__body" style="padding:12px 14px 0;">
+              <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'RISING' }}</span>
+              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 6px;">{{ $person->name }}</h3>
+              <div class="vogue-card__byline" style="font-size:0.8rem; color:var(--vogue-muted);">{{ $person->profession ?? 'Emerging Innovator' }}</div>
+            </div>
+          </article>
+        @endforeach
+      </div>
+
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/rising') }}" class="vogue-btn-outline">
+          Discover Rising &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. VOICES ══════════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-voices" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · VOICES &amp; PERSPECTIVES</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            Conversations worth preserving.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            Interviews, reflections and professional perspectives from people whose experiences help us understand the city and its changing identity.
+          </p>
+        </div>
+      </div>
+
+      <div class="vogue-4col-grid" style="margin-bottom:28px;">
+        @foreach($voicesPeople as $person)
+          <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
+            <div class="vogue-card__img-wrap" style="aspect-ratio:4/5;">
+              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy" style="object-fit:cover !important;">
+            </div>
+            <div class="vogue-card__body" style="padding-top:12px;">
+              <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'VOICE' }}</span>
+              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 6px;">{{ $person->name }}</h3>
+              <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:6px;">
+                {{ Str::limit($person->tagline ?: $person->bio, 80) }}
               </p>
-              <a href="{{ url('/article/' . $slide->id) }}" class="city-hero-btn">
-                Read Story &rarr;
-              </a>
+              <div class="vogue-card__byline" style="font-size:0.8rem; color:var(--vogue-muted);">{{ $person->profession }}</div>
             </div>
-          </div>
-        @empty
-          <div class="city-hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=1600&q=85');">
-            <div class="city-hero-overlay"></div>
-            <div class="city-hero-content">
-              <span class="vogue-rubric vogue-rubric--red" style="color:#ff5252; margin-bottom:8px; display:inline-block;">
-                {{ strtoupper($cityName) }} EDITORIAL · CITY EDITION
-              </span>
-              <h1 class="city-hero-title">Documenting Life, Culture, and Stories in {{ $cityName }}</h1>
-              <p class="city-hero-excerpt">
-                Explore long-form profiles, cultural narratives, city stories and editorial features documenting meaningful work and defining moments.
+          </article>
+        @endforeach
+      </div>
+
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/voices') }}" class="vogue-btn-outline">
+          Explore Voices &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 6. STORIES ═════════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-stories" style="margin-bottom:var(--section-gap); background:var(--vogue-bg-light); padding:48px 0; border-top:1px solid var(--vogue-border); border-bottom:1px solid var(--vogue-border);">
+    <div class="vogue-container">
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · EDITORIAL FEATURES</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            The complete story beyond the headline.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            Explore profiles, interviews, city stories and editorial features documenting meaningful work and defining journeys.
+          </p>
+        </div>
+      </div>
+
+      <div class="vogue-4col-grid" style="margin-bottom:28px;">
+        @foreach($stories as $story)
+          <article class="vogue-card" style="cursor:pointer; background:#fff; border:1px solid var(--vogue-border); padding-bottom:14px;" onclick="location.href='{{ url('/article/' . $story->id) }}'">
+            <div class="vogue-card__img-wrap">
+              <img src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
+            </div>
+            <div class="vogue-card__body" style="padding:12px 14px 0;">
+              <span class="vogue-rubric vogue-rubric--red">{{ $story->category ? $story->category->name : 'STORY' }}</span>
+              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.15rem; font-weight:600; line-height:1.3; margin:4px 0 6px;">{{ $story->title }}</h3>
+              <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:8px;">
+                {{ Str::limit($story->excerpt ?: strip_tags($story->content), 90) }}
               </p>
-              <a href="{{ url('/' . $cityId . '/stories') }}" class="city-hero-btn">
-                Explore Stories &rarr;
-              </a>
-            </div>
-          </div>
-        @endforelse
-
-        <!-- Side Navigation Arrows -->
-        @if($heroSlides->count() > 1)
-          <button class="city-hero-arrow prev" id="hero-arrow-prev" aria-label="Previous slide">&#10094;</button>
-          <button class="city-hero-arrow next" id="hero-arrow-next" aria-label="Next slide">&#10095;</button>
-          <div class="city-hero-dots" id="hero-dots">
-            @foreach($heroSlides as $i => $s)
-              <div class="city-hero-dot {{ $i === 0 ? 'active' : '' }}" data-slide="{{ $i }}"></div>
-            @endforeach
-          </div>
-        @endif
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 2. SECTION 1: CULTURE & HERITAGE (Tiles Style 1: 1 Tall Left + 4 Right 2x2) ══ -->
-  <section class="city-home-section" id="sec-culture">
-    <div class="vogue-container">
-      <div class="city-home-head">
-        <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · CULTURE &amp; HERITAGE</span>
-        <h2 class="city-home-head__hed">Culture &amp; Heritage</h2>
-        <p class="city-home-head__dek">
-          Timeless traditions, living arts, and architectural treasures of {{ $cityName }}.
-        </p>
-      </div>
-
-      <div class="city-tiles-1">
-        @foreach($cultureStories->take(5) as $idx => $story)
-          <div class="city-tile-card {{ $idx === 0 ? 'city-tile-tall' : '' }}" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-            <img class="city-tile-card__img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
-            <div class="city-tile-card__overlay"></div>
-            <div class="city-tile-card__body">
-              <div class="city-tile-card__rubric">{{ $story->category->name ?? 'Culture' }}</div>
-              @if($idx === 0)
-                <h3 class="city-tile-card__title">{{ $story->title }}</h3>
-                <p style="font-family:var(--font-garamond); font-size:1.05rem; line-height:1.45; color:rgba(255,255,255,0.85); margin:8px 0 14px;">
-                  {{ Str::limit($story->excerpt ?: strip_tags($story->content), 120) }}
-                </p>
-                <span class="city-hero-btn" style="padding:8px 18px; font-size:0.6875rem;">Read Story &rarr;</span>
-              @else
-                <h4 class="city-tile-card__title">{{ $story->title }}</h4>
-              @endif
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-      <div style="text-align:right; margin-top:16px;">
-        <a href="{{ url('/' . $cityId . '/stories?category=culture') }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-          Explore More Culture &amp; Heritage &rarr;
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 3. SECTION 2: CULINARY & TASTE (Tiles Style 2: 2 Left + 1 Center Tall + 2 Right) ══ -->
-  <section class="city-home-section city-home-section--alt" id="sec-culinary">
-    <div class="vogue-container">
-      <div class="city-home-head">
-        <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · CULINARY &amp; TASTE</span>
-        <h2 class="city-home-head__hed">Culinary &amp; Taste</h2>
-        <p class="city-home-head__dek">
-          Generational flavors, iconic local fare, and defining dining culture in {{ $cityName }}.
-        </p>
-      </div>
-
-      <div class="city-tiles-2">
-        @foreach($culinaryStories->take(5) as $idx => $story)
-          {{-- Index 2 is the 3rd child, which spans 2 rows in the center column --}}
-          <div class="city-tile-card {{ $idx === 2 ? 'city-tile-tall' : '' }}" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-            <img class="city-tile-card__img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
-            <div class="city-tile-card__overlay"></div>
-            <div class="city-tile-card__body">
-              <div class="city-tile-card__rubric">{{ $story->category->name ?? 'Taste' }}</div>
-              @if($idx === 2)
-                <h3 class="city-tile-card__title">{{ $story->title }}</h3>
-                <p style="font-family:var(--font-garamond); font-size:1.05rem; line-height:1.45; color:rgba(255,255,255,0.85); margin:8px 0 14px;">
-                  {{ Str::limit($story->excerpt ?: strip_tags($story->content), 120) }}
-                </p>
-                <span class="city-hero-btn" style="padding:8px 18px; font-size:0.6875rem;">Read Story &rarr;</span>
-              @else
-                <h4 class="city-tile-card__title">{{ $story->title }}</h4>
-              @endif
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-      <div style="text-align:right; margin-top:16px;">
-        <a href="{{ url('/' . $cityId . '/stories?category=food') }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-          Explore More Food &amp; Dining &rarr;
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 4. SECTION 3: FASHION, CRAFT & LIVING (Tiles Style 3: 2 Top Asymmetric + 3 Equal Bottom) ══ -->
-  <section class="city-home-section" id="sec-fashion">
-    <div class="vogue-container">
-      <div class="city-home-head">
-        <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · FASHION &amp; LIVING CRAFT</span>
-        <h2 class="city-home-head__hed">Fashion, Craft &amp; Living</h2>
-        <p class="city-home-head__dek">
-          Artisanal legacies, contemporary fashion, and modern lifestyles in {{ $cityName }}.
-        </p>
-      </div>
-
-      <div class="city-tiles-3-top">
-        @foreach($fashionStories->take(2) as $story)
-          <div class="city-tile-card" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-            <img class="city-tile-card__img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
-            <div class="city-tile-card__overlay"></div>
-            <div class="city-tile-card__body">
-              <div class="city-tile-card__rubric">{{ $story->category->name ?? 'Fashion' }}</div>
-              <h3 class="city-tile-card__title">{{ $story->title }}</h3>
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-      <div class="city-tiles-3-bottom">
-        @foreach($fashionStories->skip(2)->take(3) as $story)
-          <div class="city-tile-card" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-            <img class="city-tile-card__img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
-            <div class="city-tile-card__overlay"></div>
-            <div class="city-tile-card__body">
-              <div class="city-tile-card__rubric">{{ $story->category->name ?? 'Craft' }}</div>
-              <h4 class="city-tile-card__title">{{ $story->title }}</h4>
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-      <div style="text-align:right; margin-top:16px;">
-        <a href="{{ url('/' . $cityId . '/stories?category=fashion') }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-          Explore Fashion &amp; Living Archive &rarr;
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ 5. SECTION 4: DOCUMENTED CITIZENS & ICONS (3x2 Grid) ═════ -->
-  <section class="city-home-section city-home-section--alt" id="sec-people">
-    <div class="vogue-container">
-      <div class="city-home-head">
-        <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · DOCUMENTED CITIZENS</span>
-        <h2 class="city-home-head__hed">{{ $cityName }} Icons &amp; Notable People</h2>
-        <p class="city-home-head__dek">
-          Documenting individuals shaping {{ $cityName }}'s cultural, business, and civic life. Selection based on verifiable achievement; recognition cannot be purchased.
-        </p>
-      </div>
-
-      <div class="city-people-grid">
-        @foreach($people->take(6) as $person)
-          @php $pUrl = url('/person/' . ($person->slug ?: $person->id)); @endphp
-          <article class="city-person-card" onclick="location.href='{{ $pUrl }}'">
-            <div class="city-person-card__img-wrap">
-              <img class="city-person-card__img" src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
-            </div>
-            <div class="city-person-card__body">
-              <div>
-                <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'ICON' }}</span>
-                <h3 class="city-person-card__name">{{ $person->name }}</h3>
-                <div class="city-person-card__profession">{{ $person->profession ?? ($person->organization ? $person->organization : 'Featured Citizen') }}</div>
-              </div>
-              <div class="city-share-inline">
-                <span>Share &rarr;</span>
-                <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Facebook</a>
-                <a href="https://twitter.com/intent/tweet?url={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">X</a>
-                <a href="https://pinterest.com/pin/create/button/?url={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Pinterest</a>
+              <div class="vogue-card__byline" style="font-size:0.75rem; color:var(--vogue-muted);">
+                By {{ $story->author_name ?? 'Editorial Staff' }} · {{ $story->read_time ?? '5 min' }}
               </div>
             </div>
           </article>
         @endforeach
       </div>
 
-      <div style="text-align:center; margin-top:36px;">
-        <a href="{{ url('/' . $cityId . '/icons') }}" style="display:inline-block; border:1px solid var(--vogue-black); color:var(--vogue-black); font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 32px; text-decoration:none; transition:all 0.2s ease;">
-          View All {{ $cityName }} Icons &rarr;
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/stories') }}" class="vogue-btn-outline">
+          Explore Stories &rarr;
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ══ 6. SECTION 5: RECENT EDITORIAL DISPATCHES (50/50 Horizontal Stream) ══ -->
-  <section class="city-home-section" id="sec-dispatches">
+  <!-- ══ 7. THE LIST ════════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-the-list" style="margin-bottom:var(--section-gap);">
     <div class="vogue-container">
-      <div class="city-home-head">
-        <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · EDITORIAL DISPATCHES</span>
-        <h2 class="city-home-head__hed">Recent City Dispatches</h2>
-        <p class="city-home-head__dek">
-          Latest reportage, features, and stories from across {{ $cityName }}.
-        </p>
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($cityName) }} · MONTHLY ARCHIVE</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            A month in people and stories.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            The List is a monthly archive of selected profiles published by {{ $cityName }} Icons. Names are presented alphabetically. It is not a ranking, competition or award.
+          </p>
+        </div>
       </div>
 
-      <div class="city-dispatches-stream">
-        @foreach($blogStories->take(4) as $art)
-          <article class="city-dispatch-card">
-            <div class="city-dispatch-media" onclick="location.href='{{ url('/article/' . $art->id) }}'">
-              <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
-              <div class="city-dispatch-badge"><i class="fas fa-video"></i></div>
-            </div>
-            <div class="city-dispatch-content">
+      <!-- Alphabetical Table / Grid Preview -->
+      <div style="background:#fff; border:1px solid var(--vogue-border); padding:24px 28px; margin-bottom:28px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:18px;">
+          @foreach($listPeople as $person)
+            <a href="{{ url('/person/' . ($person->slug ?: $person->id)) }}" style="display:flex; align-items:center; gap:14px; padding:10px 12px; border-bottom:1px solid #f0f0f0; text-decoration:none; color:inherit; transition:background 0.2s ease;">
+              <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" style="width:48px; height:48px; border-radius:50%; object-fit:cover;">
               <div>
-                <span class="vogue-rubric vogue-rubric--red">{{ $art->category->name ?? 'Dispatch' }}</span>
-                <h3 class="city-dispatch-title"><a href="{{ url('/article/' . $art->id) }}">{{ $art->title }}</a></h3>
-                <p class="city-dispatch-excerpt">
-                  <span style="color:var(--vogue-red); margin-right:6px;">&#10070;</span>
-                  {{ Str::limit($art->excerpt ?: strip_tags($art->content), 150) }}
-                </p>
-                <a href="{{ url('/article/' . $art->id) }}" style="display:inline-block; font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
-                  Read Full Story &rarr;
+                <div style="font-family:var(--font-didot); font-size:1.05rem; font-weight:600; color:var(--vogue-black);">{{ $person->name }}</div>
+                <div style="font-size:0.75rem; color:var(--vogue-muted);">{{ $person->profession }} · <span style="color:var(--vogue-red);">{{ $person->category ? $person->category->name : 'ICON' }}</span></div>
+              </div>
+            </a>
+          @endforeach
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/the-list') }}" class="vogue-btn-outline">
+          View The List &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 8. MAGAZINE ════════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-magazine" style="margin-bottom:var(--section-gap); background:var(--vogue-black); color:#ffffff; padding:56px 0;">
+    <div class="vogue-container">
+      <div style="display:grid; grid-template-columns:1fr 1.3fr; gap:48px; align-items:center;">
+        <!-- Magazine Cover Preview -->
+        <div style="text-align:center;">
+          <img src="{{ $magazine && $magazine->cover_image ? $magazine->cover_image : asset('images/magazine-cover-sample.jpg') }}" alt="{{ $cityName }} Magazine" style="max-height:460px; width:auto; margin:0 auto; box-shadow:0 12px 36px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.15);">
+        </div>
+
+        <!-- Magazine Editorial Details -->
+        <div>
+          <span class="vogue-rubric vogue-rubric--red" style="color:var(--vogue-red); letter-spacing:2.5px; margin-bottom:12px;">CURATED EDITORIAL EDITION</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2.2rem, 3.8vw, 3.2rem); font-weight:400; line-height:1.15; margin-bottom:12px; color:#ffffff;">
+            Stories designed to last beyond the feed.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.2rem; line-height:1.6; color:rgba(255,255,255,0.85); margin-bottom:20px;">
+            Selected profiles, verified journeys and defining stories presented through a curated editorial edition.
+          </p>
+          @if($magazine)
+            <div style="margin-bottom:24px; padding:14px 18px; background:rgba(255,255,255,0.06); border-left:3px solid var(--vogue-red);">
+              <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:#fff;">
+                {{ $magazine->title }} · {{ $magazine->month_name }} {{ $magazine->year }}
+              </div>
+              <div style="font-size:0.85rem; color:rgba(255,255,255,0.7); margin-top:4px;">{{ $magazine->description }}</div>
+            </div>
+          @endif
+          <a href="{{ url('/' . $cityId . '/magazine') }}" class="vogue-btn-red">
+            Read the Magazine &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 9. IN BHAVNAGAR / IN [CITY] ════════════════════════════ -->
+  <section class="city-edition-section" id="sec-in-city" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <div class="section-hed-bar" style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:30px;">
+        <div>
+          <span class="vogue-rubric vogue-rubric--red">IN {{ strtoupper($cityName) }} · LIVING CULTURE</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(2rem, 3.8vw, 3rem); font-weight:400; line-height:1.15; margin:6px 0 8px;">
+            The city, as it happens.
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#555; max-width:850px; line-height:1.5;">
+            Selective coverage of notable events, performances, exhibitions, conversations and cultural moments across {{ $cityName }}.
+          </p>
+        </div>
+      </div>
+
+      <div class="vogue-4col-grid" style="margin-bottom:28px;">
+        @foreach($inCityStories as $art)
+          <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
+            <div class="vogue-card__img-wrap">
+              <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
+            </div>
+            <div class="vogue-card__body" style="padding-top:12px;">
+              <span class="vogue-rubric vogue-rubric--red">{{ $art->category ? $art->category->name : 'MOMENT' }}</span>
+              <h3 class="vogue-card__title" style="font-family:var(--font-didot); font-size:1.15rem; font-weight:600; line-height:1.3; margin:4px 0 6px;">{{ $art->title }}</h3>
+              <p style="font-family:var(--font-garamond); font-size:0.95rem; color:#555; line-height:1.4; margin-bottom:8px;">
+                {{ Str::limit($art->excerpt ?: strip_tags($art->content), 90) }}
+              </p>
+            </div>
+          </article>
+        @endforeach
+      </div>
+
+      <div style="text-align:center;">
+        <a href="{{ url('/' . $cityId . '/in-' . $cityId) }}" class="vogue-btn-outline">
+          Explore In {{ $cityName }} &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 10. FEATURED BRANDS ════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-featured-brands" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <!-- Editorial Disclosure Header -->
+      <div style="background:var(--vogue-bg-light); border:1px solid var(--vogue-border); padding:32px 36px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;">
+        <div style="max-width:820px;">
+          <span style="display:inline-block; font-size:0.625rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; background:var(--vogue-black); color:#fff; padding:3px 10px; margin-bottom:10px;">
+            FEATURED BRAND · PAID PARTNERSHIP
+          </span>
+          <h3 style="font-family:var(--font-didot); font-size:clamp(1.5rem, 2.8vw, 2.2rem); font-weight:400; margin-bottom:8px;">
+            Credible brands. Clearly disclosed collaborations.
+          </h3>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444444; line-height:1.55; margin-bottom:8px;">
+            Explore clearly disclosed commercial features and collaborations produced with participating brands, businesses, institutions and organisations.
+          </p>
+          <p style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-red);">
+            Commercial participation does not influence selection for Icons, Rising or Voices.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="{{ url('/' . $cityId . '/featured-brands') }}" class="vogue-btn-outline">
+            Explore Featured Brands
+          </a>
+          <a href="{{ url('/' . $cityId . '/featured-brands#advertise') }}" class="vogue-btn-solid">
+            Advertise With Us
+          </a>
+        </div>
+      </div>
+
+      @if($brands && $brands->count() > 0)
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+          @foreach($brands as $b)
+            <div style="background:#fff; border:1px solid var(--vogue-border); padding:24px; border-radius:3px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <span class="vogue-rubric" style="font-size:0.65rem; color:var(--vogue-muted);">{{ $b->disclosure_text ?? 'PARTNER CONTENT' }}</span>
+                <h4 style="font-family:var(--font-didot); font-size:1.25rem; font-weight:600; margin:6px 0 10px;">{{ $b->name }}</h4>
+                <p style="font-family:var(--font-garamond); font-size:1rem; color:#555; line-height:1.5; margin-bottom:14px;">{{ $b->description }}</p>
+              </div>
+              <div style="border-top:1px solid #f0f0f0; padding-top:12px;">
+                <a href="{{ $b->website_url ?? url('/' . $cityId . '/featured-brands') }}" target="_blank" rel="noopener" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+                  Visit Brand &rarr;
                 </a>
               </div>
-              <div class="city-share-inline" style="margin-top:16px;">
-                <span>Share &rarr;</span>
-                <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url('/article/' . $art->id)) }}" target="_blank" rel="noopener">Facebook</a>
-                <a href="https://twitter.com/intent/tweet?url={{ urlencode(url('/article/' . $art->id)) }}&text={{ urlencode($art->title) }}" target="_blank" rel="noopener">X</a>
-                <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url('/article/' . $art->id)) }}" target="_blank" rel="noopener">Pinterest</a>
-              </div>
             </div>
-          </article>
-        @endforeach
-      </div>
+          @endforeach
+        </div>
+      @endif
+    </div>
+  </section>
 
-      <div style="text-align:center; margin-top:36px;">
-        <a href="{{ url('/' . $cityId . '/stories') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:14px 32px; text-decoration:none; transition:all 0.2s ease;">
-          Explore All {{ $cityName }} Stories &rarr;
-        </a>
+  <!-- ══ 11. NOMINATION ═════════════════════════════════════════ -->
+  <section class="city-edition-section" id="sec-nomination" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <div style="background:var(--vogue-black); color:#ffffff; padding:clamp(40px, 6vw, 64px) clamp(24px, 4vw, 56px); display:grid; grid-template-columns:1.4fr 1fr; gap:36px; align-items:center;">
+        <div>
+          <span class="vogue-rubric" style="color:var(--vogue-red); letter-spacing:2.5px; margin-bottom:12px;">EDITORIAL CONSIDERATION</span>
+          <h2 style="font-family:var(--font-didot); font-size:clamp(1.8rem, 3.2vw, 2.7rem); font-weight:400; line-height:1.2; margin-bottom:14px; color:#ffffff;">
+            Know a story worth documenting?
+          </h2>
+          <p style="font-family:var(--font-garamond); font-size:1.15rem; line-height:1.6; color:rgba(255,255,255,0.85); margin-bottom:12px;">
+            Nominate yourself or someone whose work, journey or contribution deserves editorial consideration. Every nomination is independently reviewed.
+          </p>
+          <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+            Submission does not guarantee selection or publication.
+          </p>
+        </div>
+
+        <div style="text-align:right;">
+          <a href="{{ url('/' . $cityId . '/nominate') }}" class="vogue-btn-red" style="font-size:0.8rem; padding:16px 36px;">
+            Submit a Nomination
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ 7. OFFICIAL NOMINATION CTA ═════════════════════════════ -->
-  <x-nomination-cta />
-
-  @push('scripts')
-  <script>
-    // Hero Slider Carousel
-    (function () {
-      const slides = document.querySelectorAll('.city-hero-slide');
-      const dots = document.querySelectorAll('.city-hero-dot');
-      let current = 0;
-      function show(idx) {
-        if (!slides.length) return;
-        slides.forEach((s, i) => s.classList.toggle('active', i === idx));
-        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-        current = idx;
-      }
-      document.getElementById('hero-arrow-next')?.addEventListener('click', () => show((current + 1) % slides.length));
-      document.getElementById('hero-arrow-prev')?.addEventListener('click', () => show((current - 1 + slides.length) % slides.length));
-      dots.forEach((d, i) => d.addEventListener('click', () => show(i)));
-      if (slides.length > 1) {
-        setInterval(() => show((current + 1) % slides.length), 6000);
-      }
-    })();
-  </script>
-  @endpush
+  <!-- ══ 12. CLOSING ════════════════════════════════════════════ -->
+  <section class="city-edition-section" style="margin-bottom:var(--section-gap);">
+    <div class="vogue-container">
+      <div style="border-top:1px solid var(--vogue-border); border-bottom:1px solid var(--vogue-border); padding:56px clamp(20px, 4vw, 60px); text-align:center;">
+        <div style="font-family:var(--font-didot); font-size:clamp(2rem, 3.5vw, 3.2rem); font-weight:400; line-height:1.2; color:var(--vogue-black); margin-bottom:8px;">
+          Not every story needs attention.
+        </div>
+        <div style="font-family:var(--font-didot); font-size:clamp(2rem, 3.5vw, 3.2rem); font-style:italic; font-weight:400; line-height:1.2; color:var(--vogue-red); margin-bottom:20px;">
+          Some deserve permanence.
+        </div>
+        <p style="font-family:var(--font-garamond); font-size:1.25rem; color:#333333; max-width:700px; margin:0 auto 14px;">
+          {{ $cityName }} Icons documents the people helping shape the identity and future of the city.
+        </p>
+        <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--vogue-muted);">
+          Selected with purpose. Documented with responsibility
+        </div>
+      </div>
+    </div>
+  </section>
 
 </x-layouts.app>

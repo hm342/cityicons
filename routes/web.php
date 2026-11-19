@@ -97,9 +97,7 @@ Route::get('/bhavnagar-icons', function () {
 // ── 6. CITY-SCOPED ARCHIVES (e.g. /bhavnagar/icons, /mumbai/rising, etc.) ──
 Route::get('/{city}/icons', [DirectoryController::class, 'cityIcons'])->name('city.icons');
 Route::get('/{city}/rising', [DirectoryController::class, 'cityRising'])->name('city.rising');
-Route::get('/{city}/voices', function ($city) {
-    return redirect('/' . strtolower($city) . '/icons', 301);
-});
+Route::get('/{city}/voices', [DirectoryController::class, 'cityVoices'])->name('city.voices');
 Route::get('/{city}/stories', [ArticleFrontendController::class, 'cityStories'])->name('city.stories');
 Route::get('/{city}/the-list', [DirectoryController::class, 'cityTheList'])->name('city.the-list');
 Route::get('/{city}/magazine', [MagazineFrontendController::class, 'cityMagazine'])->name('city.magazine');

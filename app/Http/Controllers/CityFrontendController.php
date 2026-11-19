@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Article;
 use App\Models\Person;
+use App\Models\Brand;
+use App\Models\MagazineEdition;
 
 class CityFrontendController extends Controller
 {
     /**
-     * Display a dynamic city edition network page.
-     * All relations are eager-loaded to eliminate N+1 queries.
+     * Display the City Home Page (Matching PDF Pages 4, 5, 6 Editorial Blueprint).
      */
     public function show($slug)
     {
@@ -18,199 +19,205 @@ class CityFrontendController extends Controller
         $cityId = $city->slug;
         $cityName = $city->name;
 
-        // 1. Hero Slides (4 items)
-        $heroSlides = Article::with(['category', 'tags'])
+        // 1. Hero Cover Article / Hero Story
+        $heroArticle = Article::with(['category', 'tags'])
             ->published()
             ->where('city_id', $city->id)
             ->where('is_featured', true)
             ->latest()
-            ->take(4)
-            ->get();
+            ->first();
 
-        if ($heroSlides->count() < 4) {
-            $extraHero = Article::with(['category', 'tags'])
+        if (!$heroArticle) {
+            $heroArticle = Article::with(['category', 'tags'])
                 ->published()
                 ->where('city_id', $city->id)
-                ->whereNotIn('id', $heroSlides->pluck('id'))
                 ->latest()
-                ->take(4 - $heroSlides->count())
-                ->get();
-            $heroSlides = $heroSlides->concat($extraHero);
+                ->first();
         }
 
-        if ($heroSlides->count() < 4) {
-            $nationalHero = Article::with(['category', 'tags'])
+        if (!$heroArticle) {
+            $heroArticle = Article::with(['category', 'tags'])
                 ->published()
-                ->whereNotIn('id', $heroSlides->pluck('id'))
                 ->latest()
-                ->take(4 - $heroSlides->count())
-                ->get();
-            $heroSlides = $heroSlides->concat($nationalHero);
+                ->first();
         }
 
-        $usedIds = $heroSlides->pluck('id')->toArray();
-
-        // 2. Section 1: Culture & Heritage (5 items: 1 tall left + 4 right 2x2)
-        $cultureStories = Article::with(['category', 'tags'])
+        // 2. Featured Icons (4 people: established professionals, creators, changemakers)
+        $featuredIcons = Person::with(['category'])
             ->published()
             ->where('city_id', $city->id)
-            ->whereHas('category', function ($q) {
-                $q->whereIn('slug', ['culture', 'places', 'art', 'events']);
+            ->where(function ($q) {
+                $q->where('type', 'icon')->orWhereNull('type');
             })
-            ->whereNotIn('id', $usedIds)
-            ->latest()
-            ->take(5)
-            ->get();
-
-        if ($cultureStories->count() < 5) {
-            $moreCulture = Article::with(['category', 'tags'])
-                ->published()
-                ->where('city_id', $city->id)
-                ->whereNotIn('id', array_merge($usedIds, $cultureStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $cultureStories->count())
-                ->get();
-            $cultureStories = $cultureStories->concat($moreCulture);
-        }
-
-        if ($cultureStories->count() < 5) {
-            $nationalCulture = Article::with(['category', 'tags'])
-                ->published()
-                ->whereNotIn('id', array_merge($usedIds, $cultureStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $cultureStories->count())
-                ->get();
-            $cultureStories = $cultureStories->concat($nationalCulture);
-        }
-
-        $usedIds = array_merge($usedIds, $cultureStories->pluck('id')->toArray());
-
-        // 3. Section 2: Culinary & Taste (5 items: 2 left + 1 center tall + 2 right)
-        $culinaryStories = Article::with(['category', 'tags'])
-            ->published()
-            ->where('city_id', $city->id)
-            ->whereHas('category', function ($q) {
-                $q->whereIn('slug', ['food', 'living', 'lifestyle', 'taste', 'dining']);
-            })
-            ->whereNotIn('id', $usedIds)
-            ->latest()
-            ->take(5)
-            ->get();
-
-        if ($culinaryStories->count() < 5) {
-            $moreCulinary = Article::with(['category', 'tags'])
-                ->published()
-                ->where('city_id', $city->id)
-                ->whereNotIn('id', array_merge($usedIds, $culinaryStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $culinaryStories->count())
-                ->get();
-            $culinaryStories = $culinaryStories->concat($moreCulinary);
-        }
-
-        if ($culinaryStories->count() < 5) {
-            $nationalCulinary = Article::with(['category', 'tags'])
-                ->published()
-                ->whereNotIn('id', array_merge($usedIds, $culinaryStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $culinaryStories->count())
-                ->get();
-            $culinaryStories = $culinaryStories->concat($nationalCulinary);
-        }
-
-        $usedIds = array_merge($usedIds, $culinaryStories->pluck('id')->toArray());
-
-        // 4. Section 3: Fashion & Craft (5 items: 2 top 60/40 + 3 bottom)
-        $fashionStories = Article::with(['category', 'tags'])
-            ->published()
-            ->where('city_id', $city->id)
-            ->whereHas('category', function ($q) {
-                $q->whereIn('slug', ['fashion', 'beauty', 'art', 'street-style', 'craft']);
-            })
-            ->whereNotIn('id', $usedIds)
-            ->latest()
-            ->take(5)
-            ->get();
-
-        if ($fashionStories->count() < 5) {
-            $moreFashion = Article::with(['category', 'tags'])
-                ->published()
-                ->where('city_id', $city->id)
-                ->whereNotIn('id', array_merge($usedIds, $fashionStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $fashionStories->count())
-                ->get();
-            $fashionStories = $fashionStories->concat($moreFashion);
-        }
-
-        if ($fashionStories->count() < 5) {
-            $nationalFashion = Article::with(['category', 'tags'])
-                ->published()
-                ->whereNotIn('id', array_merge($usedIds, $fashionStories->pluck('id')->toArray()))
-                ->latest()
-                ->take(5 - $fashionStories->count())
-                ->get();
-            $fashionStories = $fashionStories->concat($nationalFashion);
-        }
-
-        $usedIds = array_merge($usedIds, $fashionStories->pluck('id')->toArray());
-
-        // 5. Section 4: People & Voices (6 people for 3x2 grid)
-        $people = Person::with(['category'])
-            ->published()
-            ->where('city_id', $city->id)
             ->orderBy('sort_order')
-            ->take(6)
-            ->get();
-
-        if ($people->count() < 6) {
-            $morePeople = Person::with(['category'])
-                ->published()
-                ->whereNotIn('id', $people->pluck('id'))
-                ->orderBy('sort_order')
-                ->take(6 - $people->count())
-                ->get();
-            $people = $people->concat($morePeople);
-        }
-
-        // 6. Section 5: Editorial Dispatches / Blog Stream (4 items: 50/50 horizontal split)
-        $blogStories = Article::with(['category', 'tags'])
-            ->published()
-            ->where('city_id', $city->id)
-            ->whereNotIn('id', $usedIds)
             ->latest()
             ->take(4)
             ->get();
 
-        if ($blogStories->count() < 4) {
-            $moreBlog = Article::with(['category', 'tags'])
+        if ($featuredIcons->count() < 4) {
+            $moreIcons = Person::with(['category'])
                 ->published()
-                ->whereNotIn('id', array_merge($usedIds, $blogStories->pluck('id')->toArray()))
+                ->whereNotIn('id', $featuredIcons->pluck('id'))
+                ->orderBy('sort_order')
                 ->latest()
-                ->take(4 - $blogStories->count())
+                ->take(4 - $featuredIcons->count())
                 ->get();
-            $blogStories = $blogStories->concat($moreBlog);
+            $featuredIcons = $featuredIcons->concat($moreIcons);
         }
 
-        if ($blogStories->count() < 4) {
-            $finalFallback = Article::with(['category', 'tags'])
+        // 3. Rising (4 emerging individuals building what comes next)
+        $risingPeople = Person::with(['category'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->where('type', 'rising')
+            ->orderBy('sort_order')
+            ->latest()
+            ->take(4)
+            ->get();
+
+        if ($risingPeople->count() < 4) {
+            $moreRising = Person::with(['category'])
                 ->published()
+                ->where('type', 'rising')
+                ->whereNotIn('id', $risingPeople->pluck('id'))
+                ->orderBy('sort_order')
                 ->latest()
-                ->take(4)
+                ->take(4 - $risingPeople->count())
                 ->get();
-            $blogStories = $blogStories->concat($finalFallback)->unique('id')->take(4);
+            $risingPeople = $risingPeople->concat($moreRising);
         }
+
+        if ($risingPeople->count() < 4) {
+            $fallbackRising = Person::with(['category'])
+                ->published()
+                ->whereNotIn('id', array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray()))
+                ->orderBy('sort_order')
+                ->take(4 - $risingPeople->count())
+                ->get();
+            $risingPeople = $risingPeople->concat($fallbackRising);
+        }
+
+        // 4. Voices (4 conversation profiles / reflections)
+        $voicesPeople = Person::with(['category'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->where('type', 'voice')
+            ->orderBy('sort_order')
+            ->latest()
+            ->take(4)
+            ->get();
+
+        if ($voicesPeople->count() < 4) {
+            $moreVoices = Person::with(['category'])
+                ->published()
+                ->where('type', 'voice')
+                ->whereNotIn('id', $voicesPeople->pluck('id'))
+                ->orderBy('sort_order')
+                ->latest()
+                ->take(4 - $voicesPeople->count())
+                ->get();
+            $voicesPeople = $voicesPeople->concat($moreVoices);
+        }
+
+        if ($voicesPeople->count() < 4) {
+            $fallbackVoices = Person::with(['category'])
+                ->published()
+                ->whereNotIn('id', array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray(), $voicesPeople->pluck('id')->toArray()))
+                ->orderBy('sort_order')
+                ->take(4 - $voicesPeople->count())
+                ->get();
+            $voicesPeople = $voicesPeople->concat($fallbackVoices);
+        }
+
+        // 5. Stories (4 long-form profiles, city stories and editorial features)
+        $stories = Article::with(['category', 'tags'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->whereNotIn('id', $heroArticle ? [$heroArticle->id] : [])
+            ->latest()
+            ->take(4)
+            ->get();
+
+        if ($stories->count() < 4) {
+            $moreStories = Article::with(['category', 'tags'])
+                ->published()
+                ->whereNotIn('id', array_merge($heroArticle ? [$heroArticle->id] : [], $stories->pluck('id')->toArray()))
+                ->latest()
+                ->take(4 - $stories->count())
+                ->get();
+            $stories = $stories->concat($moreStories);
+        }
+
+        // 6. The List (Monthly archive preview: names presented alphabetically)
+        $listPeople = Person::with(['category'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->orderBy('name', 'asc')
+            ->take(8)
+            ->get();
+
+        if ($listPeople->isEmpty()) {
+            $listPeople = Person::with(['category'])
+                ->published()
+                ->orderBy('name', 'asc')
+                ->take(8)
+                ->get();
+        }
+
+        // 7. Magazine Edition (Latest curated digital magazine)
+        $magazine = MagazineEdition::where('is_active', true)->latest()->first() ?: MagazineEdition::latest()->first();
+
+        // 8. In Bhavnagar / In [City] (Selective coverage of events, exhibitions, cultural moments)
+        $inCityStories = Article::with(['category', 'tags'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->whereHas('category', function ($q) {
+                $q->whereIn('slug', ['events', 'culture', 'places', 'dispatch', 'in-city']);
+            })
+            ->latest()
+            ->take(4)
+            ->get();
+
+        if ($inCityStories->count() < 4) {
+            $fallbackInCity = Article::with(['category', 'tags'])
+                ->published()
+                ->where('city_id', $city->id)
+                ->whereNotIn('id', $inCityStories->pluck('id'))
+                ->latest()
+                ->take(4 - $inCityStories->count())
+                ->get();
+            $inCityStories = $inCityStories->concat($fallbackInCity);
+        }
+
+        if ($inCityStories->count() < 4) {
+            $natInCity = Article::with(['category', 'tags'])
+                ->published()
+                ->whereNotIn('id', $inCityStories->pluck('id'))
+                ->latest()
+                ->take(4 - $inCityStories->count())
+                ->get();
+            $inCityStories = $inCityStories->concat($natInCity);
+        }
+
+        // 9. Featured Brands (Credible brands & clearly disclosed collaborations)
+        $brands = Brand::where('is_active', true)
+            ->orderBy('sort_order')
+            ->take(4)
+            ->get();
 
         return view('city', compact(
             'city',
             'cityId',
             'cityName',
-            'heroSlides',
-            'cultureStories',
-            'culinaryStories',
-            'fashionStories',
-            'people',
-            'blogStories'
+            'heroArticle',
+            'featuredIcons',
+            'risingPeople',
+            'voicesPeople',
+            'stories',
+            'listPeople',
+            'magazine',
+            'inCityStories',
+            'brands'
         ));
     }
 }

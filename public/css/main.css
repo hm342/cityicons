@@ -1989,3 +1989,63 @@ button {
     bottom: 24px;
   }
 }
+
+/* ── Standard Vogue Action Buttons ────────────────────────── */
+.vogue-btn-outline {
+  display: inline-block;
+  border: 1px solid var(--vogue-black);
+  color: var(--vogue-black);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  text-decoration: none;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+.vogue-btn-outline:hover {
+  background: var(--vogue-black);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.vogue-btn-solid {
+  display: inline-block;
+  background: var(--vogue-black);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.vogue-btn-solid:hover {
+  background: var(--vogue-red);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.vogue-btn-red {
+  display: inline-block;
+  background: var(--vogue-red);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.vogue-btn-red:hover {
+  background: var(--vogue-black);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+

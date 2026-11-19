@@ -130,9 +130,9 @@ class CityFrontendController extends Controller
                 ->get();
         }
 
-        // 6. Magazine Edition (Latest curated digital magazine)
-        $magazine = MagazineEdition::where('is_active', true)->latest()->first() 
-            ?? MagazineEdition::latest()->first();
+        // 6. Magazine Edition (City-scoped digital magazine with fallback)
+        $magazine = MagazineEdition::where('is_active', true)->where('city_id', $city->id)->latest()->first() 
+            ?? MagazineEdition::where('is_active', true)->latest()->first();
 
         // 7. In [City] (6 items for 3x2 vertical cards grid)
         $inCityStories = Article::with(['category', 'tags', 'city'])

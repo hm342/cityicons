@@ -10,7 +10,7 @@ class MagazineEdition extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'issue_number', 'cover_image',
+        'city_id', 'title', 'issue_number', 'cover_image',
         'description', 'published_date', 'is_active',
     ];
 
@@ -18,4 +18,9 @@ class MagazineEdition extends Model
         'is_active'      => 'boolean',
         'published_date' => 'date',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

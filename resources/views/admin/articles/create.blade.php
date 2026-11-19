@@ -133,14 +133,27 @@
 
           <div class="form-group">
             <label class="form-label" for="city_id">City Edition</label>
-            <select id="city_id" name="city_id" class="form-control">
-              <option value="">National / All Cities</option>
-              @foreach($cities as $c)
-                <option value="{{ $c->id }}" {{ old('city_id', $selectedCityId ?? '') == $c->id ? 'selected' : '' }}>
-                  {{ $c->name }} ({{ $c->state }})
-                </option>
-              @endforeach
-            </select>
+            @if($activeAdminCity)
+              <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; color:#991b1b; letter-spacing:0.5px;">Locked by City Switcher</div>
+                  <div style="font-size:13px; font-weight:700; color:#1a1a1e; margin-top:2px;">
+                    <i class="fas fa-city" style="color:var(--primary); margin-right:4px;"></i> {{ $activeAdminCity->name }} ({{ $activeAdminCity->state }})
+                  </div>
+                </div>
+                <input type="hidden" name="city_id" value="{{ $activeAdminCity->id }}">
+                <a href="{{ route('admin.switch-city', 'all') }}" style="font-size:11px; color:#2563eb; font-weight:600; text-decoration:underline;">Switch City</a>
+              </div>
+            @else
+              <select id="city_id" name="city_id" class="form-control">
+                <option value="">National / All Cities</option>
+                @foreach($cities as $c)
+                  <option value="{{ $c->id }}" {{ old('city_id', $selectedCityId ?? '') == $c->id ? 'selected' : '' }}>
+                    {{ $c->name }} ({{ $c->state }})
+                  </option>
+                @endforeach
+              </select>
+            @endif
           </div>
 
           <div class="form-group" style="margin-bottom:0;">

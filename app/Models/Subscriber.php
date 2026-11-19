@@ -10,7 +10,7 @@ class Subscriber extends Model
     use HasFactory;
 
     protected $fillable = [
-        'email', 'name', 'source', 'is_active',
+        'city_id', 'email', 'name', 'source', 'is_active',
         'subscribed_at', 'unsubscribed_at',
     ];
 
@@ -19,4 +19,9 @@ class Subscriber extends Model
         'subscribed_at'   => 'datetime',
         'unsubscribed_at' => 'datetime',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

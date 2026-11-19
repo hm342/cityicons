@@ -11,7 +11,14 @@ class TagController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tag::withCount(['articles', 'people'])->orderBy('name');
+        $activeCityId = session('admin_city_id');
+        $query = Tag::withCount(['articles', 'people'])->with('city')->orderBy('name');
+
+        if ($activeCityId) {
+            $query->where(function ($q) use ($activeCityId) {
+                $q->whereNull('city_id')->orWhere('city_id', $activeCityId);
+            });
+        }
 
         if ($request->filled('search')) {
             $query->where('name', 'like', "%{$request->search}%");
@@ -19,14 +26,20 @@ class TagController extends Controller
 
         $tags = $query->paginate(30)->withQueryString();
 
-        return view('admin.tags.index', compact('tags'));
+        return view('admin.tags.index', compact('tags', 'activeCityId'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:tags,name'],
+            'name'    => ['required', 'string', 'max:255'],
+            'city_id' => ['nullable', 'exists:cities,id'],
         ]);
+
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId && !$request->boolean('is_global')) {
+            $validated['city_id'] = $activeCityId;
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
         Tag::create($validated);

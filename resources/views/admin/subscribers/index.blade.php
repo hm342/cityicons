@@ -44,6 +44,7 @@
           <tr>
             <th>Email Address</th>
             <th>Name</th>
+            <th>City</th>
             <th>Source</th>
             <th>Subscribed Date</th>
             <th>Status</th>
@@ -58,6 +59,17 @@
               </td>
               <td>
                 {{ $sub->name ?? '—' }}
+              </td>
+              <td>
+                @if($sub->city)
+                  <span class="badge" style="background:var(--primary-light); color:var(--primary-dark); font-weight:700;">
+                    <i class="fas fa-city" style="font-size:9px;"></i> {{ $sub->city->name }}
+                  </span>
+                @else
+                  <span class="badge" style="background:#e5e7eb; color:#374151; font-weight:600;">
+                    National
+                  </span>
+                @endif
               </td>
               <td>
                 <span class="badge" style="background:#f4f4f7; color:#333;">

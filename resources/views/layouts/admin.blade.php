@@ -611,7 +611,7 @@
           <label for="admin-city-switcher" style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.5px; display:flex; align-items:center; gap:4px;">
             <i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> City:
           </label>
-          <select id="admin-city-switcher" onchange="window.location.href=this.value" style="padding:6px 12px; border-radius:20px; font-weight:600; font-size:12px; border:1px solid {{ $activeAdminCity ? 'var(--primary)' : 'var(--border-color)' }}; background:{{ $activeAdminCity ? 'var(--primary-light)' : '#ffffff' }}; color:{{ $activeAdminCity ? 'var(--primary-dark)' : 'var(--text-dark)' }}; cursor:pointer; outline:none; transition:all 0.2s;">
+          <select id="admin-city-switcher" onchange="if(window.switchAdminCity) { window.switchAdminCity(this.value); } else { window.location.href=this.value; }" style="padding:6px 12px; border-radius:20px; font-weight:600; font-size:12px; border:1px solid {{ $activeAdminCity ? 'var(--primary)' : 'var(--border-color)' }}; background:{{ $activeAdminCity ? 'var(--primary-light)' : '#ffffff' }}; color:{{ $activeAdminCity ? 'var(--primary-dark)' : 'var(--text-dark)' }}; cursor:pointer; outline:none; transition:all 0.2s;">
             <option value="{{ route('admin.switch-city', 'all') }}" {{ !$activeAdminCity ? 'selected' : '' }}>
               🌐 All Cities (National)
             </option>
@@ -720,6 +720,11 @@
         }, 200);
       }, 200);
     }
+
+    window.switchAdminCity = function(url) {
+      startProgress();
+      window.location.href = url;
+    };
 
     // Initialize Quill WYSIWYG Editor
     function initAdminQuill() {

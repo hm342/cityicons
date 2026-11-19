@@ -19,6 +19,7 @@
             <tr>
               <th>Color</th>
               <th>Category Name</th>
+              <th>City Scope</th>
               <th>Type</th>
               <th>Usage</th>
               <th style="text-align:right;">Actions</th>
@@ -33,6 +34,17 @@
                 <td>
                   <strong style="color:var(--text-dark); font-size:14px;">{{ $cat->name }}</strong>
                   <div style="font-size:11px; color:var(--text-muted);">Slug: /{{ $cat->slug }}</div>
+                </td>
+                <td>
+                  @if($cat->city)
+                    <span class="badge" style="background:var(--primary-light); color:var(--primary-dark); font-weight:700;">
+                      <i class="fas fa-city" style="font-size:9px;"></i> {{ $cat->city->name }}
+                    </span>
+                  @else
+                    <span class="badge" style="background:#e5e7eb; color:#374151; font-weight:600;">
+                      Global (All Cities)
+                    </span>
+                  @endif
                 </td>
                 <td>
                   <span class="badge" style="background:#f4f4f7; color:#333;">
@@ -56,7 +68,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="5" style="text-align:center; padding:32px; color:var(--text-muted);">
+                <td colspan="6" style="text-align:center; padding:32px; color:var(--text-muted);">
                   No categories found.
                 </td>
               </tr>
@@ -78,8 +90,23 @@
           <input type="text" id="name" name="name" required class="form-control" placeholder="e.g. Architecture">
         </div>
 
+        @if($activeAdminCity)
+          <div class="form-group">
+            <label class="form-label">City Scope</label>
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:8px 12px; margin-bottom:8px;">
+              <div style="font-size:12px; font-weight:700; color:#1a1a1e;">
+                <i class="fas fa-city" style="color:var(--primary); margin-right:4px;"></i> {{ $activeAdminCity->name }} Exclusive
+              </div>
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+              <input type="checkbox" name="is_global" value="1" style="accent-color:var(--primary);">
+              <span>Make available globally across all cities</span>
+            </label>
+          </div>
+        @endif
+
         <div class="form-group">
-          <label class="form-label" for="type">Category Scope *</label>
+          <label class="form-label" for="type">Category Target *</label>
           <select id="type" name="type" class="form-control">
             <option value="article">Editorial Articles</option>
             <option value="person">People Directory</option>

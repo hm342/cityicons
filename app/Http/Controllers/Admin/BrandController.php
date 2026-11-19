@@ -53,6 +53,10 @@ class BrandController extends Controller
             $validated['logo_image'] = $request->logo_image_url;
         }
 
+        if (session('admin_city_id')) {
+            $validated['city_id'] = session('admin_city_id');
+        }
+
         unset($validated['logo_image_file'], $validated['logo_image_url']);
 
         Brand::create($validated);
@@ -93,6 +97,10 @@ class BrandController extends Controller
             $validated['logo_image'] = '/storage/' . $path;
         } elseif ($request->filled('logo_image_url')) {
             $validated['logo_image'] = $request->logo_image_url;
+        }
+
+        if (session('admin_city_id')) {
+            $validated['city_id'] = session('admin_city_id');
         }
 
         unset($validated['logo_image_file'], $validated['logo_image_url']);

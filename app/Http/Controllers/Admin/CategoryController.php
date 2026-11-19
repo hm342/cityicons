@@ -12,8 +12,17 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount(['articles', 'people'])->orderBy('sort_order')->get();
-        return view('admin.categories.index', compact('categories'));
+        $activeCityId = session('admin_city_id');
+        $query = Category::withCount(['articles', 'people'])->with('city')->orderBy('sort_order');
+
+        if ($activeCityId) {
+            $query->where(function ($q) use ($activeCityId) {
+                $q->whereNull('city_id')->orWhere('city_id', $activeCityId);
+            });
+        }
+
+        $categories = $query->get();
+        return view('admin.categories.index', compact('categories', 'activeCityId'));
     }
 
     public function store(Request $request)
@@ -23,7 +32,13 @@ class CategoryController extends Controller
             'type'       => ['required', 'in:article,person'],
             'color'      => ['nullable', 'string', 'max:7'],
             'sort_order' => ['nullable', 'integer'],
+            'city_id'    => ['nullable', 'exists:cities,id'],
         ]);
+
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId && !$request->boolean('is_global')) {
+            $validated['city_id'] = $activeCityId;
+        }
 
         $validated['slug'] = Str::slug($validated['name']);
         Category::create($validated);

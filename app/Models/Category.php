@@ -11,12 +11,28 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
+        'city_id',
         'name',
         'slug',
         'type',
         'color',
         'sort_order',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function scopeForCity($query, $cityId)
+    {
+        return $query->where(function ($q) use ($cityId) {
+            $q->whereNull('city_id');
+            if ($cityId) {
+                $q->orWhere('city_id', $cityId);
+            }
+        });
+    }
 
     public function articles(): HasMany
     {

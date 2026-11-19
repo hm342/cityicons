@@ -23,6 +23,7 @@
           <tr>
             <th style="width:70px;">Cover</th>
             <th>Issue &amp; Title</th>
+            <th>City</th>
             <th>Release Date</th>
             <th>Description</th>
             <th>Status</th>
@@ -48,6 +49,11 @@
                 <strong style="color:var(--text-dark); font-size:14px; display:block;">{{ $ed->title }}</strong>
               </td>
               <td>
+                <span class="badge" style="background:var(--primary-light); color:var(--primary-dark); font-weight:700;">
+                  {{ $ed->city ? $ed->city->name : 'All Cities' }}
+                </span>
+              </td>
+              <td>
                 <span style="font-size:13px; color:var(--text-muted);">
                   {{ $ed->published_date ? $ed->published_date->format('F Y') : 'Upcoming' }}
                 </span>
@@ -66,7 +72,7 @@
                 <a href="{{ route('admin.magazine-editions.edit', $ed->id) }}" class="btn btn-secondary btn-sm" title="Edit">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a href="{{ url('/magazine') }}" target="_blank" class="btn btn-secondary btn-sm" title="View Public Page">
+                <a href="{{ $ed->city ? url('/' . $ed->city->slug . '/magazine') : url('/bhavnagar/magazine') }}" target="_blank" class="btn btn-secondary btn-sm" title="View Public Page">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </a>
                 <form action="{{ route('admin.magazine-editions.destroy', $ed->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this magazine edition?');">

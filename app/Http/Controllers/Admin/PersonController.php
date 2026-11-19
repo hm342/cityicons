@@ -48,10 +48,10 @@ class PersonController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->get();
-        $cities = City::where('is_active', true)->orderBy('name')->get();
-        $tags = Tag::orderBy('name')->get();
         $selectedCityId = session('admin_city_id');
+        $categories = Category::forCity($selectedCityId)->orderBy('name')->get();
+        $cities = City::where('is_active', true)->orderBy('name')->get();
+        $tags = Tag::forCity($selectedCityId)->orderBy('name')->get();
 
         return view('admin.people.create', compact('categories', 'cities', 'tags', 'selectedCityId'));
     }
@@ -81,6 +81,10 @@ class PersonController extends Controller
             'tags'                => ['nullable', 'array'],
             'tags.*'              => ['exists:tags,id'],
         ]);
+
+        if (session('admin_city_id')) {
+            $validated['city_id'] = session('admin_city_id');
+        }
 
         $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
         $origSlug = $validated['slug'];
@@ -114,11 +118,12 @@ class PersonController extends Controller
     public function edit($id)
     {
         $person = Person::with('tags')->findOrFail($id);
-        $categories = Category::orderBy('name')->get();
+        $selectedCityId = session('admin_city_id') ?: $person->city_id;
+        $categories = Category::forCity($selectedCityId)->orderBy('name')->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
-        $tags = Tag::orderBy('name')->get();
+        $tags = Tag::forCity($selectedCityId)->orderBy('name')->get();
 
-        return view('admin.people.edit', compact('person', 'categories', 'cities', 'tags'));
+        return view('admin.people.edit', compact('person', 'categories', 'cities', 'tags', 'selectedCityId'));
     }
 
     public function update(Request $request, $id)
@@ -148,6 +153,10 @@ class PersonController extends Controller
             'tags'                => ['nullable', 'array'],
             'tags.*'              => ['exists:tags,id'],
         ]);
+
+        if (session('admin_city_id')) {
+            $validated['city_id'] = session('admin_city_id');
+        }
 
         $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
         $validated['is_featured'] = $request->boolean('is_featured');

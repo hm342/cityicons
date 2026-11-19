@@ -10,7 +10,22 @@ class Tag extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['city_id', 'name', 'slug'];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function scopeForCity($query, $cityId)
+    {
+        return $query->where(function ($q) use ($cityId) {
+            $q->whereNull('city_id');
+            if ($cityId) {
+                $q->orWhere('city_id', $cityId);
+            }
+        });
+    }
 
     public function articles(): BelongsToMany
     {

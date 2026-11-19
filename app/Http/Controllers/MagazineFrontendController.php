@@ -18,8 +18,20 @@ class MagazineFrontendController extends Controller
         }
 
         $editions = MagazineEdition::where('is_active', true)
+            ->where('city_id', $city ? $city->id : null)
             ->orderBy('issue_number', 'desc')
             ->get();
+
+        // Fallback to flagship bhavnagar editions if current city has no editions yet
+        if ($editions->isEmpty()) {
+            $flagship = City::where('slug', 'bhavnagar')->first();
+            if ($flagship) {
+                $editions = MagazineEdition::where('is_active', true)
+                    ->where('city_id', $flagship->id)
+                    ->orderBy('issue_number', 'desc')
+                    ->get();
+            }
+        }
 
         $currentIssue = $editions->first();
         $previousIssues = $editions->slice(1);

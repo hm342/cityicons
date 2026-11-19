@@ -39,4 +39,25 @@ class City extends Model
     {
         return $this->hasMany(Brand::class);
     }
+
+    public function magazineEditions(): HasMany
+    {
+        return $this->hasMany(MagazineEdition::class);
+    }
+
+    public function subscribers(): HasMany
+    {
+        return $this->hasMany(Subscriber::class);
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
+    }
 }
+

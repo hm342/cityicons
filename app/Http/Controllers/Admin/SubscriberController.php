@@ -11,7 +11,7 @@ class SubscriberController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Subscriber::latest('subscribed_at');
+        $query = Subscriber::with('city')->latest('subscribed_at');
 
         if ($request->filled('search')) {
             $s = $request->search;
@@ -21,13 +21,18 @@ class SubscriberController extends Controller
             });
         }
 
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId) {
+            $query->where('city_id', $activeCityId);
+        }
+
         if ($request->filled('source')) {
             $query->where('source', $request->source);
         }
 
         $subscribers = $query->paginate(25)->withQueryString();
 
-        return view('admin.subscribers.index', compact('subscribers'));
+        return view('admin.subscribers.index', compact('subscribers', 'activeCityId'));
     }
 
     public function export(): StreamedResponse
@@ -37,16 +42,24 @@ class SubscriberController extends Controller
             'Content-Disposition' => 'attachment; filename="cityicons_subscribers_' . date('Y-m-d') . '.csv"',
         ];
 
-        $callback = function () {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID', 'Email', 'Name', 'Source', 'Is Active', 'Subscribed At']);
+        $activeCityId = session('admin_city_id');
 
-            Subscriber::chunk(200, function ($subscribers) use ($file) {
+        $callback = function () use ($activeCityId) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['ID', 'Email', 'Name', 'City', 'Source', 'Is Active', 'Subscribed At']);
+
+            $query = Subscriber::with('city');
+            if ($activeCityId) {
+                $query->where('city_id', $activeCityId);
+            }
+
+            $query->chunk(200, function ($subscribers) use ($file) {
                 foreach ($subscribers as $s) {
                     fputcsv($file, [
                         $s->id,
                         $s->email,
                         $s->name,
+                        $s->city ? $s->city->name : 'National',
                         $s->source,
                         $s->is_active ? 'Yes' : 'No',
                         $s->subscribed_at ? $s->subscribed_at->format('Y-m-d H:i') : '',

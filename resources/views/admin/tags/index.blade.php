@@ -27,6 +27,11 @@
         @foreach($tags as $t)
           <div style="display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid #d5d5de; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">
             <span>#{{ $t->name }}</span>
+            @if($t->city)
+              <span style="font-size:9px; background:var(--primary-light); color:var(--primary-dark); font-weight:700; padding:1px 5px; border-radius:10px;">
+                {{ $t->city->name }}
+              </span>
+            @endif
             <span style="font-size:10px; background:#f0f0f4; color:#666; padding:1px 6px; border-radius:10px;">
               {{ $t->articles_count + $t->people_count }}
             </span>
@@ -58,6 +63,21 @@
           <input type="text" id="name" name="name" required class="form-control" placeholder="e.g. Sustainable Fashion">
           <div class="form-text">Will be automatically formatted and slugified.</div>
         </div>
+
+        @if($activeAdminCity)
+          <div class="form-group">
+            <label class="form-label">City Scope</label>
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:8px 12px; margin-bottom:8px;">
+              <div style="font-size:12px; font-weight:700; color:#1a1a1e;">
+                <i class="fas fa-city" style="color:var(--primary); margin-right:4px;"></i> {{ $activeAdminCity->name }} Exclusive
+              </div>
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+              <input type="checkbox" name="is_global" value="1" style="accent-color:var(--primary);">
+              <span>Make available globally across all cities</span>
+            </label>
+          </div>
+        @endif
 
         <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;">
           <i class="fa-solid fa-plus"></i> Add Tag

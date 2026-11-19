@@ -52,8 +52,8 @@
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:28px;">
           @foreach($latestStories as $art)
             <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
-              <div style="width:100%; height:210px; overflow:hidden; background-color:var(--vogue-bg-light); border-radius:2px; margin-bottom:14px;">
-                <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.4s ease;" loading="lazy">
+              <div class="vogue-card__img-wrap" style="margin-bottom:14px;">
+                <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
               </div>
               <span class="vogue-rubric vogue-rubric--red">{{ $art->category ? strtoupper($art->category->name) : 'STORY' }}</span>
               <h3 style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 8px; color:var(--vogue-black);">

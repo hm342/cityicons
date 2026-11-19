@@ -33,8 +33,8 @@
             $tag = $item->category ? $item->category->name : ($isPerson ? 'VOICE' : 'STORY');
           @endphp
           <article class="vogue-card" onclick="location.href='{{ $linkUrl }}'" style="cursor:pointer;">
-            <div class="vogue-card__img-wrap" style="height:260px; overflow:hidden; border-radius:4px;">
-              <img src="{{ $image ?: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80' }}" alt="{{ $title }}" style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease;">
+            <div class="vogue-card__img-wrap">
+              <img src="{{ $image ?: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80' }}" alt="{{ $title }}" loading="lazy">
             </div>
             <div class="vogue-card__body" style="padding-top:12px;">
               <span class="vogue-rubric vogue-rubric--red">{{ $tag }}</span>

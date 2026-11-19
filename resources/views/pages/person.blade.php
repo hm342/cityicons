@@ -54,12 +54,12 @@
         
         <!-- Left Column: Media & Editorial Biography -->
         <div>
-          <!-- Master Portrait Photo -->
-          <div style="width:100%; height:clamp(380px, 50vh, 560px); overflow:hidden; background-color:#181818; margin-bottom:24px; position:relative; border:1px solid var(--vogue-border);">
+          <!-- Master Portrait Photo (Standard 4:5 Editorial Portrait Ratio) -->
+          <div class="person-portrait-box" style="width:100%; max-width:520px; aspect-ratio:4 / 5; overflow:hidden; background-color:#181818; margin-bottom:28px; position:relative; border:1px solid var(--vogue-border); border-radius:2px;">
             <img src="{{ $person->portrait_image ?: ($person->cover_image ?: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=85') }}" 
                  alt="{{ $person->name }}" 
-                 style="width:100%; height:100%; object-fit:cover; object-position:center top; display:block;">
-            <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.85) 100%); padding:24px 28px; color:#ffffff;">
+                 style="width:100%; height:100%; object-fit:cover; object-position:center 15%; display:block;">
+            <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.72) 100%); padding:16px 22px; color:#ffffff;">
               <div style="font-size:0.6875rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--vogue-red);">
                 Documented Record · Bhavnagar Icons
               </div>
@@ -75,13 +75,17 @@
           </blockquote>
 
           <!-- Long-Form Biography / Profile Story -->
-          <div style="font-family:var(--font-garamond); font-size:1.25rem; line-height:1.8; color:#222; margin-bottom:36px;">
+          <div class="editorial-bio-prose" style="font-family:var(--font-garamond); font-size:1.25rem; line-height:1.8; color:#222; margin-bottom:36px;">
             @if($person->bio)
-              @foreach(explode("\n", $person->bio) as $para)
-                @if(trim($para))
-                  <p style="margin-bottom:20px;">{{ trim($para) }}</p>
-                @endif
-              @endforeach
+              @if(strip_tags($person->bio) !== $person->bio)
+                {!! $person->bio !!}
+              @else
+                @foreach(explode("\n", $person->bio) as $para)
+                  @if(trim($para))
+                    <p style="margin-bottom:20px;">{{ trim($para) }}</p>
+                  @endif
+                @endforeach
+              @endif
             @else
               <p style="margin-bottom:20px;">
                 {{ $person->name }} is recognized within Bhavnagar Icons for exemplary work, enduring dedication, and demonstrable impact in {{ $person->category ? strtolower($person->category->name) : 'their field' }}. 
@@ -249,8 +253,8 @@
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:24px;">
             @foreach($morePeople as $other)
               <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($other->slug ?: $other->id)) }}'">
-                <div style="height:280px; width:100%; overflow:hidden; background:#181818; margin-bottom:12px;">
-                  <img src="{{ $other->portrait_image ?: $other->cover_image }}" alt="{{ $other->name }}" style="width:100%; height:100%; object-fit:cover;">
+                <div class="vogue-card__img-wrap" style="width:100%; aspect-ratio:4 / 5; overflow:hidden; background:#181818; margin-bottom:12px; border-radius:2px;">
+                  <img src="{{ $other->portrait_image ?: $other->cover_image }}" alt="{{ $other->name }}" style="width:100%; height:100%; object-fit:cover; object-position:center 15%;">
                 </div>
                 <span class="vogue-rubric">{{ $other->category ? $other->category->name : 'ARCHIVE' }}</span>
                 <h3 style="font-family:var(--font-didot); font-size:1.25rem; font-weight:500; line-height:1.2; margin:4px 0 6px;">

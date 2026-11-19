@@ -33,8 +33,8 @@
         <div class="vogue-4col-grid" style="margin-bottom:36px;">
           @foreach($people as $person)
             <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
-              <div class="vogue-card__img-wrap" style="height:280px; overflow:hidden; border-radius:4px;">
-                <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+              <div class="vogue-card__img-wrap">
+                <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
               </div>
               <div class="vogue-card__body" style="padding-top:12px;">
                 <span class="vogue-rubric vogue-rubric--red">{{ $person->category ? $person->category->name : 'VOICE' }}</span>

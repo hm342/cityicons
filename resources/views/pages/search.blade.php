@@ -35,9 +35,9 @@
             </h2>
             <div class="vogue-4col-grid">
               @foreach($people as $p)
-                <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/stories') }}'">
-                  <div class="vogue-card__img-wrap" style="height:240px; overflow:hidden; border-radius:4px;">
-                    <img src="{{ $p->portrait_image ?: $p->cover_image }}" alt="{{ $p->name }}" style="width:100%; height:100%; object-fit:cover;">
+                <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($p->slug ?: $p->id)) }}'">
+                  <div class="vogue-card__img-wrap">
+                    <img src="{{ $p->portrait_image ?: $p->cover_image }}" alt="{{ $p->name }}" loading="lazy">
                   </div>
                   <div class="vogue-card__body" style="padding-top:10px;">
                     <span class="vogue-rubric vogue-rubric--red">{{ strtoupper($p->type) }}</span>
@@ -61,8 +61,8 @@
             <div class="vogue-4col-grid">
               @foreach($articles as $art)
                 <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
-                  <div class="vogue-card__img-wrap" style="height:220px; overflow:hidden; border-radius:4px;">
-                    <img src="{{ $art->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $art->title }}" style="width:100%; height:100%; object-fit:cover;">
+                  <div class="vogue-card__img-wrap">
+                    <img src="{{ $art->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $art->title }}" loading="lazy">
                   </div>
                   <div class="vogue-card__body" style="padding-top:10px;">
                     <span class="vogue-rubric">{{ $art->category ? $art->category->name : 'STORY' }}</span>

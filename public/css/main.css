@@ -96,6 +96,16 @@ picture img,
   object-position: center;
 }
 
+/* Portrait boxes & people cards: focus on upper facial region (15% from top) */
+.vogue-card__img-wrap img,
+.person-portrait-box img,
+.person-profile-page .person-portrait-box img,
+.rm-grid-card-img,
+[class*="portrait"] img {
+  object-fit: cover !important;
+  object-position: center 15% !important;
+}
+
 /* Logos, emblems and brand stamps: strictly object-fit: contain */
 .cityicon-logo-img,
 .rm-logo-img,
@@ -660,23 +670,23 @@ button {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 36px;
-  align-items: stretch;
+  align-items: start;
   margin-bottom: 0;
   position: relative;
 }
 
-/* Left Column: Stable container */
+/* Left Column: Sticky container */
 .vogue-sticky-col {
-  position: relative;
-  height: 100%;
+  position: sticky;
+  top: 96px;
+  height: fit-content;
 }
 
-/* Lead Card: Fill container without overlapping following sections */
+/* Lead Card: Natural height container */
 .vogue-sticky-lead {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 520px;
+  height: auto;
 }
 
 .vogue-card {
@@ -691,34 +701,59 @@ button {
   opacity: 0.92;
 }
 
-/* Lead Profile / Feature Card */
+/* Base image wrapper: ENFORCE UNIFORM 4:5 PORTRAIT RATIO ACROSS ALL CARDS */
+.vogue-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5 !important;
+  height: auto !important;
+  overflow: hidden;
+  background-color: var(--vogue-bg-light);
+  border-radius: 2px;
+}
+
+.vogue-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center 15% !important;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vogue-card:hover .vogue-card__img-wrap img {
+  transform: scale(1.035);
+}
+
+/* Lead Profile / Feature Card (Equal 4:5 Ratio Box, Editorial Flow) */
 .vogue-card--lead {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 520px;
-  overflow: hidden;
-  background-color: var(--vogue-black);
+  height: auto;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  background: transparent;
   border-radius: 2px;
 }
 
 .vogue-card--lead .vogue-card__img-wrap {
-  position: absolute;
-  inset: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 4 / 5 !important;
+  height: auto !important;
   overflow: hidden;
+  background-color: #181818;
+  margin-bottom: 18px;
+  border-radius: 2px;
 }
 
 .vogue-card--lead .vogue-card__img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover !important;
-  object-position: center top;
+  object-position: center 15% !important;
+  display: block;
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -727,45 +762,34 @@ button {
 }
 
 .vogue-card--lead::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.25) 35%,
-    rgba(0, 0, 0, 0.78) 70%,
-    rgba(0, 0, 0, 0.94) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
+  display: none;
 }
 
 .vogue-card--lead .vogue-card__body {
   position: relative;
   z-index: 2;
-  padding: 36px 32px;
-  color: var(--vogue-white);
+  padding: 0;
+  color: var(--vogue-black);
   display: flex;
   flex-direction: column;
 }
 
 .vogue-card--lead .vogue-card__title {
   font-family: var(--font-didot);
-  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-size: clamp(1.6rem, 2.3vw, 2.25rem);
   font-weight: 500;
-  line-height: 1.22;
+  line-height: 1.18;
   letter-spacing: -0.3px;
-  color: #ffffff;
-  margin: 6px 0 10px;
+  color: var(--vogue-black);
+  margin: 8px 0 12px;
 }
 
 .vogue-card--lead .vogue-card__excerpt {
   font-family: var(--font-garamond);
-  font-size: 1.15rem;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 12px;
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: #333333;
+  margin-bottom: 14px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -774,23 +798,25 @@ button {
 
 .vogue-card--lead .vogue-card__byline {
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--vogue-muted);
 }
 
 /* Sub-card Grid */
 .vogue-card--sub {
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
+  background: transparent;
 }
 
 .vogue-card--sub .vogue-card__img-wrap {
   width: 100%;
-  height: 190px;
+  aspect-ratio: 4 / 5 !important;
+  height: auto !important;
   overflow: hidden;
   margin-bottom: 12px;
   background-color: var(--vogue-bg-light);
@@ -801,7 +827,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover !important;
-  object-position: center top;
+  object-position: center 15% !important;
   transition: transform 0.5s ease;
 }
 
@@ -927,10 +953,14 @@ button {
     gap: 32px;
   }
 
+  .vogue-sticky-col {
+    position: static;
+  }
+
   .vogue-sticky-lead {
     position: relative;
     top: 0;
-    height: 440px;
+    height: auto;
   }
 }
 
@@ -941,7 +971,7 @@ button {
   }
 
   .vogue-sticky-lead {
-    height: 380px;
+    height: auto;
   }
 }
 
@@ -1491,7 +1521,7 @@ button {
     margin-bottom: 10px;
   }
   .vogue-sticky-lead {
-    height: 380px;
+    height: auto;
   }
   .city-cinema-banner {
     height: 320px;
@@ -1508,4 +1538,24 @@ button {
   .city-4col-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PERSON DETAILS PAGE EDITORIAL PORTRAIT & BIO PROSE
+   ════════════════════════════════════════════════════════════ */
+.person-portrait-box {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 5 !important;
+  overflow: hidden;
+  position: relative;
+  border-radius: 2px;
+  border: 1px solid var(--vogue-border);
+  background-color: #181818;
+}
+
+.editorial-bio-prose p {
+  margin-bottom: 22px;
+  line-height: 1.8;
+  color: #222222;
 }

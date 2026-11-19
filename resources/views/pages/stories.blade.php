@@ -41,8 +41,8 @@
         <div class="vogue-4col-grid" style="margin-bottom:40px;">
           @foreach($stories as $story)
             <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $story->id) }}'">
-              <div class="vogue-card__img-wrap" style="height:250px; overflow:hidden; border-radius:4px;">
-                <img src="{{ $story->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $story->title }}" style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+              <div class="vogue-card__img-wrap">
+                <img src="{{ $story->cover_image ?: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80' }}" alt="{{ $story->title }}" loading="lazy">
               </div>
               <div class="vogue-card__body" style="padding-top:12px;">
                 <span class="vogue-rubric vogue-rubric--red">{{ $story->category ? $story->category->name : 'STORY' }}</span>

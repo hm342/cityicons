@@ -81,9 +81,9 @@
           @endif
         </a>
 
-        <!-- Right: Search & All India link -->
+        <!-- Right: Search & Nominate a story button -->
         <div class="rm-header-right">
-          <a href="{{ url('/') }}" class="rm-header-link-india">India</a>
+          <a href="{{ url('/' . $cityId . '/nominate') }}" class="rm-header-btn-nominate">Nominate a Story</a>
           <button class="rm-menu-btn" id="btn-open-search" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
@@ -102,7 +102,6 @@
           <li><a href="{{ url('/' . $cityId . '/featured-brands') }}">Brands</a></li>
           <li><a href="{{ url('/' . $cityId . '/about') }}">About</a></li>
           <li><a href="{{ url('/' . $cityId . '/nominate') }}">Nominate</a></li>
-          <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
         </ul>
       </nav>
     </div>
@@ -349,7 +348,6 @@
       const open = () => { drawer?.classList.add('open'); overlay?.classList.add('open'); };
       const close = () => { drawer?.classList.remove('open'); overlay?.classList.remove('open'); };
       document.getElementById('btn-open-menu')?.addEventListener('click', open);
-      document.getElementById('btn-cities-drawer')?.addEventListener('click', (e) => { e.preventDefault(); open(); });
       document.getElementById('btn-close-offcanvas')?.addEventListener('click', close);
       overlay?.addEventListener('click', close);
     })();

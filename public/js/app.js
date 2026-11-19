@@ -79,4 +79,74 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  // ── 5. REAL MOMENTS HERO SLIDER ───────────────────────────────
+  const rmSlider = document.getElementById('rm-hero-slider');
+  if (rmSlider) {
+    const slides = rmSlider.querySelectorAll('.rm-hero-slide');
+    const dots = document.querySelectorAll('.rm-slider-dot');
+    const btnSlidePrev = document.getElementById('rm-slide-prev');
+    const btnSlideNext = document.getElementById('rm-slide-next');
+
+    let currentSlide = 0;
+    let slideInterval = null;
+    const totalSlides = slides.length;
+
+    function goToSlide(index) {
+      if (totalSlides === 0) return;
+      slides[currentSlide].classList.remove('is-active');
+      if (dots[currentSlide]) dots[currentSlide].classList.remove('is-active');
+
+      currentSlide = (index + totalSlides) % totalSlides;
+
+      slides[currentSlide].classList.add('is-active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('is-active');
+    }
+
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(currentSlide - 1);
+    }
+
+    if (btnSlideNext) btnSlideNext.addEventListener('click', () => {
+      nextSlide();
+      resetTimer();
+    });
+
+    if (btnSlidePrev) btnSlidePrev.addEventListener('click', () => {
+      prevSlide();
+      resetTimer();
+    });
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        goToSlide(idx);
+        resetTimer();
+      });
+    });
+
+    function startTimer() {
+      if (totalSlides > 1) {
+        slideInterval = setInterval(nextSlide, 6500);
+      }
+    }
+
+    function stopTimer() {
+      if (slideInterval) clearInterval(slideInterval);
+    }
+
+    function resetTimer() {
+      stopTimer();
+      startTimer();
+    }
+
+    rmSlider.addEventListener('mouseenter', stopTimer);
+    rmSlider.addEventListener('mouseleave', startTimer);
+
+    startTimer();
+  }
 });
+

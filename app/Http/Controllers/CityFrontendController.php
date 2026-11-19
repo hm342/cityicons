@@ -19,22 +19,35 @@ class CityFrontendController extends Controller
         $cityId = $city->slug;
         $cityName = $city->name;
 
-        // 1. Hero Cover Article / Hero Story
-        $heroArticle = Article::with(['category', 'tags', 'city'])
+        // 1. Hero Slides (Up to 3 featured articles for Real Moments slider)
+        $heroSlides = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->where('is_featured', true)
             ->latest()
-            ->first()
-            ?? Article::with(['category', 'tags', 'city'])
+            ->take(3)
+            ->get();
+
+        if ($heroSlides->count() < 3) {
+            $moreSlides = Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->where('city_id', $city->id)
+                ->whereNotIn('id', $heroSlides->pluck('id'))
                 ->latest()
-                ->first()
-            ?? Article::with(['category', 'tags', 'city'])
+                ->take(3 - $heroSlides->count())
+                ->get();
+            $heroSlides = $heroSlides->concat($moreSlides);
+        }
+
+        if ($heroSlides->isEmpty()) {
+            $heroSlides = Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->latest()
-                ->first();
+                ->take(3)
+                ->get();
+        }
+
+        $heroArticle = $heroSlides->first();
 
         // 2. Featured Icons (4 people: established professionals, creators, changemakers)
         $featuredIcons = Person::with(['category', 'city'])
@@ -156,6 +169,7 @@ class CityFrontendController extends Controller
             'cityId',
             'cityName',
             'heroArticle',
+            'heroSlides',
             'featuredIcons',
             'risingPeople',
             'stories',

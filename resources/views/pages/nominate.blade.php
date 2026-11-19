@@ -4,7 +4,7 @@
   $isCitySpecific = !empty($cSlug);
 @endphp
 
-<x-layouts.app :title="'Nominate A Story — ' . ($isCitySpecific ? $cName . ' Icons' : 'CityIcons Network')">
+<x-layouts.app :title="'Nominate A Story — ' . ($isCitySpecific ? $cName . ' Icons' : 'CityIcons Network')" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
@@ -22,7 +22,7 @@
           @endif
         </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 3.8rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
-          Nominate A Story @if($isCitySpecific) for {{ $cName }} @endif
+          Nominate A Story{{ $isCitySpecific ? ' for ' . $cName : '' }}
         </h1>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 1.8vw, 1.5rem); color:var(--vogue-black); line-height:1.3;">
           Help us discover people worth documenting.

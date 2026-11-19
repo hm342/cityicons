@@ -5,19 +5,21 @@
 
 @php
   $cSlug = $city ? (is_object($city) ? $city->slug : $city) : null;
+  $cName = $city ? (is_object($city) ? $city->name : ucfirst($cSlug)) : null;
   $cBase = $cSlug ? url('/' . $cSlug) : '';
 
   if ($cSlug) {
-    // City-scoped navigation
+    // City-scoped navigation (Matching PDF Page 3)
     $navItems = [
-      ['id' => 'city-home', 'name' => ucfirst($cSlug) . ' Home', 'url' => $cBase],
+      ['id' => 'city-home', 'name' => $cName . ' Home', 'url' => $cBase],
       ['id' => 'icons', 'name' => 'Icons', 'url' => $cBase . '/icons'],
       ['id' => 'rising', 'name' => 'Rising', 'url' => $cBase . '/rising'],
       ['id' => 'stories', 'name' => 'Stories', 'url' => $cBase . '/stories'],
       ['id' => 'the-list', 'name' => 'The List', 'url' => $cBase . '/the-list'],
       ['id' => 'magazine', 'name' => 'Magazine', 'url' => $cBase . '/magazine'],
+      ['id' => 'in-city', 'name' => 'In ' . $cName, 'url' => $cBase . '/in-' . $cSlug],
       ['id' => 'featured-brands', 'name' => 'Brands', 'url' => $cBase . '/featured-brands'],
-      ['id' => 'about', 'name' => 'About', 'url' => url('/about')],
+      ['id' => 'about', 'name' => 'About', 'url' => $cBase . '/about'],
       ['id' => 'nominate', 'name' => 'Nominate', 'url' => $cBase . '/nominate'],
       ['id' => 'all-cities', 'name' => '← All Cities', 'url' => url('/')],
     ];

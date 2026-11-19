@@ -43,11 +43,12 @@
       <li><a href="{{ url('/' . $cityId . '/stories') }}">City Stories</a></li>
       <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List Archive</a></li>
       <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine Edition</a></li>
-      <li><a href="#sec-culture">Culture &amp; Heritage</a></li>
-      <li><a href="#sec-food">Culinary &amp; Taste</a></li>
-      <li><a href="#sec-fashion">Fashion &amp; Craft</a></li>
-      <li><a href="{{ url('/' . $cityId . '/nominate') }}" style="color:#d4af37; font-weight:700;">Nominate an Icon</a></li>
-      <li><a href="{{ url('/') }}" style="color:rgba(255,255,255,0.7);">← All India Portal</a></li>
+      <li><a href="{{ url('/' . $cityId . '/in-' . $cityId) }}">In {{ $cityName }} (Dispatch)</a></li>
+      <li><a href="{{ url('/' . $cityId . '/featured-brands') }}">Featured Brands</a></li>
+      <li><a href="{{ url('/' . $cityId . '/about') }}">About {{ $cityName }} Icons</a></li>
+      <li><a href="{{ url('/' . $cityId . '/contact') }}">Contact Desk</a></li>
+      <li><a href="{{ url('/' . $cityId . '/nominate') }}" style="color:#d4af37; font-weight:700;">Nominate a Story</a></li>
+      <li><a href="{{ url('/') }}" style="color:rgba(255,255,255,0.7);">&larr; All India Portal</a></li>
     </ul>
 
     <div class="rm-offcanvas-title">City Editions</div>
@@ -98,8 +99,10 @@
         <li><a href="{{ url('/' . $cityId . '/stories') }}">Stories</a></li>
         <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List</a></li>
         <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine</a></li>
-        <li><a href="#sec-culture">Culture</a></li>
-        <li><a href="#sec-food">Food</a></li>
+        <li><a href="{{ url('/' . $cityId . '/in-' . $cityId) }}">In {{ $cityName }}</a></li>
+        <li><a href="{{ url('/' . $cityId . '/featured-brands') }}">Brands</a></li>
+        <li><a href="{{ url('/' . $cityId . '/about') }}">About</a></li>
+        <li><a href="{{ url('/' . $cityId . '/nominate') }}">Nominate</a></li>
         <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
       </ul>
     </nav>
@@ -291,12 +294,17 @@
         @endif
       </a>
       <div class="rm-footer-nav">
-        <a href="#hero-section">Home</a>
-        <a href="#sec-culture">Culture</a>
-        <a href="#sec-food">Food</a>
-        <a href="#sec-fashion">Fashion</a>
-        <a href="#sec-people">People</a>
-        <a href="#sec-dispatches">Dispatches</a>
+        <a href="{{ url('/' . $cityId) }}">Home</a>
+        <a href="{{ url('/' . $cityId . '/icons') }}">Icons</a>
+        <a href="{{ url('/' . $cityId . '/rising') }}">Rising</a>
+        <a href="{{ url('/' . $cityId . '/stories') }}">Stories</a>
+        <a href="{{ url('/' . $cityId . '/the-list') }}">The List</a>
+        <a href="{{ url('/' . $cityId . '/magazine') }}">Magazine</a>
+        <a href="{{ url('/' . $cityId . '/in-' . $cityId) }}">In {{ $cityName }}</a>
+        <a href="{{ url('/' . $cityId . '/featured-brands') }}">Brands</a>
+        <a href="{{ url('/' . $cityId . '/about') }}">About</a>
+        <a href="{{ url('/' . $cityId . '/contact') }}">Contact</a>
+        <a href="{{ url('/' . $cityId . '/nominate') }}">Nominate</a>
         <a href="{{ url('/') }}">All India Edition</a>
       </div>
       <div class="rm-footer-copy">

@@ -72,9 +72,7 @@ Route::get('/nominate', function () {
     return redirect('/bhavnagar/nominate');
 })->name('nominate');
 Route::get('/featured-brands', [BrandFrontendController::class, 'index'])->name('featured-brands');
-Route::get('/in-bhavnagar', function () {
-    return redirect('/bhavnagar');
-})->name('in-bhavnagar');
+Route::get('/in-bhavnagar', [ArticleFrontendController::class, 'inBhavnagar'])->name('in-bhavnagar');
 
 // ── 5. LEGACY CITY ALIASES & REDIRECTS (Redirect /cities/{city} -> /{city}) ──
 Route::get('/cities/{city}', function ($city) {
@@ -100,16 +98,29 @@ Route::get('/bhavnagar-icons', function () {
 Route::get('/{city}/icons', [DirectoryController::class, 'cityIcons'])->name('city.icons');
 Route::get('/{city}/rising', [DirectoryController::class, 'cityRising'])->name('city.rising');
 Route::get('/{city}/voices', function ($city) {
-    return redirect('/' . strtolower($city) . '/icons');
+    return redirect('/' . strtolower($city) . '/icons', 301);
 });
 Route::get('/{city}/stories', [ArticleFrontendController::class, 'cityStories'])->name('city.stories');
 Route::get('/{city}/the-list', [DirectoryController::class, 'cityTheList'])->name('city.the-list');
 Route::get('/{city}/magazine', [MagazineFrontendController::class, 'cityMagazine'])->name('city.magazine');
 Route::get('/{city}/nominate', [PublicNominationController::class, 'cityNominate'])->name('city.nominate');
 Route::get('/{city}/featured-brands', [BrandFrontendController::class, 'cityBrands'])->name('city.brands');
-Route::get('/{city}/in-bhavnagar', function ($city) {
-    return redirect('/' . strtolower($city));
+Route::get('/{city}/about', function ($city) {
+    $c = \App\Models\City::where('slug', strtolower($city))->first() ?: \App\Models\City::where('slug', 'bhavnagar')->first();
+    return view('pages.about', ['city' => $c, 'active' => 'about']);
+})->name('city.about');
+Route::get('/{city}/contact', function ($city) {
+    $c = \App\Models\City::where('slug', strtolower($city))->first() ?: \App\Models\City::where('slug', 'bhavnagar')->first();
+    return view('pages.contact', ['city' => $c, 'active' => 'contact']);
+})->name('city.contact');
+Route::get('/{city}/policies/{slug?}', function ($city, $slug = 'editorial') {
+    $c = \App\Models\City::where('slug', strtolower($city))->first() ?: \App\Models\City::where('slug', 'bhavnagar')->first();
+    return view('pages.policy', ['city' => $c, 'slug' => strtolower($slug)]);
+})->name('city.policy.show');
+Route::get('/{city}/in-{targetCity}', function ($city, $targetCity, \Illuminate\Http\Request $request) {
+    return app(ArticleFrontendController::class)->cityInCity($city, $request);
 });
+Route::get('/{city}/dispatch', [ArticleFrontendController::class, 'cityInCity'])->name('city.dispatch');
 
 // ── 7. ADMIN PANEL ROUTES ─────────────────────────────────────
 Route::prefix('admin')->name('admin.')->group(function () {

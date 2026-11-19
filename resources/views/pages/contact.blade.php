@@ -1,11 +1,24 @@
-<x-layouts.app title="Contact — Bhavnagar Icons: Editorial & Advertising Offices">
+@php
+  $cName = isset($city) ? (is_object($city) ? $city->name : ucfirst($city)) : 'Bhavnagar';
+  $cSlug = isset($city) ? (is_object($city) ? $city->slug : strtolower($city)) : 'bhavnagar';
+  $isFlagship = ($cSlug === 'bhavnagar');
+@endphp
+
+<x-layouts.app :title="'Contact — ' . $cName . ' Icons: Editorial & Advertising Offices'" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <span class="vogue-rubric vogue-rubric--red">COMMUNICATION &amp; ENQUIRIES</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric vogue-rubric--red">
+            {{ strtoupper($cName) }} ICONS · COMMUNICATION &amp; ENQUIRIES
+          </span>
+          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+            &larr; Back to {{ $cName }} Subsite
+          </a>
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
           Contact
         </h1>
@@ -40,7 +53,7 @@
             Advertising &amp; Brand Collaborations
           </h2>
           <p style="font-family:var(--font-garamond); font-size:1.1rem; color:#444; line-height:1.6; margin-bottom:20px;">
-            Discuss commercial partnerships, founder stories, brand features, magazine advertising, and custom storytelling for brands looking to reach Bhavnagar's most influential decision-makers.
+            Discuss commercial partnerships, founder stories, brand features, magazine advertising, and custom storytelling for brands looking to reach {{ $cName }}'s most influential decision-makers.
           </p>
           <div style="margin-top:auto;">
             <div style="font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-muted); margin-bottom:4px;">Direct Email:</div>

@@ -1,6 +1,9 @@
-@props(['slug' => 'editorial'])
+@props(['slug' => 'editorial', 'city' => null])
 
 @php
+  $cName = isset($city) ? (is_object($city) ? $city->name : ucfirst($city)) : 'Bhavnagar';
+  $cSlug = isset($city) ? (is_object($city) ? $city->slug : strtolower($city)) : 'bhavnagar';
+  $isFlagship = ($cSlug === 'bhavnagar');
   $policies = [
     'editorial' => [
       'title' => 'Editorial Policy',
@@ -178,16 +181,29 @@
   ];
 
   $current = $policies[$slug] ?? $policies['editorial'];
+  $renderedContent = $current['content'];
+  if ($cName !== 'Bhavnagar') {
+      $renderedContent = str_replace('Bhavnagar Icons', $cName . ' Icons', $renderedContent);
+      $renderedContent = str_replace('to Bhavnagar', 'to ' . $cName, $renderedContent);
+      $renderedContent = str_replace('connected to Bhavnagar', 'connected to ' . $cName, $renderedContent);
+  }
 @endphp
 
-<x-layouts.app :title="$current['title'] . ' — Bhavnagar Icons Policies'">
+<x-layouts.app :title="$current['title'] . ' — ' . $cName . ' Icons Policies'" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <span class="vogue-rubric vogue-rubric--red">STANDARDS, DISCLOSURES &amp; POLICIES · SECTION {{ $current['num'] }}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric vogue-rubric--red">
+            {{ strtoupper($cName) }} ICONS · POLICIES &amp; STANDARDS · SECTION {{ $current['num'] }}
+          </span>
+          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+            &larr; Back to {{ $cName }} Subsite
+          </a>
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 3.8rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
           {{ $current['title'] }}
         </h1>
@@ -207,7 +223,7 @@
             .policy-content strong { color:var(--vogue-black); font-family:var(--font-sans); font-size:0.95rem; }
           </style>
           <div class="policy-content">
-            {!! $current['content'] !!}
+            {!! $renderedContent !!}
           </div>
         </div>
 
@@ -220,7 +236,7 @@
           <ul style="list-style:none; font-size:0.8rem; line-height:2.2; font-weight:600; text-transform:uppercase; letter-spacing:1px;">
             @foreach($policies as $key => $p)
               <li>
-                <a href="{{ url('/policies/' . $key) }}" style="{{ $slug === $key ? 'color:var(--vogue-red); font-weight:800;' : 'color:#555;' }}">
+                <a href="{{ $cSlug ? url('/' . $cSlug . '/policies/' . $key) : url('/policies/' . $key) }}" style="{{ $slug === $key ? 'color:var(--vogue-red); font-weight:800;' : 'color:#555;' }}">
                   {{ $p['title'] }}
                 </a>
               </li>

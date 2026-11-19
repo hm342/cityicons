@@ -96,11 +96,37 @@ class ArticleFrontendController extends Controller
     }
 
     /**
+     * Display city-scoped In [City] local events, culture, and happenings (e.g. /bhavnagar/in-bhavnagar, /mumbai/in-mumbai).
+     */
+    public function cityInCity($citySlug, Request $request)
+    {
+        $city = City::where('slug', strtolower($citySlug))->first();
+        if (!$city) {
+            $city = City::where('slug', 'bhavnagar')->firstOrFail();
+        }
+
+        $articles = Article::with(['category', 'city', 'tags'])
+            ->published()
+            ->where('city_id', $city->id)
+            ->latest()
+            ->paginate(12);
+
+        if ($articles->isEmpty()) {
+            $articles = Article::with(['category', 'city', 'tags'])
+                ->published()
+                ->latest()
+                ->paginate(12);
+        }
+
+        return view('pages.in-city', compact('city', 'articles'));
+    }
+
+    /**
      * Display In Bhavnagar local events, culture, and happenings.
      */
     public function inBhavnagar(Request $request)
     {
-        return redirect('/bhavnagar');
+        return $this->cityInCity('bhavnagar', $request);
     }
 
     /**

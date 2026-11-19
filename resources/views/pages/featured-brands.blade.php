@@ -4,7 +4,7 @@
   $isFlagship = ($cSlug === 'bhavnagar');
 @endphp
 
-<x-layouts.app :title="'Featured Brands — ' . $cName . ' Commercial Storytelling & Collaborations'">
+<x-layouts.app :title="'Featured Brands — ' . $cName . ' Commercial Storytelling & Collaborations'" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">

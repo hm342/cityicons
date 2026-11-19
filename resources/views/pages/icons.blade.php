@@ -5,7 +5,7 @@
   $baseRoute = url('/' . $cSlug . '/icons');
 @endphp
 
-<x-layouts.app :title="'Icons — ' . $cName . ' Icons: Established work. Proven impact. Lasting relevance.'">
+<x-layouts.app :title="'Icons — ' . $cName . ' Icons: Established work. Proven impact. Lasting relevance.'" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">

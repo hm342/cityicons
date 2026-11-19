@@ -5,7 +5,7 @@
   $baseRoute = $isCitySpecific ? url('/' . $cSlug . '/stories') : url('/stories');
 @endphp
 
-<x-layouts.app :title="'Stories — ' . ($isCitySpecific ? $cName . ' Editorial Stories' : 'National Editorial Stories')">
+<x-layouts.app :title="'Stories — ' . ($isCitySpecific ? $cName . ' Editorial Stories' : 'National Editorial Stories')" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">

@@ -5,7 +5,7 @@
   $baseRoute = url('/' . $cSlug . '/rising');
 @endphp
 
-<x-layouts.app :title="'Rising — ' . $cName . ' Rising: Next-generation leadership, emerging work and forward momentum'">
+<x-layouts.app :title="'Rising — ' . $cName . ' Rising: Next-generation leadership, emerging work and forward momentum'" :city="$city ?? null">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">

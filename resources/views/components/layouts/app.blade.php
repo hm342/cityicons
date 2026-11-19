@@ -1,3 +1,9 @@
+@props([
+  'title' => null,
+  'description' => null,
+  'activeCity' => 'all',
+  'city' => null
+])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -41,13 +47,13 @@
   <div id="site-progress-bar"></div>
 
   <!-- Offcanvas Slideout Drawer -->
-  <x-drawer />
+  <x-drawer :city="$city" />
 
   <!-- Site Master Header -->
-  <x-header />
+  <x-header :city="$city" />
 
   <!-- Sticky City Navigation Bar -->
-  <x-city-navbar :active="$activeCity ?? 'all'" />
+  <x-city-navbar :active="$activeCity ?? 'all'" :city="$city" />
 
   <!-- Main Content Slot -->
   <main id="main-content">
@@ -55,7 +61,7 @@
   </main>
 
   <!-- Site Footer -->
-  <x-footer />
+  <x-footer :city="$city" />
 
   <!-- Search Modal Overlay -->
   <x-search-modal />

@@ -11,7 +11,7 @@
   if ($cSlug) {
     // City-scoped navigation (Matching PDF Page 3)
     $navItems = [
-      ['id' => 'city-home', 'name' => $cName . ' Home', 'url' => $cBase],
+      ['id' => 'city-home', 'name' => 'Home', 'url' => $cBase],
       ['id' => 'icons', 'name' => 'Icons', 'url' => $cBase . '/icons'],
       ['id' => 'rising', 'name' => 'Rising', 'url' => $cBase . '/rising'],
       ['id' => 'stories', 'name' => 'Stories', 'url' => $cBase . '/stories'],
@@ -21,7 +21,6 @@
       ['id' => 'featured-brands', 'name' => 'Brands', 'url' => $cBase . '/featured-brands'],
       ['id' => 'about', 'name' => 'About', 'url' => $cBase . '/about'],
       ['id' => 'nominate', 'name' => 'Nominate', 'url' => $cBase . '/nominate'],
-      ['id' => 'all-cities', 'name' => '← All Cities', 'url' => url('/')],
     ];
   } else {
     // National Main Site Navigation

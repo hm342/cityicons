@@ -148,5 +148,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startTimer();
   }
+
+  // ── 6. REAL MOMENTS FULLSCREEN HERO (Image 1) ─────────────────
+  const rmHeroFs = document.getElementById('rm-hero-fullscreen');
+  if (rmHeroFs) {
+    const fsSlides = rmHeroFs.querySelectorAll('.rm-hero-slide');
+    const fsDots = rmHeroFs.querySelectorAll('.rm-hero-dot-item');
+    const btnEdgePrev = document.getElementById('rm-edge-prev');
+    const btnEdgeNext = document.getElementById('rm-edge-next');
+
+    let curFs = 0;
+    let fsInterval = null;
+    const totalFs = fsSlides.length;
+
+    function goToFsSlide(idx) {
+      if (totalFs === 0) return;
+      fsSlides[curFs].classList.remove('is-active');
+      if (fsDots[curFs]) fsDots[curFs].classList.remove('is-active');
+
+      curFs = (idx + totalFs) % totalFs;
+
+      fsSlides[curFs].classList.add('is-active');
+      if (fsDots[curFs]) fsDots[curFs].classList.add('is-active');
+    }
+
+    function nextFs() {
+      goToFsSlide(curFs + 1);
+    }
+
+    function prevFs() {
+      goToFsSlide(curFs - 1);
+    }
+
+    if (btnEdgeNext) btnEdgeNext.addEventListener('click', () => {
+      nextFs();
+      resetFsTimer();
+    });
+
+    if (btnEdgePrev) btnEdgePrev.addEventListener('click', () => {
+      prevFs();
+      resetFsTimer();
+    });
+
+    fsDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        goToFsSlide(idx);
+        resetFsTimer();
+      });
+    });
+
+    function startFsTimer() {
+      if (totalFs > 1) {
+        fsInterval = setInterval(nextFs, 7000);
+      }
+    }
+
+    function stopFsTimer() {
+      if (fsInterval) clearInterval(fsInterval);
+    }
+
+    function resetFsTimer() {
+      stopFsTimer();
+      startFsTimer();
+    }
+
+    rmHeroFs.addEventListener('mouseenter', stopFsTimer);
+    rmHeroFs.addEventListener('mouseleave', startFsTimer);
+
+    startFsTimer();
+  }
+
+  // ── 7. STICKY FLOATING HEADER (Image 1) ───────────────────────
+  const floatingHeader = document.getElementById('rm-floating-header');
+  if (floatingHeader) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 45) {
+        floatingHeader.classList.add('is-sticky');
+      } else {
+        floatingHeader.classList.remove('is-sticky');
+      }
+    }, { passive: true });
+  }
+
+  // ── 8. FLOATING BACK TO TOP BUTTON (Images 2 & 3) ─────────────
+  const btnBackToTop = document.getElementById('rm-back-to-top');
+  if (btnBackToTop) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 350) {
+        btnBackToTop.classList.add('is-visible');
+      } else {
+        btnBackToTop.classList.remove('is-visible');
+      }
+    }, { passive: true });
+
+    btnBackToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 });
+
 

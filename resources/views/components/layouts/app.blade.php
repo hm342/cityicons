@@ -2,7 +2,9 @@
   'title' => null,
   'description' => null,
   'activeCity' => 'all',
-  'city' => null
+  'city' => null,
+  'transparentHeader' => false,
+  'darkTheme' => false
 ])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -42,18 +44,20 @@
   </style>
   @stack('styles')
 </head>
-<body>
+<body class="{{ $darkTheme ? 'rm-dark-theme' : '' }}">
   <!-- Global Top Progress Bar -->
   <div id="site-progress-bar"></div>
 
   <!-- Offcanvas Slideout Drawer -->
   <x-drawer :city="$city" />
 
-  <!-- Site Master Header -->
-  <x-header :city="$city" />
+  @if(!$transparentHeader)
+    <!-- Site Master Header -->
+    <x-header :city="$city" />
 
-  <!-- Sticky City Navigation Bar -->
-  <x-city-navbar :active="$activeCity ?? 'all'" :city="$city" />
+    <!-- Sticky City Navigation Bar -->
+    <x-city-navbar :active="$activeCity ?? 'all'" :city="$city" />
+  @endif
 
   <!-- Main Content Slot -->
   <main id="main-content">
@@ -65,6 +69,11 @@
 
   <!-- Search Modal Overlay -->
   <x-search-modal />
+
+  <!-- Floating Back-to-Top Button (Real Moments) -->
+  <button class="rm-back-to-top" id="rm-back-to-top" aria-label="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>

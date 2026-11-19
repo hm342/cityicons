@@ -220,7 +220,8 @@
   <div class="rm-container">
     <div class="rm-grid-cards" id="grid-section-4">
       @foreach($people->take(6) as $person)
-        <div class="rm-grid-card" onclick="location.href='{{ url('/stories') }}'">
+        @php $pUrl = url('/person/' . ($person->slug ?: $person->id)); @endphp
+        <div class="rm-grid-card" onclick="location.href='{{ $pUrl }}'">
           <img class="rm-grid-card-img" src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
           <div class="rm-grid-card-overlay"></div>
           <div class="rm-grid-card-body">
@@ -228,9 +229,9 @@
             <h3 class="rm-grid-card-title">{{ $person->name }}</h3>
             <div class="post-share-inline">
               <span class="share-txt">Share &rarr;</span>
-              <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Facebook</a>
-              <a href="https://twitter.com/intent/tweet?url={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">X</a>
-              <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Pinterest</a>
+              <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Facebook</a>
+              <a href="https://twitter.com/intent/tweet?url={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">X</a>
+              <a href="https://pinterest.com/pin/create/button/?url={{ urlencode($pUrl) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Pinterest</a>
             </div>
           </div>
         </div>

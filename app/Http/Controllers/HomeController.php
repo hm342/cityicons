@@ -79,14 +79,33 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        // 7. Featured Brand Partners (clearly disclosed)
+        // 7. Stories (Section 5 of PDF: The complete story, beyond the headline)
+        $latestStories = Article::with(['category', 'city'])
+            ->published()
+            ->latest()
+            ->take(6)
+            ->get();
+
+        // 8. The List Preview (Section 6 of PDF: A month in people and stories)
+        $theListPreview = Person::with(['category', 'city'])
+            ->published()
+            ->orderBy('name', 'asc')
+            ->take(6)
+            ->get();
+
+        // 9. Curated Magazine Edition (Section 7 of PDF: Stories designed to last beyond the feed)
+        $magazineEdition = \App\Models\MagazineEdition::where('is_active', true)
+            ->latest()
+            ->first();
+
+        // 10. Featured Brand Partners (clearly disclosed)
         $featuredBrands = Brand::where('is_active', true)
             ->where('is_featured', true)
             ->orderBy('sort_order')
             ->take(4)
             ->get();
 
-        // 8. Site Settings (keyed array)
+        // 11. Site Settings (keyed array)
         $settings = Setting::all()->pluck('value', 'key')->toArray();
 
         return view('home', compact(
@@ -94,8 +113,11 @@ class HomeController extends Controller
             'newsStrip',
             'icons',
             'rising',
-            'inBhavnagar',
             'voices',
+            'latestStories',
+            'theListPreview',
+            'magazineEdition',
+            'inBhavnagar',
             'featuredBrands',
             'settings'
         ));

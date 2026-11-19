@@ -38,6 +38,8 @@ Route::get('/index.html', function () {
 Route::get('/icons', [DirectoryController::class, 'icons'])->name('icons');
 Route::get('/rising', [DirectoryController::class, 'rising'])->name('rising');
 Route::get('/voices', [DirectoryController::class, 'voices'])->name('voices');
+Route::get('/person/{slug}', [DirectoryController::class, 'showPerson'])->name('person.show');
+Route::get('/icon/{slug}', [DirectoryController::class, 'showPerson'])->name('icon.show');
 Route::get('/stories', [ArticleFrontendController::class, 'stories'])->name('stories');
 Route::get('/the-list', [DirectoryController::class, 'theList'])->name('the-list');
 Route::get('/magazine', [MagazineFrontendController::class, 'index'])->name('magazine');
@@ -158,6 +160,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // ── 8. DIRECT ROOT-LEVEL CITY EDITIONS (e.g. /bhavnagar, /mumbai, /surat, /ahmedabad) ──
 Route::get('/{city}', [CityFrontendController::class, 'show'])
-    ->where('city', '^(?!admin|storage|up|icons|rising|voices|stories|the-list|magazine|in-bhavnagar|featured-brands|about|nominate|contact|search|policies|article|newsletter)[a-zA-Z0-9\-]+$')
+    ->where('city', '^(?!admin|storage|up|icons|rising|voices|stories|the-list|magazine|in-bhavnagar|featured-brands|about|nominate|contact|search|policies|article|newsletter|person|icon)[a-zA-Z0-9\-]+$')
     ->name('city.show');
 

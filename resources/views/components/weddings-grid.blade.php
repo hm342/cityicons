@@ -26,7 +26,7 @@
         @foreach($items as $item)
           @php
             $isPerson = $item instanceof \App\Models\Person;
-            $linkUrl = $isPerson ? url('/stories') : url('/article/' . $item->id);
+            $linkUrl = $isPerson ? url('/person/' . ($item->slug ?: $item->id)) : url('/article/' . $item->id);
             $image = $isPerson ? ($item->portrait_image ?: $item->cover_image) : $item->cover_image;
             $title = $item->name ?? $item->title;
             $subtitle = $isPerson ? ($item->profession . ($item->organization ? ' · ' . $item->organization : '')) : ('By ' . ($item->author_name ?? 'Editorial Staff'));

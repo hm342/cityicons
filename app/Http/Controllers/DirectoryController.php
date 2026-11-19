@@ -131,4 +131,39 @@ class DirectoryController extends Controller
             'availableArchives'
         ));
     }
+
+    /**
+     * Display dedicated profile page for an Icon / Person.
+     */
+    public function showPerson($slug)
+    {
+        $person = Person::with(['category', 'city', 'tags'])
+            ->published()
+            ->where(function ($q) use ($slug) {
+                $q->where('slug', $slug)->orWhere('id', $slug);
+            })
+            ->firstOrFail();
+
+        // Related stories (articles that share category or city)
+        $relatedArticles = \App\Models\Article::with(['category', 'city'])
+            ->published()
+            ->when($person->category_id, function ($q) use ($person) {
+                $q->where('category_id', $person->category_id);
+            })
+            ->latest()
+            ->take(3)
+            ->get();
+
+        // More profiles in same category or tier
+        $morePeople = Person::with(['category', 'city'])
+            ->published()
+            ->where('id', '!=', $person->id)
+            ->where('type', $person->type)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('pages.person', compact('person', 'relatedArticles', 'morePeople'));
+    }
 }
+

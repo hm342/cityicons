@@ -376,14 +376,15 @@ button {
   width: 100%;
 }
 
-/* Cover image in unified container — 1.5x height */
+/* Cover image in unified container — elegant balanced editorial height */
 .hero-big-banner__img-wrap {
   position: relative;
   width: 100%;
-  height: clamp(840px, 92vh, 1150px);
+  height: clamp(440px, 55vh, 600px);
   overflow: hidden;
   background-color: var(--vogue-black);
   cursor: pointer;
+  border-radius: 2px;
 }
 
 .hero-big-banner__img-wrap img {
@@ -624,6 +625,10 @@ button {
    ════════════════════════════════════════════════════════════ */
 .city-edition-section {
   margin-bottom: var(--section-gap);
+  position: relative;
+  clear: both;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .vogue-sticky-section {
@@ -635,112 +640,171 @@ button {
   position: relative;
 }
 
-/* Left Column: Stretches with the right 6-story grid to provide scroll distance */
+/* Left Column: Stable container */
 .vogue-sticky-col {
   position: relative;
   height: 100%;
 }
 
-/* Sticky Lead Card: Stays fixed/pinned as user scrolls down the page */
+/* Lead Card: Fill container without overlapping following sections */
 .vogue-sticky-lead {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 64px;
-  height: calc(100vh - 100px);
-  max-height: 680px;
-  min-height: 520px;
-  width: 100%;
-  z-index: 10;
-}
-
-.vogue-sticky-lead__card {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 520px;
+}
+
+.vogue-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--vogue-white);
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.vogue-card:hover {
+  opacity: 0.92;
+}
+
+/* Lead Profile / Feature Card */
+.vogue-card--lead {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
   overflow: hidden;
   background-color: var(--vogue-black);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  border-radius: 2px;
 }
 
-.vogue-sticky-lead__img {
+.vogue-card--lead .vogue-card__img-wrap {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  overflow: hidden;
 }
 
-.vogue-sticky-lead__card:hover .vogue-sticky-lead__img {
+.vogue-card--lead .vogue-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center top;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vogue-card--lead:hover .vogue-card__img-wrap img {
   transform: scale(1.03);
 }
 
-/* Editorial Dark Gradient overlay at bottom for crisp white typography */
-.vogue-sticky-lead__overlay {
+.vogue-card--lead::after {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.02) 0%,
-    rgba(0, 0, 0, 0.18) 35%,
-    rgba(0, 0, 0, 0.78) 75%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0.78) 70%,
     rgba(0, 0, 0, 0.94) 100%
   );
   pointer-events: none;
+  z-index: 1;
 }
 
-.vogue-sticky-lead__content {
+.vogue-card--lead .vogue-card__body {
   position: relative;
   z-index: 2;
   padding: 36px 32px;
-  text-align: center;
   color: var(--vogue-white);
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.vogue-sticky-lead__rubric {
-  display: inline-block;
+.vogue-card--lead .vogue-card__title {
+  font-family: var(--font-didot);
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  margin: 6px 0 10px;
+}
+
+.vogue-card--lead .vogue-card__excerpt {
+  font-family: var(--font-garamond);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vogue-card--lead .vogue-card__byline {
   font-family: var(--font-sans);
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 2.5px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 14px;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.vogue-sticky-lead__hed {
+/* Sub-card Grid */
+.vogue-card--sub {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.vogue-card--sub .vogue-card__img-wrap {
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background-color: var(--vogue-bg-light);
+  border-radius: 2px;
+}
+
+.vogue-card--sub .vogue-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center top;
+  transition: transform 0.5s ease;
+}
+
+.vogue-card--sub:hover .vogue-card__img-wrap img {
+  transform: scale(1.04);
+}
+
+.vogue-card--sub .vogue-card__title {
+  font-family: var(--font-didot);
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--vogue-black);
+  margin: 4px 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.vogue-card--sub .vogue-card__byline {
   font-family: var(--font-sans);
-  font-size: clamp(1.35rem, 1.85vw, 1.75rem);
+  font-size: 0.6875rem;
   font-weight: 700;
-  line-height: 1.28;
-  letter-spacing: -0.3px;
-  color: #ffffff;
-  margin-bottom: 16px;
-  text-wrap: balance;
-  transition: opacity 0.2s ease;
-}
-
-.vogue-sticky-lead__card:hover .vogue-sticky-lead__hed {
-  opacity: 0.9;
-}
-
-.vogue-sticky-lead__byline {
-  font-family: var(--font-sans);
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--vogue-muted);
+  margin-top: auto;
 }
 
 /* ── RIGHT COLUMN: 2-COLUMN GRID OF EXACTLY 6 STORIES ──────── */

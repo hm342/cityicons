@@ -60,7 +60,7 @@
                   {{ strtoupper($person->type) }}
                 </span>
               </div>
-              <a href="{{ url('/stories') }}" style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); text-decoration:none;">
+              <a href="{{ url('/person/' . ($person->slug ?: $person->id)) }}" style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); text-decoration:none;">
                 Explore Documentation →
               </a>
             </div>

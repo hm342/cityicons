@@ -38,7 +38,7 @@
           @if($lead)
             <div class="vogue-sticky-col">
               <article class="vogue-sticky-lead">
-                <div class="vogue-card vogue-card--lead" style="cursor:pointer;" onclick="location.href='{{ url('/stories') }}'">
+                <div class="vogue-card vogue-card--lead" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($lead->slug ?: $lead->id)) }}'">
                   <div class="vogue-card__img-wrap">
                     <img src="{{ $lead->portrait_image ?: $lead->cover_image }}" alt="{{ $lead->name }}" loading="lazy">
                   </div>
@@ -56,7 +56,7 @@
           <!-- Rest of People Grid -->
           <div class="vogue-scroll-right-grid">
             @foreach($people->slice(1) as $person)
-              <article class="vogue-card vogue-card--sub" style="cursor:pointer;" onclick="location.href='{{ url('/stories') }}'">
+              <article class="vogue-card vogue-card--sub" style="cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
                 <div class="vogue-card__img-wrap">
                   <img src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
                 </div>

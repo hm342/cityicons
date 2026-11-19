@@ -67,10 +67,31 @@ Route::get('/policies/{slug?}', function ($slug = 'editorial') {
     return view('pages.policy', ['slug' => strtolower($slug)]);
 })->name('policy.show');
 
-// ── 5. CITY EDITIONS NETWORK (MUMBAI, AHMEDABAD, ETC.) ────────
+// ── 5. CITY EDITIONS NETWORK (BHAVNAGAR, MUMBAI, ETC.) ────────
 Route::get('/cities/{city}', [CityFrontendController::class, 'show'])->name('city.show');
 
 Route::get('/cities/{city}.html', function ($city) {
+    return redirect()->route('city.show', ['city' => $city]);
+});
+
+// Shorthand direct routes for Bhavnagar subsite & singular /city/... aliases
+Route::get('/bhavnagar', function () {
+    return redirect()->route('city.show', ['city' => 'bhavnagar']);
+})->name('bhavnagar');
+
+Route::get('/bhavnagar.html', function () {
+    return redirect()->route('city.show', ['city' => 'bhavnagar']);
+});
+
+Route::get('/bhavnagar-icons', function () {
+    return redirect()->route('city.show', ['city' => 'bhavnagar']);
+});
+
+Route::get('/city/{city}', function ($city) {
+    return redirect()->route('city.show', ['city' => $city]);
+});
+
+Route::get('/city/{city}.html', function ($city) {
     return redirect()->route('city.show', ['city' => $city]);
 });
 

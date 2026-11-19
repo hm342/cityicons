@@ -17,9 +17,15 @@
         <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6; margin-bottom:8px;">
           In Bhavnagar documents notable events, performances, exhibitions, conversations and cultural moments through an independent editorial lens. Coverage is selective and based on relevance, public interest, experience and long-term documentation value.
         </p>
-        <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-muted);">
+        <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-muted); margin-bottom:14px;">
           Event coverage may be independent or commercially supported. Paid associations are clearly disclosed.
         </p>
+        <div>
+          <a href="{{ url('/cities/bhavnagar') }}" style="display:inline-flex; align-items:center; gap:8px; background:var(--vogue-black); color:#ffffff; padding:10px 22px; font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; text-decoration:none; border-radius:30px; transition:all 0.2s ease;">
+            <span>Explore Full Bhavnagar Subsite</span>
+            <i class="fas fa-arrow-right" style="font-size:10px;"></i>
+          </a>
+        </div>
       </div>
 
       <!-- Cinematic Banner + Carousel Component (Connected to Database) -->

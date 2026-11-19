@@ -7,9 +7,11 @@
       <a href="{{ url('/') }}" style="display:inline-block; margin-bottom:12px;" aria-label="CityIcons Home">
         <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="City Icons" style="height:clamp(48px, 5.5vw, 68px); width:auto; display:block; margin:0 auto; object-fit:contain;">
       </a>
-      <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--vogue-red); margin-bottom:6px;">
-        Bhavnagar Icons · Flagship Edition
-      </div>
+      <a href="{{ url('/cities/bhavnagar') }}" style="display:inline-block; text-decoration:none;" title="Enter Bhavnagar Icons Subsite">
+        <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--vogue-red); margin-bottom:6px;">
+          Bhavnagar Icons · Flagship Edition <i class="fas fa-arrow-right" style="font-size:9px; margin-left:3px;"></i>
+        </div>
+      </a>
       <p style="font-family:var(--font-garamond); font-size:1.15rem; color:rgba(255,255,255,0.7); max-width:600px; margin:0 auto 6px;">
         Independent city-focused editorial documentation.
       </p>
@@ -41,7 +43,8 @@
           <li><a href="{{ url('/stories') }}">Stories</a></li>
           <li><a href="{{ url('/the-list') }}">The List</a></li>
           <li><a href="{{ url('/magazine') }}">Magazine</a></li>
-          <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar</a></li>
+          <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
+          <li><a href="{{ url('/cities/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
           <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
         </ul>
       </div>

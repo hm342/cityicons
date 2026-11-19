@@ -21,7 +21,8 @@
     <li><a href="{{ url('/stories') }}">Stories</a></li>
     <li><a href="{{ url('/the-list') }}">The List</a></li>
     <li><a href="{{ url('/magazine') }}">Magazine</a></li>
-    <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar</a></li>
+    <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
+    <li><a href="{{ url('/cities/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
     <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
     <li><a href="{{ url('/about') }}">About Platform</a></li>
     <li><a href="{{ url('/nominate') }}" style="color:var(--vogue-red); font-weight:700;">Nominate a Story</a></li>
@@ -30,7 +31,7 @@
   <!-- City Editions Directory -->
   <div class="vogue-drawer__title" style="margin-top:20px;">City Editions · Network</div>
   <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
-    <a href="{{ url('/') }}" class="vogue-drawer__city-chip" style="border-color:var(--vogue-red); font-weight:800;">Bhavnagar (Flagship)</a>
+    <a href="{{ url('/cities/bhavnagar') }}" class="vogue-drawer__city-chip" style="border-color:var(--vogue-red); font-weight:800; color:var(--vogue-red);">Bhavnagar (Flagship)</a>
     <a href="{{ url('/cities/mumbai') }}" class="vogue-drawer__city-chip">Mumbai</a>
     <a href="{{ url('/cities/ahmedabad') }}" class="vogue-drawer__city-chip">Ahmedabad</a>
     <a href="{{ url('/cities/surat') }}" class="vogue-drawer__city-chip">Surat</a>

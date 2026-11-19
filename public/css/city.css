@@ -217,74 +217,113 @@ button {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 10px 24px 6px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+  padding: 16px 32px 18px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.45) 65%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .rm-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .rm-header-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
+  flex: 1;
 }
 
 .rm-menu-btn {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  padding: 4px;
-  transition: opacity 0.2s;
+  padding: 6px;
+  transition: opacity 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .rm-menu-btn:hover {
-  opacity: 0.7;
+  opacity: 0.8;
+  transform: scale(1.05);
 }
 
-/* Center Logo: clean sans + cursive script (real Moments style) */
+/* Center Logo */
 .rm-logo {
   display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .rm-logo-img {
-  height: clamp(24px, 2.8vw, 30px);
-  max-height: 32px;
+  height: clamp(38px, 4.2vw, 48px);
+  max-height: 50px;
   width: auto;
   display: block;
   object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.55));
+  transition: opacity 0.2s;
+}
+
+.rm-logo-img:hover {
+  opacity: 0.92;
 }
 
 .rm-logo-text {
   font-family: var(--font-sans);
-  font-size: 1.15rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.5px;
   line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .rm-logo-script {
   font-family: var(--font-script);
-  font-size: 1.55rem;
+  font-size: 2.1rem;
   font-weight: 700;
   color: #ffffff;
-  margin-left: 2px;
+  margin-left: 3px;
   line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .rm-header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 0.9rem;
+  justify-content: flex-end;
+  gap: 16px;
+  flex: 1;
+}
+
+.rm-header-link-india {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 4px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.rm-header-link-india:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ffffff;
 }
 
 .rm-header-right a, .rm-header-right button {
@@ -298,42 +337,62 @@ button {
 
 /* Submenu Bar under Logo */
 .rm-subnav {
-  position: absolute;
-  top: 48px;
-  left: 0;
-  right: 0;
-  z-index: 95;
+  position: static;
+  margin-top: 14px;
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .rm-subnav-list {
   display: flex;
   align-items: center;
+  justify-content: center;
   list-style: none;
-  gap: 16px;
+  gap: 20px;
   background: transparent;
   flex-wrap: wrap;
-  justify-content: center;
+  padding: 0;
+  margin: 0;
 }
 
 .rm-subnav-list li a {
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  transition: color 0.2s;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  padding: 3px 0;
+  position: relative;
 }
 
 .rm-subnav-list li a:hover {
   color: #ffffff;
 }
 
+.rm-subnav-list li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--vogue-red);
+  transition: all 0.2s ease;
+}
+
+.rm-subnav-list li a:hover::after {
+  left: 0;
+  right: 0;
+}
+
 .rm-offcanvas .rm-logo-img {
-  height: 34px;
-  max-height: 38px;
+  height: 38px;
+  max-height: 42px;
   width: auto;
   object-fit: contain;
 }

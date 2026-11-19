@@ -83,29 +83,29 @@
 
         <!-- Right: Search & All India link -->
         <div class="rm-header-right">
-          <a href="{{ url('/') }}" style="font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;text-decoration:none;">India</a>
+          <a href="{{ url('/') }}" class="rm-header-link-india">India</a>
           <button class="rm-menu-btn" id="btn-open-search" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- Submenu Bar under Logo -->
-    <nav class="rm-subnav">
-      <ul class="rm-subnav-list">
-        <li><a href="{{ url('/' . $cityId . '/icons') }}">Icons</a></li>
-        <li><a href="{{ url('/' . $cityId . '/rising') }}">Rising</a></li>
-        <li><a href="{{ url('/' . $cityId . '/stories') }}">Stories</a></li>
-        <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List</a></li>
-        <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine</a></li>
-        <li><a href="{{ url('/' . $cityId . '/in-' . $cityId) }}">In {{ $cityName }}</a></li>
-        <li><a href="{{ url('/' . $cityId . '/featured-brands') }}">Brands</a></li>
-        <li><a href="{{ url('/' . $cityId . '/about') }}">About</a></li>
-        <li><a href="{{ url('/' . $cityId . '/nominate') }}">Nominate</a></li>
-        <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
-      </ul>
-    </nav>
+      <!-- Submenu Bar under Logo -->
+      <nav class="rm-subnav">
+        <ul class="rm-subnav-list">
+          <li><a href="{{ url('/' . $cityId . '/icons') }}">Icons</a></li>
+          <li><a href="{{ url('/' . $cityId . '/rising') }}">Rising</a></li>
+          <li><a href="{{ url('/' . $cityId . '/stories') }}">Stories</a></li>
+          <li><a href="{{ url('/' . $cityId . '/the-list') }}">The List</a></li>
+          <li><a href="{{ url('/' . $cityId . '/magazine') }}">Magazine</a></li>
+          <li><a href="{{ url('/' . $cityId . '/in-' . $cityId) }}">In {{ $cityName }}</a></li>
+          <li><a href="{{ url('/' . $cityId . '/featured-brands') }}">Brands</a></li>
+          <li><a href="{{ url('/' . $cityId . '/about') }}">About</a></li>
+          <li><a href="{{ url('/' . $cityId . '/nominate') }}">Nominate</a></li>
+          <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
+        </ul>
+      </nav>
+    </div>
 
     <!-- Hero Slides Container (Server-Rendered) -->
     <div id="hero-slides-wrap">

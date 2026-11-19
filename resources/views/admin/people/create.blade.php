@@ -42,7 +42,7 @@
 
           <div class="form-group">
             <label class="form-label">Editorial Biography &amp; Body of Work</label>
-            <div id="quill-editor" style="height:320px; background:#fff; font-size:15px;">{!! old('bio') !!}</div>
+            <div id="quill-editor" data-placeholder="Write comprehensive profile bio, heritage context, and achievements..." style="height:320px; background:#fff; font-size:15px;">{!! old('bio') !!}</div>
             <input type="hidden" name="bio" id="bio-input">
           </div>
         </div>
@@ -195,25 +195,8 @@
 
 @push('scripts')
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const quill = new Quill('#quill-editor', {
-      theme: 'snow',
-      placeholder: 'Write comprehensive profile bio, heritage context, and achievements...',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'blockquote'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link', 'clean']
-        ]
-      }
-    });
-
-    const form = document.querySelector('form');
-    const bioInput = document.getElementById('bio-input');
-    form.addEventListener('submit', function () {
-      bioInput.value = quill.root.innerHTML;
-    });
-  });
+  if (typeof initAdminQuill === 'function') {
+    initAdminQuill();
+  }
 </script>
 @endpush

@@ -37,7 +37,7 @@
 
           <div class="form-group">
             <label class="form-label">Full Story Body</label>
-            <div id="quill-editor" style="height:340px; background:#fff; font-size:15px;">{!! old('body', $article->body) !!}</div>
+            <div id="quill-editor" data-placeholder="Write the complete editorial article here..." style="height:340px; background:#fff; font-size:15px;">{!! old('body', $article->body) !!}</div>
             <input type="hidden" name="body" id="body-input">
           </div>
         </div>
@@ -197,25 +197,8 @@
 
 @push('scripts')
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const quill = new Quill('#quill-editor', {
-      theme: 'snow',
-      placeholder: 'Write the complete editorial article here...',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'blockquote'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link', 'clean']
-        ]
-      }
-    });
-
-    const form = document.querySelector('form');
-    const bodyInput = document.getElementById('body-input');
-    form.addEventListener('submit', function () {
-      bodyInput.value = quill.root.innerHTML;
-    });
-  });
+  if (typeof initAdminQuill === 'function') {
+    initAdminQuill();
+  }
 </script>
 @endpush

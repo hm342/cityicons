@@ -223,6 +223,43 @@
     .admin-content {
       padding: 32px;
       flex: 1;
+      opacity: 1;
+      transition: opacity 0.18s ease-in-out;
+    }
+    .admin-content.is-loading {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Top Progress Bar for Seamless SPA transitions */
+    #admin-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), #ef4444);
+      z-index: 99999;
+      opacity: 0;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+      pointer-events: none;
+      box-shadow: 0 0 10px rgba(181, 22, 34, 0.6);
+    }
+
+    /* Alert Close Button */
+    .alert-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0.5;
+      padding: 0 4px;
+      color: inherit;
+    }
+    .alert-close:hover {
+      opacity: 1;
     }
 
     /* Common Components */
@@ -395,6 +432,8 @@
   @stack('styles')
 </head>
 <body>
+  <!-- Progress Bar for SPA content navigation -->
+  <div id="admin-progress-bar"></div>
 
   <!-- Sidebar -->
   <aside class="admin-sidebar">
@@ -483,7 +522,7 @@
           <span class="user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
           <span class="role-badge">{{ Auth::user()->role ?? 'Admin' }}</span>
         </div>
-        <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
+        <form action="{{ route('admin.logout') }}" method="POST" data-no-pjax style="display:inline;">
           @csrf
           <button type="submit" class="btn btn-secondary btn-sm" title="Log out">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -525,6 +564,338 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+  <script>
+    /* ==========================================================================
+       CityIcons Admin SPA Router & Seamless PJAX Engine
+       Enables instantaneous page-content reloads without reloading the sidebar.
+       ========================================================================== */
+    const progressBar = document.getElementById('admin-progress-bar');
+    let progressTimer = null;
+    let currentAbortController = null;
+
+    function startProgress() {
+      if (!progressBar) return;
+      clearTimeout(progressTimer);
+      progressBar.style.opacity = '1';
+      progressBar.style.width = '25%';
+      progressTimer = setTimeout(() => {
+        progressBar.style.width = '70%';
+      }, 150);
+    }
+
+    function finishProgress() {
+      if (!progressBar) return;
+      clearTimeout(progressTimer);
+      progressBar.style.width = '100%';
+      setTimeout(() => {
+        progressBar.style.opacity = '0';
+        setTimeout(() => {
+          progressBar.style.width = '0%';
+        }, 200);
+      }, 200);
+    }
+
+    // Initialize Quill WYSIWYG Editor
+    function initAdminQuill() {
+      const editorEl = document.querySelector('#quill-editor');
+      if (!editorEl) return;
+
+      // Avoid re-initialization if already active
+      if (editorEl.classList.contains('ql-container')) {
+        return;
+      }
+
+      // Remove any leftover duplicate toolbar element if existing
+      const prevToolbar = editorEl.previousElementSibling;
+      if (prevToolbar && prevToolbar.classList.contains('ql-toolbar')) {
+        prevToolbar.remove();
+      }
+
+      const targetInput = document.getElementById('body-input') || document.getElementById('bio-input');
+      const placeholder = editorEl.getAttribute('data-placeholder') || 'Write editorial content here...';
+
+      try {
+        const quill = new Quill(editorEl, {
+          theme: 'snow',
+          placeholder: placeholder,
+          modules: {
+            toolbar: [
+              [{ 'header': [1, 2, 3, false] }],
+              ['bold', 'italic', 'underline', 'blockquote'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['link', 'clean']
+            ]
+          }
+        });
+
+        editorEl.__quill = quill;
+
+        const form = editorEl.closest('form');
+        if (form && targetInput) {
+          if (!form.dataset.quillBound) {
+            form.dataset.quillBound = 'true';
+            form.addEventListener('submit', function () {
+              targetInput.value = quill.root.innerHTML;
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Quill initialization error:', err);
+      }
+    }
+
+    // Initialize all page-level components
+    function initAdminPage() {
+      initAdminQuill();
+
+      // Dismissible flash alerts
+      document.querySelectorAll('.alert').forEach(alert => {
+        if (!alert.querySelector('.alert-close')) {
+          const closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.className = 'alert-close';
+          closeBtn.innerHTML = '&times;';
+          closeBtn.title = 'Dismiss alert';
+          closeBtn.onclick = () => alert.remove();
+          alert.appendChild(closeBtn);
+        }
+      });
+
+      // Dispatch custom lifecycle event
+      document.dispatchEvent(new CustomEvent('admin:page-loaded', { detail: { url: window.location.href } }));
+    }
+
+    // Re-evaluate script elements inside newly injected dynamic content
+    function executeScripts(container) {
+      const scripts = container.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        if (oldScript.type && oldScript.type !== 'text/javascript' && oldScript.type !== 'module') {
+          return;
+        }
+        const newScript = document.createElement('script');
+        Array.from(oldScript.attributes).forEach(attr => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+        newScript.textContent = oldScript.textContent;
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      });
+    }
+
+    // Fetch and seamlessly swap page content
+    async function loadAdminPage(url, pushState = true, options = {}) {
+      if (currentAbortController) {
+        currentAbortController.abort();
+      }
+      currentAbortController = new AbortController();
+
+      const contentEl = document.querySelector('.admin-content');
+      const headerTitleEl = document.querySelector('.header-title');
+      const navEl = document.querySelector('.admin-nav');
+
+      startProgress();
+      if (contentEl) contentEl.classList.add('is-loading');
+
+      try {
+        const fetchOptions = {
+          method: options.method || 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Admin-PJAX': 'true',
+            'Accept': 'text/html, application/xhtml+xml, */*'
+          },
+          signal: currentAbortController.signal,
+          redirect: 'follow'
+        };
+
+        if (options.body) {
+          fetchOptions.body = options.body;
+        }
+
+        const response = await fetch(url, fetchOptions);
+
+        // Check if session timed out and redirected to login
+        if (response.url.includes('/login')) {
+          window.location.href = response.url;
+          return;
+        }
+
+        // Check content-type: if file download (e.g. CSV export)
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('text/html')) {
+          window.location.href = url;
+          finishProgress();
+          if (contentEl) contentEl.classList.remove('is-loading');
+          return;
+        }
+
+        if (!response.ok && response.status !== 422) {
+          window.location.href = url;
+          return;
+        }
+
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const newContent = doc.querySelector('.admin-content');
+        const newHeaderTitle = doc.querySelector('.header-title');
+        const newNav = doc.querySelector('.admin-nav');
+
+        if (!newContent) {
+          window.location.href = url;
+          return;
+        }
+
+        // 1. Update Document Title
+        if (doc.title) {
+          document.title = doc.title;
+        }
+
+        // 2. Update Header Title
+        if (headerTitleEl && newHeaderTitle) {
+          headerTitleEl.innerHTML = newHeaderTitle.innerHTML;
+        }
+
+        // 3. Update Content
+        if (contentEl) {
+          contentEl.innerHTML = newContent.innerHTML;
+          executeScripts(contentEl);
+        }
+
+        // 4. Update Sidebar Navigation (updates active item highlight and notification badges without reloading sidebar)
+        if (navEl && newNav) {
+          navEl.innerHTML = newNav.innerHTML;
+        }
+
+        // 5. Update Browser History State
+        const finalUrl = response.url || url;
+        if (pushState) {
+          window.history.pushState({ pjax: true, url: finalUrl }, '', finalUrl);
+        }
+
+        // 6. Scroll window to top
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // 7. Initialize page components (Quill editor, etc.)
+        initAdminPage();
+
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          return; // Aborted by newer navigation click
+        }
+        console.error('PJAX navigation error, falling back to full page load:', err);
+        window.location.href = url;
+      } finally {
+        if (contentEl) contentEl.classList.remove('is-loading');
+        finishProgress();
+      }
+    }
+
+    // Global Click Interception for Admin Links
+    document.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      // Ignore modified clicks (Ctrl, Cmd, Shift, Alt)
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      // Ignore links with target="_blank"
+      if (link.target && link.target !== '_self') return;
+
+      // Ignore explicit download links
+      if (link.hasAttribute('download')) return;
+
+      // Ignore data-no-pjax
+      if (link.closest('[data-no-pjax]') || link.hasAttribute('data-no-pjax')) return;
+
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+      // Parse absolute URL
+      let targetUrl;
+      try {
+        targetUrl = new URL(link.href, window.location.href);
+      } catch (err) {
+        return;
+      }
+
+      // Must be same origin
+      if (targetUrl.origin !== window.location.origin) return;
+
+      // Must be within admin dashboard paths
+      if (!targetUrl.pathname.startsWith('/admin')) return;
+
+      // Exclude binary export routes
+      if (targetUrl.pathname.endsWith('/export')) return;
+
+      e.preventDefault();
+      loadAdminPage(targetUrl.href, true);
+    });
+
+    // Global Form Submission Interception
+    document.addEventListener('submit', function (e) {
+      const form = e.target.closest('form');
+      if (!form) return;
+
+      // Ignore if marked with data-no-pjax
+      if (form.hasAttribute('data-no-pjax') || form.closest('[data-no-pjax]')) return;
+
+      // Ignore logout form (must do full page reload)
+      if (form.action.includes('logout')) return;
+
+      let targetUrl;
+      try {
+        targetUrl = new URL(form.action, window.location.href);
+      } catch (err) {
+        return;
+      }
+
+      if (targetUrl.origin !== window.location.origin || !targetUrl.pathname.startsWith('/admin')) {
+        return;
+      }
+
+      const method = (form.getAttribute('method') || 'GET').toUpperCase();
+
+      if (method === 'GET') {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          if (value !== '') {
+            params.append(key, value);
+          }
+        }
+        const cleanUrl = targetUrl.pathname + (params.toString() ? '?' + params.toString() : '');
+        loadAdminPage(cleanUrl, true);
+      } else if (method === 'POST') {
+        // Sync Quill editor if present inside this form before creating FormData
+        const editorEl = form.querySelector('#quill-editor');
+        if (editorEl && editorEl.__quill) {
+          const targetInput = form.querySelector('#body-input') || form.querySelector('#bio-input');
+          if (targetInput) targetInput.value = editorEl.__quill.root.innerHTML;
+        }
+
+        e.preventDefault();
+        const formData = new FormData(form);
+        loadAdminPage(form.action, true, {
+          method: 'POST',
+          body: formData
+        });
+      }
+    });
+
+    // Handle browser Back / Forward navigation
+    window.addEventListener('popstate', function (e) {
+      loadAdminPage(window.location.href, false);
+    });
+
+    // Initial load execution
+    document.addEventListener('DOMContentLoaded', function () {
+      initAdminPage();
+    });
+  </script>
+
   @stack('scripts')
 </body>
 </html>

@@ -12,7 +12,7 @@
           Subscribers who have opted in for CityIcons weekly dispatches and issue releases.
         </div>
       </div>
-      <a href="{{ route('admin.subscribers.export') }}" class="btn btn-dark">
+      <a href="{{ route('admin.subscribers.export') }}" class="btn btn-dark" data-no-pjax download>
         <i class="fa-solid fa-file-csv"></i> Export to CSV
       </a>
     </div>

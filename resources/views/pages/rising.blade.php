@@ -24,10 +24,10 @@
           {{ $cName }} Rising
         </h1>
         <p style="font-family:var(--font-didot); font-size:clamp(1.25rem, 2vw, 1.6rem); color:var(--vogue-black); line-height:1.3; margin-bottom:8px;">
-          Next-generation leadership, emerging work and forward momentum.
+          Credible beginnings. Meaningful potential.
         </p>
         <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; max-width:850px; line-height:1.6;">
-          Rising highlights individuals and ventures establishing their footprint, building new institutions, driving innovation or demonstrating exceptional trajectory with roots in or impact on {{ $cName }}.
+          Rising documents emerging individuals who have demonstrated genuine achievement, consistent work and a credible future trajectory with roots in or impact on {{ $cName }}. Selection is not determined by age, popularity or follower count alone. Every profile must be supported by verifiable progress.
         </p>
         <div style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-red); margin-top:8px;">
           Recognition cannot be purchased.

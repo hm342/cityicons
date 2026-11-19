@@ -36,6 +36,14 @@ class DirectoryController extends Controller
         }
 
         $people = $query->paginate(12)->withQueryString();
+        if ($people->isEmpty() && !$request->filled('category')) {
+            $people = Person::with(['category', 'city', 'tags'])
+                ->published()
+                ->icons()
+                ->orderBy('sort_order')
+                ->latest()
+                ->paginate(12);
+        }
         $lead = $people->first();
 
         return view('pages.icons', compact('city', 'people', 'lead', 'categories'));
@@ -76,6 +84,14 @@ class DirectoryController extends Controller
         }
 
         $people = $query->paginate(12)->withQueryString();
+        if ($people->isEmpty() && !$request->filled('category')) {
+            $people = Person::with(['category', 'city', 'tags'])
+                ->published()
+                ->rising()
+                ->orderBy('sort_order')
+                ->latest()
+                ->paginate(12);
+        }
         $lead = $people->first();
 
         return view('pages.rising', compact('city', 'people', 'lead', 'categories'));

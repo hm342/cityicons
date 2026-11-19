@@ -1,217 +1,421 @@
-<x-layouts.app title="CityIcons — India, Documented. Pan-India Editorial Network">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CITYICON — India's Premier City Magazine. Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities.">
+  <title>CITYICONS — India's City Magazine</title>
+  <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
 
-  <!-- ══ 1. HERO (India, Documented) ═════════════════════════════ -->
-  <x-hero-banner 
-    :cover="$coverArticle" 
-    :settings="$settings" 
-    title="India, Documented."
-    rubric="CITYICONS · ALL-INDIA EDITORIAL NETWORK"
-    dek="Documenting the people, journeys and cultural moments shaping India's defining cities."
-    signature="Selected with purpose. Documented with responsibility."
-    primaryBtnText="Explore Cities Network"
-    primaryBtnUrl="#sec-cities"
-    secondaryBtnText="Bhavnagar Flagship"
-    :secondaryBtnUrl="url('/bhavnagar')"
-    tertiaryBtnText="Nominate an Icon"
-    :tertiaryBtnUrl="url('/nominate')"
-  />
+  <!-- ══ OFFCANVAS SLIDEOUT DRAWER ════════════════════════════ -->
+  <div class="vogue-overlay" id="vogue-overlay"></div>
+  <aside class="vogue-drawer" id="vogue-drawer">
+    <button class="vogue-drawer__close" id="btn-close-drawer" aria-label="Close menu">&times;</button>
+    <div style="font-family:var(--font-didot); font-size:2.8rem; letter-spacing:6px; margin-bottom:20px;">CITYICONS</div>
+    
+    <div class="vogue-drawer__title">City Editions</div>
+    <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
+      @foreach($cities as $c)
+        <a href="{{ url('/' . $c->slug) }}" class="vogue-drawer__city-chip">{{ $c->name }}</a>
+      @endforeach
+    </div>
 
-  <!-- ══ 2. EDITORIAL MANIFESTO (Every city has people worth remembering) ══ -->
-  <x-editorial-intro 
-    title="Every city has people worth remembering."
-    rubric="EDITORIAL MANIFESTO"
-    lead="CityIcons is an independent pan-India editorial platform documenting credible people, meaningful journeys and lasting contributions across India’s defining cities."
-    tagline="We focus on evidence, context and impact, not popularity alone."
-  />
+    <div class="vogue-drawer__title" style="margin-top:30px;">Quick Jump</div>
+    <ul class="vogue-drawer__menu">
+      <li><a href="#hero-banner">Cover Story</a></li>
+      <li><a href="#sec-bhavnagar">Bhavnagar Edition</a></li>
+      <li><a href="#sec-mumbai">Mumbai Edition</a></li>
+      <li><a href="#sec-ahmedabad">Ahmedabad Cinema</a></li>
+      <li><a href="#sec-weddings">Weddings &amp; Celebrations</a></li>
+    </ul>
+  </aside>
 
-  <!-- ══ 3. CITY NEWS CAROUSEL / LATEST DISPATCHES TICKER ════════ -->
-  <x-city-news-strip :articles="$newsStrip" />
-
-  <!-- ══ 4. CITIES NETWORK EXPLORER (Direct City Gateway) ════════ -->
-  <section id="sec-cities" class="city-edition-section">
+  <!-- ══ 1. SITE MASTER HEADER ════════════════════════════════ -->
+  <!-- Left: Menu | Center: CITYICON | Right: Subscribe & Search -->
+  <header class="site-master-header">
     <div class="vogue-container">
-      <div class="section-hed-bar" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:28px;">
-        <div style="max-width:850px;">
-          <h2 class="section-hed-title" style="margin-bottom:6px;">Cities Network</h2>
-          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; line-height:1.5; margin:0;">
-            Independent city-focused editorial documentation across Indian cities. Select any city to enter its dedicated visual subsite, local dispatches, and permanent record.
-          </p>
+      <div class="header-main-grid">
+        <!-- Left: Menu -->
+        <div class="header-left">
+          <button class="menu-toggle-btn" id="btn-open-drawer" aria-label="Open navigation menu">
+            <div class="burger-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span>Menu</span>
+          </button>
         </div>
-        <a href="{{ url('/bhavnagar') }}" class="section-hed-link" style="flex-shrink:0;">
-          <span>Enter Flagship Edition (Bhavnagar)</span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
+
+        <!-- Center: CITYICON (Only CITYICON) -->
+        <div class="header-center">
+          <a href="{{ url('/') }}" class="cityicon-main-logo">CITYICONS</a>
+        </div>
+
+        <!-- Right: Subscribe & Search -->
+        <div class="header-right">
+          <a href="{{ url('/bhavnagar/nominate') }}" class="btn-header-subscribe">Subscribe</a>
+          <button class="btn-header-search" id="btn-open-search" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
       </div>
+    </div>
 
-      <div class="cities-network-grid">
-        @foreach($cities as $c)
-          @php
-            $isFlagship = ($c->slug === 'bhavnagar');
-            $cityUrl = url('/' . $c->slug);
-            $imgUrl = $c->hero_image ?: 'https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=1200&q=80';
-          @endphp
-          <article class="city-network-card" onclick="location.href='{{ $cityUrl }}'" aria-label="Explore {{ $c->name }} City Subsite">
-            <img class="city-network-card__img" src="{{ $imgUrl }}" alt="{{ $c->name }} Editorial Edition" loading="lazy">
-            <div class="city-network-card__overlay"></div>
+    <!-- ══ 2. CITY-WISE MENU BAR (Sticky) ═══════════════════════ -->
+    <nav class="city-navbar">
+      <div class="vogue-container">
+        <ul class="city-navbar__list" id="city-nav-list">
+          <li class="city-navbar__item active"><a href="{{ url('/') }}">All India</a></li>
+          @foreach($cities as $c)
+            <li class="city-navbar__item"><a href="{{ url('/' . $c->slug) }}">{{ $c->name }}</a></li>
+          @endforeach
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-            <div class="city-network-card__badge {{ $isFlagship ? 'city-network-card__badge--flagship' : '' }}">
-              <span class="vogue-rubric" style="{{ !$isFlagship ? 'color:#ffffff;' : '' }}">
-                {{ $isFlagship ? 'FLAGSHIP EDITION' : 'ACTIVE EDITION' }}
-              </span>
-            </div>
+  <!-- ══ 3. HERO BIG BANNER (Inside Unified Container) ═══════ -->
+  <section class="hero-section-wrap">
+    <div class="vogue-container">
+      <div class="hero-big-banner" id="hero-banner">
+        @if($coverArticle)
+          <div class="hero-big-banner__img-wrap" onclick="location.href='{{ url('/article/' . $coverArticle->id) }}'" style="cursor:pointer;">
+            <img src="{{ $coverArticle->cover_image }}" alt="{{ $coverArticle->title }}" loading="eager">
+            <!-- Top gradient for contrast -->
+            <div class="hero-big-banner__top-shade"></div>
+            <!-- Right side top CITYICONS name inside the image -->
+            <div class="hero-big-banner__brand-stamp">CITYICONS</div>
+            <!-- Bottom gradient shade for text readability -->
+            <div class="hero-big-banner__bottom-shade"></div>
 
-            <div class="city-network-card__body">
-              <span class="city-network-card__state">{{ strtoupper($c->state) }}</span>
-              <h3 class="city-network-card__name">{{ $c->name }}</h3>
-              <div class="city-network-card__meta">
-                {{ $c->people_count ?? 0 }} Documented Icons · {{ $c->articles_count ?? 0 }} Stories
+            <!-- Main description INSIDE the image at the bottom -->
+            <div class="hero-big-banner__content-overlay">
+              <div class="hero-big-banner__content-box">
+                <h1 class="hero-big-banner__hed">{{ $coverArticle->title }}</h1>
               </div>
-              <div class="city-network-card__cta">
-                <span>Enter {{ $c->name }} Subsite</span>
-                <i class="fas fa-arrow-right"></i>
-              </div>
             </div>
-          </article>
+          </div>
+
+          <!-- Others things OUT of the image (underneath the image) -->
+          <div class="hero-big-banner__details" onclick="location.href='{{ url('/article/' . $coverArticle->id) }}'" style="cursor:pointer;">
+            <span class="vogue-rubric vogue-rubric--red">
+              {{ $coverArticle->category ? $coverArticle->category->name : 'Fashion' }} · Cover Feature
+            </span>
+            <p class="hero-big-banner__dek">{{ $coverArticle->excerpt }}</p>
+            <div class="vogue-byline">
+              <span>By {{ $coverArticle->author_name ?? 'Editorial Staff' }}</span>
+              <span class="dot"></span>
+              <span>{{ $coverArticle->published_at ? $coverArticle->published_at->format('j F Y') : '15 November 2026' }}</span>
+              <span class="dot"></span>
+              <span>{{ $coverArticle->read_time ?? '8 min read' }}</span>
+            </div>
+          </div>
+        @endif
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. CITY NEWS CAROUSEL / TICKER BAR ═══════════════════ -->
+  <section class="city-news-strip-section">
+    <div class="vogue-container">
+      <div class="news-strip-header">
+        <span class="news-strip-title">Latest City Dispatch · Across India</span>
+        <div class="news-strip-controls">
+          <button class="strip-control-btn" id="btn-strip-prev" aria-label="Previous news">&#10094;</button>
+          <button class="strip-control-btn" id="btn-strip-next" aria-label="Next news">&#10095;</button>
+        </div>
+      </div>
+      <div class="city-news-track" id="city-news-track">
+        @foreach($newsStrip as $art)
+          <div class="city-news-mini-card" onclick="location.href='{{ url('/article/' . $art->id) }}'" style="cursor:pointer;">
+            <div class="city-news-mini-card__img">
+              <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
+            </div>
+            <span class="city-news-mini-card__city">{{ $art->city ? $art->city->name : 'National' }}</span>
+            <h3 class="city-news-mini-card__hed">{{ $art->title }}</h3>
+          </div>
         @endforeach
       </div>
     </div>
   </section>
 
-  <!-- ══ 5. DOCUMENTED ICONS (People shaping India and beyond) ═══ -->
-  <x-city-edition-section 
-    city-id="pan-india-icons" 
-    title="Documented Icons" 
-    subtitle="People shaping India and beyond. Explore established professionals, creators, entrepreneurs, artists and changemakers whose work deserves permanence." 
-    button-text="Explore Bhavnagar Icons" 
-    explore-url="{{ url('/bhavnagar/icons') }}" 
-    :people="$featuredIcons" 
-  />
+  <main id="main-content">
 
-  <!-- ══ 6. CURATED EDITORIAL STORIES ════════════════════════════ -->
-  <section id="sec-stories" class="city-edition-section">
-    <div class="vogue-container">
-      <div class="section-hed-bar" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:28px;">
-        <div style="max-width:850px;">
-          <h2 class="section-hed-title" style="margin-bottom:6px;">National Stories</h2>
-          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; line-height:1.5; margin:0;">
-            The complete story, beyond the headline. Explore profiles, cultural narratives, and editorial features across Indian cities.
-          </p>
+    <!-- ══ 5. CITY SECTION 1: BHAVNAGAR ═════════════════════════ -->
+    <section id="sec-bhavnagar" class="city-edition-section">
+      <div class="vogue-container">
+        <div class="section-hed-bar">
+          <h2 class="section-hed-title">Bhavnagar</h2>
+          <a href="{{ url('/bhavnagar') }}" class="section-hed-link">
+            <span>Explore Bhavnagar Edition</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
         </div>
-        <a href="{{ url('/stories') }}" class="section-hed-link" style="flex-shrink:0;">
-          <span>Explore All Stories</span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
 
-      @if($featuredStories && $featuredStories->count() > 0)
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:28px;">
-          @foreach($featuredStories as $art)
-            <article class="vogue-card" style="cursor:pointer;" onclick="location.href='{{ url('/article/' . $art->id) }}'">
-              <div class="vogue-card__img-wrap" style="margin-bottom:14px;">
-                <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
+        <div class="vogue-sticky-section">
+          <!-- Left: Sticky Lead Story -->
+          <div class="vogue-sticky-col">
+            <article class="vogue-sticky-lead" id="bhavnagar-lead">
+              @if($bhavLead)
+                <div class="vogue-sticky-lead__card" onclick="location.href='{{ url('/article/' . $bhavLead->id) }}'" style="cursor:pointer;">
+                  <img class="vogue-sticky-lead__img" src="{{ $bhavLead->cover_image }}" alt="{{ $bhavLead->title }}" loading="lazy">
+                  <div class="vogue-sticky-lead__overlay"></div>
+                  <div class="vogue-sticky-lead__content">
+                    <span class="vogue-sticky-lead__rubric">{{ $bhavLead->category ? $bhavLead->category->name : 'Events' }} · Bhavnagar</span>
+                    <h2 class="vogue-sticky-lead__hed">{{ $bhavLead->title }}</h2>
+                    <div class="vogue-sticky-lead__byline">BY {{ strtoupper($bhavLead->author_name ?? 'Editorial Staff') }}</div>
+                  </div>
+                </div>
+              @endif
+            </article>
+          </div>
+
+          <!-- Right: 6 Stories Grid (2 columns x 3 rows) scrolling naturally with page -->
+          <div class="vogue-scroll-right-grid" id="bhavnagar-grid-6">
+            @foreach($bhavGrid as $a)
+              <article class="vogue-sub-card" onclick="location.href='{{ url('/article/' . $a->id) }}'" style="cursor:pointer;">
+                <div class="vogue-sub-card__media">
+                  <img src="{{ $a->cover_image }}" alt="{{ $a->title }}" loading="lazy">
+                </div>
+                <span class="vogue-sub-card__rubric">{{ $a->category ? $a->category->name : 'Story' }}</span>
+                <h3 class="vogue-sub-card__hed">{{ $a->title }}</h3>
+                <div class="vogue-sub-card__byline">
+                  <span>BY {{ strtoupper($a->author_name ?? 'Editorial Staff') }}</span>
+                  <span class="vogue-sub-card__date">{{ $a->published_at ? $a->published_at->format('j F Y') : '' }}</span>
+                </div>
+              </article>
+            @endforeach
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 6. CITY SECTION 2: MUMBAI ════════════════════════════ -->
+    <section id="sec-mumbai" class="city-edition-section">
+      <div class="vogue-container">
+        <div class="section-hed-bar">
+          <h2 class="section-hed-title">Mumbai</h2>
+          <a href="{{ url('/mumbai') }}" class="section-hed-link">
+            <span>Explore Mumbai Edition</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="vogue-sticky-section">
+          <!-- Left: Sticky Lead Story -->
+          <div class="vogue-sticky-col">
+            <article class="vogue-sticky-lead" id="mumbai-lead">
+              @if($mumbaiLead)
+                <div class="vogue-sticky-lead__card" onclick="location.href='{{ url('/article/' . $mumbaiLead->id) }}'" style="cursor:pointer;">
+                  <img class="vogue-sticky-lead__img" src="{{ $mumbaiLead->cover_image }}" alt="{{ $mumbaiLead->title }}" loading="lazy">
+                  <div class="vogue-sticky-lead__overlay"></div>
+                  <div class="vogue-sticky-lead__content">
+                    <span class="vogue-sticky-lead__rubric">{{ $mumbaiLead->category ? $mumbaiLead->category->name : 'Fashion' }} · Mumbai</span>
+                    <h2 class="vogue-sticky-lead__hed">{{ $mumbaiLead->title }}</h2>
+                    <div class="vogue-sticky-lead__byline">BY {{ strtoupper($mumbaiLead->author_name ?? 'Editorial Staff') }}</div>
+                  </div>
+                </div>
+              @endif
+            </article>
+          </div>
+
+          <!-- Right: 6 Stories Grid (2 columns x 3 rows) scrolling naturally with page -->
+          <div class="vogue-scroll-right-grid" id="mumbai-grid-6">
+            @foreach($mumbaiGrid as $a)
+              <article class="vogue-sub-card" onclick="location.href='{{ url('/article/' . $a->id) }}'" style="cursor:pointer;">
+                <div class="vogue-sub-card__media">
+                  <img src="{{ $a->cover_image }}" alt="{{ $a->title }}" loading="lazy">
+                </div>
+                <span class="vogue-sub-card__rubric">{{ $a->category ? $a->category->name : 'Story' }}</span>
+                <h3 class="vogue-sub-card__hed">{{ $a->title }}</h3>
+                <div class="vogue-sub-card__byline">
+                  <span>BY {{ strtoupper($a->author_name ?? 'Editorial Staff') }}</span>
+                  <span class="vogue-sub-card__date">{{ $a->published_at ? $a->published_at->format('j F Y') : '' }}</span>
+                </div>
+              </article>
+            @endforeach
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 7. CITY SECTION 3: AHMEDABAD (Cinematic Banner + Carousel Below) ══ -->
+    <section class="city-cinema-section" id="sec-ahmedabad">
+      <div class="vogue-container">
+        <div class="section-hed-bar">
+          <h2 class="section-hed-title">Ahmedabad</h2>
+          <a href="{{ url('/ahmedabad') }}" class="section-hed-link">
+            <span>Explore Ahmedabad Edition</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- Big Cinematic Image Banner (Inside same main container) -->
+        <div class="city-cinema-banner" id="ahmedabad-cinema-banner">
+          @if($ahmdBanner)
+            <img src="{{ $ahmdBanner->cover_image }}" alt="{{ $ahmdBanner->title }}" onclick="location.href='{{ url('/article/' . $ahmdBanner->id) }}'" style="cursor:pointer;">
+            <div class="city-cinema-overlay"></div>
+            <div class="city-cinema-content" onclick="location.href='{{ url('/article/' . $ahmdBanner->id) }}'" style="cursor:pointer;">
+              <span class="vogue-rubric">{{ $ahmdBanner->category ? $ahmdBanner->category->name : 'Culture' }} · Ahmedabad Showcase</span>
+              <h2 class="city-cinema-hed">{{ $ahmdBanner->title }}</h2>
+              <p class="city-cinema-dek">{{ $ahmdBanner->excerpt }}</p>
+              <div class="vogue-byline" style="color:rgba(255,255,255,0.8); margin-top:10px;">
+                <span>By {{ $ahmdBanner->author_name ?? 'Editorial Staff' }}</span>
+                <span class="dot"></span>
+                <span>{{ $ahmdBanner->published_at ? $ahmdBanner->published_at->format('j F Y') : '' }}</span>
               </div>
-              <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
-                <span class="vogue-rubric vogue-rubric--red">{{ $art->category ? strtoupper($art->category->name) : 'STORY' }}</span>
-                @if($art->city)
-                  <span style="font-size:0.625rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-muted);">· {{ $art->city->name }}</span>
-                @endif
+            </div>
+          @endif
+        </div>
+
+        <!-- Carousel of other Ahmedabad news below -->
+        @if($ahmdStories && $ahmdStories->count() > 0)
+          <div class="city-cinema-carousel-wrap">
+            <div class="city-cinema-carousel-header">
+              <span style="font-family:var(--font-sans); font-size:0.6875rem; font-weight:800; letter-spacing:2px; text-transform:uppercase;">More From Ahmedabad</span>
+              <div class="news-strip-controls">
+                <button class="strip-control-btn" id="btn-ahmd-prev" aria-label="Previous">&#10094;</button>
+                <button class="strip-control-btn" id="btn-ahmd-next" aria-label="Next">&#10095;</button>
               </div>
-              <h3 style="font-family:var(--font-didot); font-size:1.2rem; font-weight:600; line-height:1.25; margin:4px 0 8px; color:var(--vogue-black);">
-                {{ $art->title }}
-              </h3>
-              <p style="font-family:var(--font-garamond); font-size:1.05rem; color:#555; line-height:1.5; margin-bottom:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                {{ $art->excerpt }}
-              </p>
-              <div class="vogue-byline" style="margin-top:auto;">
-                {{ $art->author_name ?? 'Editorial Staff' }} · {{ $art->read_time ?? '4 min read' }}
+            </div>
+            <div class="city-cinema-carousel-track" id="ahmedabad-cinema-track">
+              @foreach($ahmdStories as $a)
+                <article class="city-cinema-card" onclick="location.href='{{ url('/article/' . $a->id) }}'" style="cursor:pointer;">
+                  <div class="city-cinema-card__media">
+                    <img src="{{ $a->cover_image }}" alt="{{ $a->title }}" loading="lazy">
+                  </div>
+                  <span class="vogue-rubric" style="font-size:0.625rem;">{{ $a->category ? $a->category->name : 'Story' }}</span>
+                  <h3 class="city-cinema-card__hed">{{ $a->title }}</h3>
+                  <div class="vogue-byline">
+                    <span>By {{ $a->author_name ?? 'Editorial Staff' }}</span>
+                  </div>
+                </article>
+              @endforeach
+            </div>
+          </div>
+        @endif
+      </div>
+    </section>
+
+    <!-- ══ 8. LAST SECTION: WEDDINGS & ROYAL CELEBRATIONS (4-Column Collection Grid) ══ -->
+    <section id="sec-weddings" class="vogue-weddings-section">
+      <div class="vogue-container">
+        <div class="section-hed-bar">
+          <h2 class="section-hed-title">Weddings &amp; Celebrations</h2>
+          <a href="{{ url('/jaipur') }}" class="section-hed-link">
+            <span>Explore Royal Celebrations</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="vogue-4col-grid" id="weddings-4col-grid">
+          @foreach($weddingArticles as $a)
+            <article class="vogue-4col-card" onclick="location.href='{{ url('/article/' . $a->id) }}'" style="cursor:pointer;">
+              <div class="vogue-4col-card__media">
+                <img src="{{ $a->cover_image }}" alt="{{ $a->title }}" loading="lazy">
+                <span class="vogue-card-badge-gallery" aria-label="Gallery">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M8 21h13V8"></path>
+                  </svg>
+                </span>
+              </div>
+              <span class="vogue-4col-card__rubric">{{ $a->category ? $a->category->name : 'Weddings' }}</span>
+              <h3 class="vogue-4col-card__hed">{{ $a->title }}</h3>
+              <div class="vogue-4col-card__byline">
+                <span class="vogue-4col-card__author">BY {{ strtoupper($a->author_name ?? 'Editorial Staff') }}</span>
+                <span class="vogue-4col-card__date">{{ $a->published_at ? $a->published_at->format('j F Y') : '' }}</span>
               </div>
             </article>
           @endforeach
         </div>
-      @endif
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <!-- ══ 7. THE LIST (A month in people and stories) ════════════ -->
-  <section id="sec-the-list" class="city-edition-section">
+  </main>
+
+  <!-- ══ 9. SITE FOOTER ═══════════════════════════════════════ -->
+  <footer class="vogue-footer">
     <div class="vogue-container">
-      <div class="section-hed-bar" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:28px;">
-        <div style="max-width:850px;">
-          <h2 class="section-hed-title" style="margin-bottom:6px;">The List</h2>
-          <p style="font-family:var(--font-garamond); font-size:1.15rem; color:#444; line-height:1.5; margin:0;">
-            A month in people and stories. The List is a monthly archive of selected profiles published by CityIcons. Names are presented alphabetically. It is not a ranking, competition or award.
-          </p>
-        </div>
-        <a href="{{ url('/the-list') }}" class="section-hed-link" style="flex-shrink:0;">
-          <span>View The List Archive</span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
+      <div class="vogue-footer__logo-wrap">
+        <div class="vogue-footer-logo">CITYICONS</div>
       </div>
 
-      @if($theListPreview && $theListPreview->count() > 0)
-        <div style="border-top:2px solid var(--vogue-black); border-bottom:1px solid var(--vogue-border); padding:8px 0;">
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:12px 28px;">
-            @foreach($theListPreview as $person)
-              <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--vogue-border); cursor:pointer;" onclick="location.href='{{ url('/person/' . ($person->slug ?: $person->id)) }}'">
-                <div>
-                  <span style="font-family:var(--font-didot); font-size:1.15rem; font-weight:600; color:var(--vogue-black);">{{ $person->name }}</span>
-                  <div style="font-size:0.75rem; color:var(--vogue-muted); margin-top:2px;">
-                    {{ $person->profession }} @if($person->city) · {{ $person->city->name }} @endif
-                  </div>
-                </div>
-                <span style="font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-red);">
-                  {{ strtoupper($person->type) }} &rarr;
-                </span>
-              </div>
-            @endforeach
-          </div>
-        </div>
-      @endif
-    </div>
-  </section>
+      <div class="vogue-footer__social">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+      </div>
 
-  <!-- ══ 8. MAGAZINE (Stories designed to last beyond the feed) ══ -->
-  <section id="sec-magazine" class="city-edition-section">
-    <div class="vogue-container">
-      <div style="background:var(--vogue-black); color:#ffffff; padding:clamp(36px, 5vw, 56px); display:grid; grid-template-columns:1.5fr 1fr; gap:40px; align-items:center; border-radius:2px;" class="magazine-feature-box">
-        <div>
-          <span class="vogue-rubric vogue-rubric--red" style="letter-spacing:2.5px;">CURATED PRINT &amp; DIGITAL EDITION</span>
-          <h2 style="font-family:var(--font-didot); font-size:clamp(1.8rem, 3.2vw, 2.8rem); font-weight:400; line-height:1.15; margin:10px 0 14px; color:#ffffff;">
-            Stories designed to last beyond the feed.
-          </h2>
-          <p style="font-family:var(--font-garamond); font-size:1.2rem; line-height:1.6; color:rgba(255,255,255,0.85); margin-bottom:20px;">
-            CityIcons Magazine presents selected profiles, verified journeys and defining stories from across India in a curated editorial format. Each edition contributes to a permanent cultural archive.
-          </p>
-          <div style="display:flex; gap:14px; flex-wrap:wrap;">
-            <a href="{{ url('/magazine') }}" style="display:inline-block; background:var(--vogue-red); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:12px 26px;">
-              Read Latest Issue
-            </a>
-            <a href="{{ url('/bhavnagar/magazine') }}" style="display:inline-block; border:1px solid rgba(255,255,255,0.5); color:#ffffff; font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:12px 26px;">
-              Bhavnagar Edition
-            </a>
-          </div>
-        </div>
+      <div class="vogue-footer__cities-title">City Editions of India</div>
+      <div class="vogue-footer__cities" id="footer-cities-list">
+        @foreach($cities as $idx => $c)
+          <a href="{{ url('/' . $c->slug) }}">{{ $c->name }}</a>@if(!$loop->last) · @endif
+        @endforeach
+      </div>
 
-        <div style="text-align:center;">
-          <div style="width:230px; max-width:100%; height:310px; margin:0 auto; background:#1c1c1c; border:1px solid rgba(255,255,255,0.2); box-shadow:0 12px 30px rgba(0,0,0,0.6); overflow:hidden; position:relative; border-radius:2px;">
-            @if($magazineEdition && $magazineEdition->cover_image)
-              <img src="{{ $magazineEdition->cover_image }}" alt="CityIcons Magazine" style="width:100%; height:100%; object-fit:cover;">
-            @else
-              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80" alt="CityIcons Magazine" style="width:100%; height:100%; object-fit:cover;">
-            @endif
-          </div>
-        </div>
+      <div class="vogue-footer__legal">
+        &copy; {{ date('Y') }} CITYICON MAGAZINE. ALL RIGHTS RESERVED.<br>
+        Curating India's finest in fashion, culture, living, and architecture across our city editions.
       </div>
     </div>
-  </section>
+  </footer>
 
-  <!-- ══ 9. FEATURED BRANDS (Clearly disclosed collaborations) ══ -->
-  <x-featured-brands-section :brands="$featuredBrands" />
+  <!-- ══ SEARCH MODAL OVERLAY ═════════════════════════════════ -->
+  <div class="vogue-search-modal" id="vogue-search-modal">
+    <div class="vogue-search-wrap">
+      <button class="vogue-search-close" id="btn-close-search" aria-label="Close search">&times;</button>
+      <form action="{{ url('/search') }}" method="GET">
+        <input type="text" name="q" class="vogue-search-input" id="vogue-search-input" placeholder="Search CITYICON stories..." autofocus>
+      </form>
+    </div>
+  </div>
 
-  <!-- ══ 10. NOMINATION (Know a story worth documenting?) ═══════ -->
-  <x-nomination-cta />
+  <script>
+    // Offcanvas Drawer
+    (function() {
+      const drawer = document.getElementById('vogue-drawer');
+      const overlay = document.getElementById('vogue-overlay');
+      const btnOpen = document.getElementById('btn-open-drawer');
+      const btnClose = document.getElementById('btn-close-drawer');
+      const open = () => { drawer?.classList.add('open'); overlay?.classList.add('open'); };
+      const close = () => { drawer?.classList.remove('open'); overlay?.classList.remove('open'); };
+      btnOpen?.addEventListener('click', open);
+      btnClose?.addEventListener('click', close);
+      overlay?.addEventListener('click', close);
+    })();
 
-  <!-- ══ 11. CLOSING (Not every story needs attention. Some deserve permanence) ══ -->
-  <x-closing-statement />
+    // Search Modal
+    (function() {
+      const modal = document.getElementById('vogue-search-modal');
+      const btnOpen = document.getElementById('btn-open-search');
+      const btnClose = document.getElementById('btn-close-search');
+      btnOpen?.addEventListener('click', () => {
+        modal?.classList.add('open');
+        setTimeout(() => document.getElementById('vogue-search-input')?.focus(), 150);
+      });
+      btnClose?.addEventListener('click', () => modal?.classList.remove('open'));
+      modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+    })();
 
-</x-layouts.app>
+    // Horizontal Carousel Tracks
+    (function() {
+      const newsTrack = document.getElementById('city-news-track');
+      document.getElementById('btn-strip-prev')?.addEventListener('click', () => newsTrack?.scrollBy({ left: -320, behavior: 'smooth' }));
+      document.getElementById('btn-strip-next')?.addEventListener('click', () => newsTrack?.scrollBy({ left: 320, behavior: 'smooth' }));
+
+      const ahmdTrack = document.getElementById('ahmedabad-cinema-track');
+      document.getElementById('btn-ahmd-prev')?.addEventListener('click', () => ahmdTrack?.scrollBy({ left: -320, behavior: 'smooth' }));
+      document.getElementById('btn-ahmd-next')?.addEventListener('click', () => ahmdTrack?.scrollBy({ left: 320, behavior: 'smooth' }));
+    })();
+  </script>
+</body>
+</html>

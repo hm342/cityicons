@@ -21,7 +21,7 @@
   --vogue-text:        #121212;
   --vogue-muted:       #757575;
   --vogue-border:      #e2e2e2;
-  --vogue-red:         #B51622;
+  --vogue-red:         #e51a24;
   --vogue-bg-light:    #f8f8f8;
 
   --font-didot:        'Bodoni Moda', 'Didot', 'Playfair Display', Georgia, serif;
@@ -64,61 +64,26 @@ img {
   object-position: center;
 }
 
-/* Universal rule: ensure all media and content images strictly use object-fit: cover */
+/* Universal rule: ensure all media images strictly fill container with object-fit: cover */
 img,
 picture img,
 .hero-big-banner__img-wrap img,
 .city-news-mini-card__img img,
-.vogue-card__img-wrap img,
-.vogue-card--lead .vogue-card__img-wrap img,
-.vogue-card--sub .vogue-card__img-wrap img,
 .vogue-sticky-lead__card img,
 .vogue-sticky-lead__img,
 .vogue-sub-card__media img,
 .city-cinema-banner img,
-.cinema-banner-card img,
-.cinema-carousel-item img,
 .city-cinema-card__media img,
 .vogue-4col-card__media img,
 .city-4col-card__media img,
-.article-lead-image img,
-.person-profile-page img,
 [class*="-media"] img,
 [class*="-img"] img,
 [class*="__media"] img,
-[class*="__img"] img,
-[class*="card"] img,
-[class*="banner"] img,
-[class*="portrait"] img,
-[class*="thumb"] img,
-[class*="avatar"] img {
+[class*="__img"] img {
+  width: 100%;
+  height: 100%;
   object-fit: cover !important;
   object-position: center;
-}
-
-/* Portrait boxes & people cards: focus on upper facial region (15% from top) */
-.vogue-card__img-wrap img,
-.person-portrait-box img,
-.person-profile-page .person-portrait-box img,
-.rm-grid-card-img,
-[class*="portrait"] img {
-  object-fit: cover !important;
-  object-position: center 15% !important;
-}
-
-/* Logos, emblems and brand stamps: strictly object-fit: contain */
-.cityicon-logo-img,
-.rm-logo-img,
-.rm-footer-logo-img,
-.vogue-footer__logo-wrap img,
-.vogue-drawer__logo-img,
-.admin-brand__img,
-.brand-logo-img,
-[class*="logo"] img,
-img[class*="logo"],
-[class*="stamp"] img {
-  object-fit: contain !important;
-  width: auto !important;
 }
 
 a {
@@ -272,40 +237,20 @@ button {
   background-color: var(--vogue-black);
 }
 
-/* Center: Logo (CITYICONS) */
+/* Center: Logo (Only CITYICON) */
 .header-center {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .cityicon-main-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  line-height: 1;
-}
-
-.cityicon-logo-img {
-  height: clamp(52px, 6vw, 76px);
-  width: auto;
-  max-width: 100%;
-  display: block;
-  object-fit: contain;
-  margin: 0 auto;
-}
-
-.cityicon-header-tagline {
-  font-family: var(--font-sans);
-  font-size: 0.625rem;
-  font-weight: 800;
-  letter-spacing: 3.5px;
+  font-family: var(--font-didot);
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: 8px;
   text-transform: uppercase;
-  color: var(--vogue-muted);
-  margin-top: 6px;
+  color: var(--vogue-black);
+  line-height: 0.95;
+  display: block;
 }
 
 /* Right: Subscribe & Search */
@@ -411,15 +356,14 @@ button {
   width: 100%;
 }
 
-/* Cover image in unified container — elegant balanced editorial height */
+/* Cover image in unified container — 1.5x height */
 .hero-big-banner__img-wrap {
   position: relative;
   width: 100%;
-  height: clamp(440px, 55vh, 600px);
+  height: clamp(840px, 92vh, 1150px);
   overflow: hidden;
   background-color: var(--vogue-black);
   cursor: pointer;
-  border-radius: 2px;
 }
 
 .hero-big-banner__img-wrap img {
@@ -660,233 +604,123 @@ button {
    ════════════════════════════════════════════════════════════ */
 .city-edition-section {
   margin-bottom: var(--section-gap);
-  position: relative;
-  clear: both;
-  isolation: isolate;
-  overflow: hidden;
 }
 
 .vogue-sticky-section {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 36px;
-  align-items: start;
+  align-items: stretch;
   margin-bottom: 0;
   position: relative;
 }
 
-/* Left Column: Sticky container */
+/* Left Column: Stretches with the right 6-story grid to provide scroll distance */
 .vogue-sticky-col {
-  position: sticky;
-  top: 96px;
-  height: fit-content;
+  position: relative;
+  height: 100%;
 }
 
-/* Lead Card: Natural height container */
+/* Sticky Lead Card: Stays fixed/pinned as user scrolls down the page */
 .vogue-sticky-lead {
-  position: relative;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 100px);
+  max-height: 680px;
+  min-height: 520px;
   width: 100%;
-  height: auto;
+  z-index: 10;
 }
 
-.vogue-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--vogue-white);
-  transition: opacity 0.2s ease;
+.vogue-sticky-lead__card {
   position: relative;
-}
-
-.vogue-card:hover {
-  opacity: 0.92;
-}
-
-/* Base image wrapper: ENFORCE UNIFORM 4:5 PORTRAIT RATIO ACROSS ALL CARDS */
-.vogue-card__img-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 5 !important;
-  height: auto !important;
-  overflow: hidden;
-  background-color: var(--vogue-bg-light);
-  border-radius: 2px;
-}
-
-.vogue-card__img-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover !important;
-  object-position: center 15% !important;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.vogue-card:hover .vogue-card__img-wrap img {
-  transform: scale(1.035);
-}
-
-/* Lead Profile / Feature Card (Hero Image of Section: SAME 4:5 Ratio Box, Content Overlay INSIDE) */
-.vogue-card--lead {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 5 !important;
-  height: auto !important;
   overflow: hidden;
   background-color: var(--vogue-black);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border-radius: 2px;
 }
 
-.vogue-card--lead .vogue-card__img-wrap {
+.vogue-sticky-lead__img {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  border-radius: 2px;
-  background-color: var(--vogue-black);
-  margin-bottom: 0;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.vogue-card--lead .vogue-card__img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover !important;
-  object-position: center 15% !important;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.vogue-card--lead:hover .vogue-card__img-wrap img {
+.vogue-sticky-lead__card:hover .vogue-sticky-lead__img {
   transform: scale(1.03);
 }
 
-/* Gradient overlay: keep top 45% clear so subject's face is 100% visible, soft shade at bottom for white text */
-.vogue-card--lead::after {
-  content: '';
+/* Editorial Dark Gradient overlay at bottom for crisp white typography */
+.vogue-sticky-lead__overlay {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.02) 40%,
-    rgba(0, 0, 0, 0.55) 68%,
-    rgba(0, 0, 0, 0.92) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Content overlay INSIDE the card at the bottom */
-.vogue-card--lead .vogue-card__body {
-  position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
-  right: 0;
-  z-index: 2;
-  padding: clamp(20px, 3.5vw, 32px) clamp(20px, 3vw, 28px);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
-
-.vogue-card--lead .vogue-card__body .vogue-rubric,
-.vogue-card--lead .vogue-card__body .vogue-rubric--red {
-  color: #ff4d5a !important;
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.vogue-card--lead .vogue-card__title {
-  font-family: var(--font-didot);
-  font-size: clamp(1.45rem, 2.3vw, 2rem);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.3px;
-  color: #ffffff;
-  margin: 4px 0 8px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-}
-
-.vogue-card--lead .vogue-card__excerpt {
-  font-family: var(--font-garamond);
-  font-size: 1.12rem;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.92);
-  margin-bottom: 10px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-.vogue-card--lead .vogue-card__byline {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-/* Sub-card Grid */
-.vogue-card--sub {
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  background: transparent;
-}
-
-.vogue-card--sub .vogue-card__img-wrap {
-  width: 100%;
-  aspect-ratio: 4 / 5 !important;
-  height: auto !important;
-  overflow: hidden;
-  margin-bottom: 12px;
-  background-color: var(--vogue-bg-light);
-  border-radius: 2px;
-}
-
-.vogue-card--sub .vogue-card__img-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover !important;
-  object-position: center 15% !important;
-  transition: transform 0.5s ease;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.18) 35%,
+    rgba(0, 0, 0, 0.78) 75%,
+    rgba(0, 0, 0, 0.94) 100%
+  );
+  pointer-events: none;
 }
 
-.vogue-card--sub:hover .vogue-card__img-wrap img {
-  transform: scale(1.04);
+.vogue-sticky-lead__content {
+  position: relative;
+  z-index: 2;
+  padding: 36px 32px;
+  text-align: center;
+  color: var(--vogue-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.vogue-card--sub .vogue-card__title {
-  font-family: var(--font-didot);
-  font-size: 1.12rem;
-  font-weight: 600;
-  line-height: 1.25;
-  color: var(--vogue-black);
-  margin: 4px 0 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.vogue-card--sub .vogue-card__byline {
+.vogue-sticky-lead__rubric {
+  display: inline-block;
   font-family: var(--font-sans);
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--vogue-muted);
-  margin-top: auto;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 14px;
+}
+
+.vogue-sticky-lead__hed {
+  font-family: var(--font-sans);
+  font-size: clamp(1.35rem, 1.85vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-wrap: balance;
+  transition: opacity 0.2s ease;
+}
+
+.vogue-sticky-lead__card:hover .vogue-sticky-lead__hed {
+  opacity: 0.9;
+}
+
+.vogue-sticky-lead__byline {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* ── RIGHT COLUMN: 2-COLUMN GRID OF EXACTLY 6 STORIES ──────── */
@@ -984,14 +818,10 @@ button {
     gap: 32px;
   }
 
-  .vogue-sticky-col {
-    position: static;
-  }
-
   .vogue-sticky-lead {
     position: relative;
     top: 0;
-    height: auto;
+    height: 440px;
   }
 }
 
@@ -1002,7 +832,7 @@ button {
   }
 
   .vogue-sticky-lead {
-    height: auto;
+    height: 380px;
   }
 }
 
@@ -1552,7 +1382,7 @@ button {
     margin-bottom: 10px;
   }
   .vogue-sticky-lead {
-    height: auto;
+    height: 380px;
   }
   .city-cinema-banner {
     height: 320px;
@@ -1570,166 +1400,3 @@ button {
     grid-template-columns: 1fr;
   }
 }
-
-/* ════════════════════════════════════════════════════════════
-   PERSON DETAILS PAGE EDITORIAL PORTRAIT & BIO PROSE
-   ════════════════════════════════════════════════════════════ */
-.person-portrait-box {
-  width: 100%;
-  max-width: 520px;
-  aspect-ratio: 4 / 5 !important;
-  overflow: hidden;
-  position: relative;
-  border-radius: 2px;
-  border: 1px solid var(--vogue-border);
-  background-color: #181818;
-}
-
-.editorial-bio-prose p {
-  margin-bottom: 22px;
-  line-height: 1.8;
-  color: #222222;
-}
-
-/* ════════════════════════════════════════════════════════════
-   CITIES NETWORK EXPLORER GRID & CARDS (VOGUE EDITORIAL)
-   Uniform 4:5 ratio boxes for all city edition cards
-   ════════════════════════════════════════════════════════════ */
-.cities-network-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 28px;
-  margin-top: 24px;
-}
-
-.city-network-card {
-  position: relative;
-  aspect-ratio: 4 / 5 !important;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 2px;
-  background-color: var(--vogue-black);
-  cursor: pointer;
-  isolation: isolate;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.city-network-card__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover !important;
-  object-position: center !important;
-  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-  z-index: 1;
-}
-
-.city-network-card:hover .city-network-card__img {
-  transform: scale(1.06);
-}
-
-.city-network-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.35) 0%,
-    rgba(0, 0, 0, 0.05) 30%,
-    rgba(0, 0, 0, 0.55) 60%,
-    rgba(0, 0, 0, 0.92) 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-}
-
-.city-network-card__badge {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  z-index: 3;
-}
-
-.city-network-card__badge .vogue-rubric {
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  padding: 4px 10px;
-  border-radius: 1px;
-  font-size: 0.625rem;
-  letter-spacing: 2px;
-  margin-bottom: 0;
-}
-
-.city-network-card__badge--flagship .vogue-rubric {
-  background-color: var(--vogue-red);
-  color: #ffffff !important;
-}
-
-.city-network-card__body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 3;
-  padding: clamp(20px, 3vw, 28px);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
-
-.city-network-card__state {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
-  margin-bottom: 4px;
-}
-
-.city-network-card__name {
-  font-family: var(--font-didot);
-  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.15;
-  color: #ffffff;
-  margin: 0 0 8px;
-  letter-spacing: 0.5px;
-}
-
-.city-network-card__meta {
-  font-family: var(--font-garamond);
-  font-size: 1.05rem;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 14px;
-}
-
-.city-network-card__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #ffffff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  padding-bottom: 3px;
-  align-self: flex-start;
-  transition: all 0.2s ease;
-}
-
-.city-network-card:hover .city-network-card__cta {
-  border-color: #ffffff;
-  color: var(--vogue-red);
-}
-
-@media (max-width: 768px) {
-  .cities-network-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-}
-

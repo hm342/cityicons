@@ -74,23 +74,11 @@ img,
 [class*="-media"] img,
 [class*="-img"] img,
 [class*="__media"] img,
-[class*="__img"] img,
-[class*="card"] img {
+[class*="__img"] img {
   width: 100%;
   height: 100%;
   object-fit: cover !important;
   object-position: center;
-}
-
-/* Logos in city subsite */
-.rm-logo-img,
-.rm-footer-logo-img,
-[class*="logo"] img,
-img[class*="logo"] {
-  width: auto !important;
-  height: auto !important;
-  max-width: 100% !important;
-  object-fit: contain !important;
 }
 
 a {
@@ -262,16 +250,8 @@ button {
 /* Center Logo: clean sans + cursive script (real Moments style) */
 .rm-logo {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 4px;
-}
-
-.rm-logo-img {
-  height: clamp(38px, 5vw, 54px);
-  width: auto;
-  max-width: 220px;
-  object-fit: contain;
-  display: block;
 }
 
 .rm-logo-text {
@@ -438,30 +418,9 @@ button {
    ════════════════════════════════════════════════════════════ */
 .rm-tiles-1 {
   display: grid;
-  grid-template-columns: 1.25fr 1fr 1fr;
-  grid-template-rows: 255px 255px;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-rows: 250px 250px;
   gap: 16px;
-}
-
-.rm-tiles-1 > .tile-card:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-}
-.rm-tiles-1 > .tile-card:nth-child(2) {
-  grid-column: 2;
-  grid-row: 1;
-}
-.rm-tiles-1 > .tile-card:nth-child(3) {
-  grid-column: 3;
-  grid-row: 1;
-}
-.rm-tiles-1 > .tile-card:nth-child(4) {
-  grid-column: 2;
-  grid-row: 2;
-}
-.rm-tiles-1 > .tile-card:nth-child(5) {
-  grid-column: 3;
-  grid-row: 2;
 }
 
 .tile-card {
@@ -469,7 +428,6 @@ button {
   overflow: hidden;
   background-color: #111;
   cursor: pointer;
-  border-radius: 4px;
 }
 
 .tile-card-img {
@@ -477,7 +435,6 @@ button {
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  display: block;
 }
 
 .tile-card:hover .tile-card-img {
@@ -487,8 +444,7 @@ button {
 .tile-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.88) 100%);
-  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.8) 100%);
 }
 
 .tile-card-body {
@@ -500,8 +456,11 @@ button {
   z-index: 2;
 }
 
-.rm-tiles-1 .tile-tall .tile-card-body,
-.rm-tiles-2 .tile-tall .tile-card-body {
+.rm-tiles-1 .tile-tall {
+  grid-row: span 2;
+}
+
+.rm-tiles-1 .tile-tall .tile-card-body {
   padding: 34px;
 }
 
@@ -512,12 +471,11 @@ button {
 
 .tile-title {
   font-family: var(--font-sans);
-  font-size: 1.18rem;
+  font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.28;
   color: #ffffff;
   letter-spacing: -0.3px;
-  margin-top: 4px;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -527,29 +485,16 @@ button {
 .rm-tiles-2 {
   display: grid;
   grid-template-columns: 1fr 1.3fr 1fr;
-  grid-template-rows: 255px 255px;
+  grid-template-rows: 240px 240px;
   gap: 16px;
 }
 
-.rm-tiles-2 > .tile-card:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1;
+.rm-tiles-2 .tile-tall {
+  grid-row: span 2;
 }
-.rm-tiles-2 > .tile-card:nth-child(2) {
-  grid-column: 1;
-  grid-row: 2;
-}
-.rm-tiles-2 > .tile-card:nth-child(3) {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-}
-.rm-tiles-2 > .tile-card:nth-child(4) {
-  grid-column: 3;
-  grid-row: 1;
-}
-.rm-tiles-2 > .tile-card:nth-child(5) {
-  grid-column: 3;
-  grid-row: 2;
+
+.rm-tiles-2 .tile-tall .tile-card-body {
+  padding: 34px;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -589,19 +534,16 @@ button {
 
 .rm-grid-card {
   position: relative;
-  aspect-ratio: 4 / 5;
-  height: auto;
+  height: 380px;
   overflow: hidden;
   background-color: #111;
   cursor: pointer;
-  border-radius: 2px;
 }
 
 .rm-grid-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover !important;
-  object-position: center 15% !important;
+  object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -753,18 +695,9 @@ button {
 
 .rm-footer-logo {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  align-items: baseline;
   gap: 4px;
   margin-bottom: 16px;
-}
-
-.rm-footer-logo-img {
-  height: clamp(34px, 4.5vw, 48px);
-  width: auto;
-  max-width: 200px;
-  object-fit: contain;
-  display: inline-block;
 }
 
 .rm-footer-nav {
@@ -932,27 +865,20 @@ button {
    8. RESPONSIVE BREAKPOINTS
    ════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .rm-tiles-1, .rm-tiles-2 {
+  .rm-tiles-1 {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
   }
-  .rm-tiles-1 > .tile-card:nth-child(1),
-  .rm-tiles-2 > .tile-card:nth-child(3) {
-    grid-column: 1 / span 2;
-    grid-row: auto;
-    height: 360px;
+  .rm-tiles-1 .tile-tall {
+    grid-column: span 2;
+    height: 350px;
   }
-  .rm-tiles-1 > .tile-card,
-  .rm-tiles-2 > .tile-card {
-    grid-column: auto;
-    grid-row: auto;
-    height: 260px;
+  .rm-tiles-2 {
+    grid-template-columns: 1fr 1fr;
   }
-  .rm-tiles-1 > .tile-card:nth-child(1) {
-    grid-column: 1 / span 2;
-  }
-  .rm-tiles-2 > .tile-card:nth-child(3) {
-    grid-column: 1 / span 2;
+  .rm-tiles-2 .tile-tall {
+    grid-column: span 2;
+    height: 350px;
   }
   .rm-subnav-list {
     gap: 16px;
@@ -964,25 +890,19 @@ button {
     display: none;
   }
   .rm-hero-content {
-    left: 20px;
-    right: 20px;
+    left: 24px;
+    right: 24px;
     bottom: 30px;
   }
   .rm-hero-title {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
   }
   .rm-tiles-1, .rm-tiles-2, .rm-tiles-3-top, .rm-tiles-3-bottom, .rm-grid-cards {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
   }
-  .rm-tiles-1 > .tile-card,
-  .rm-tiles-2 > .tile-card,
-  .rm-tiles-3-top > .tile-card,
-  .rm-tiles-3-bottom > .tile-card,
-  .rm-grid-card {
-    grid-column: auto !important;
-    grid-row: auto !important;
-    height: 280px !important;
+  .rm-tiles-1 .tile-tall, .rm-tiles-2 .tile-tall {
+    grid-column: span 1;
+    height: 300px;
   }
   .rm-blog-card {
     flex-direction: column;
@@ -990,7 +910,7 @@ button {
   }
   .rm-blog-media {
     flex: 0 0 auto;
-    height: 210px;
+    height: 190px;
     width: 100%;
   }
   .rm-blog-content {

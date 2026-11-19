@@ -44,6 +44,12 @@ class ArticleFrontendController extends Controller
         }
 
         $stories = $query->paginate(12)->withQueryString();
+        if ($stories->isEmpty() && !$request->filled('category') && !$request->filled('q')) {
+            $stories = Article::with(['category', 'city', 'tags'])
+                ->published()
+                ->latest()
+                ->paginate(12);
+        }
 
         return view('pages.stories', compact('city', 'stories', 'categories', 'cities'));
     }

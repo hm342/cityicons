@@ -1,11 +1,24 @@
-<x-layouts.app title="Featured Brands — Commercial Storytelling & Collaborations">
+@php
+  $cName = isset($city) ? $city->name : 'Bhavnagar';
+  $cSlug = isset($city) ? $city->slug : 'bhavnagar';
+  $isFlagship = ($cSlug === 'bhavnagar');
+@endphp
+
+<x-layouts.app :title="'Featured Brands — ' . $cName . ' Commercial Storytelling & Collaborations'">
 
   <section class="city-edition-section" style="padding-top:40px; margin-bottom:var(--section-gap);">
     <div class="vogue-container">
       
       <!-- Section Header -->
       <div style="border-bottom:2px solid var(--vogue-black); padding-bottom:16px; margin-bottom:36px;">
-        <span class="vogue-rubric" style="color:var(--vogue-muted); font-size:0.6rem; letter-spacing:2px;">COMMERCIAL CONTENT · PAID PARTNERSHIPS</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+          <span class="vogue-rubric" style="color:var(--vogue-muted); font-size:0.6rem; letter-spacing:2px;">
+            {{ strtoupper($cName) }} · COMMERCIAL CONTENT · PAID PARTNERSHIPS
+          </span>
+          <a href="{{ url('/' . $cSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-black); text-decoration:underline;">
+            &larr; Back to {{ $cName }} Subsite
+          </a>
+        </div>
         <h1 style="font-family:var(--font-didot); font-size:clamp(2.4rem, 4.5vw, 4rem); font-weight:400; line-height:1.1; margin:8px 0 12px;">
           Featured Brands
         </h1>
@@ -16,7 +29,7 @@
           Featured Brands presents paid collaborations with participating businesses, founders, institutions, organisations and events. Every commercial collaboration is clearly disclosed and remains separate from independent editorial categories.
         </p>
         <p style="font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-red);">
-          A paid founder or leadership feature remains commercial brand content and does not confer personal selection as an Icon, Rising profile or Voice.
+          A paid founder or leadership feature remains commercial brand content and does not confer personal selection as an Icon or Rising profile.
         </p>
       </div>
 
@@ -82,7 +95,7 @@
             <span class="vogue-rubric vogue-rubric--red" style="font-size:0.6rem;">STANDARDS &amp; INTEGRITY</span>
             <h3 style="font-family:var(--font-didot); font-size:1.3rem; margin-bottom:8px;">Commercial Disclosure</h3>
             <p style="font-family:var(--font-garamond); font-size:1.1rem; line-height:1.6; color:#333; margin-bottom:10px;">
-              {{ $disclosure ?? 'Featured Brands is a paid commercial category. Payment provides visibility only. It does not provide Icon, Rising or Voices status.' }}
+              {{ $disclosure ?? 'Featured Brands is a paid commercial category. Payment provides visibility only. It does not provide Icon or Rising status.' }}
             </p>
             <p style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-muted);">
               Every commercial feature carries unambiguous labels: FEATURED BRAND · PAID PARTNERSHIP · SPONSORED · ADVERTISEMENT · EVENT PARTNER.

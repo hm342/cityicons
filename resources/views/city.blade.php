@@ -1,7 +1,12 @@
 @php
   $cityId = is_object($city) ? $city->slug : ($city ?? 'bhavnagar');
   $cityName = is_object($city) ? $city->name : ucfirst($cityId);
-  $heroSlides = collect([$lead])->concat($gridStories->take(3))->filter();
+  $heroSlides = $heroSlides ?? collect();
+  $cultureStories = $cultureStories ?? collect();
+  $culinaryStories = $culinaryStories ?? collect();
+  $fashionStories = $fashionStories ?? collect();
+  $people = $people ?? collect();
+  $blogStories = $blogStories ?? collect();
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -34,10 +39,10 @@
     <div class="rm-offcanvas-title">Categories</div>
     <ul class="rm-offcanvas-menu">
       <li><a href="#sec-culture">Culture &amp; Heritage</a></li>
-      <li><a href="#sec-food">Food &amp; Dining</a></li>
-      <li><a href="#sec-fashion">Fashion &amp; Style</a></li>
-      <li><a href="#sec-street">Street Moments</a></li>
-      <li><a href="#sec-blog">Blog Stories</a></li>
+      <li><a href="#sec-food">Culinary &amp; Taste</a></li>
+      <li><a href="#sec-fashion">Fashion &amp; Craft</a></li>
+      <li><a href="#sec-people">People &amp; Voices</a></li>
+      <li><a href="#sec-dispatches">Editorial Dispatches</a></li>
       <li><a href="{{ url('/') }}">← All India Magazine</a></li>
     </ul>
 
@@ -87,8 +92,8 @@
         <li><a href="#sec-culture">Culture</a></li>
         <li><a href="#sec-food">Food</a></li>
         <li><a href="#sec-fashion">Fashion</a></li>
-        <li><a href="#sec-street">Street</a></li>
-        <li><a href="#sec-blog">Blog</a></li>
+        <li><a href="#sec-people">People</a></li>
+        <li><a href="#sec-dispatches">Dispatches</a></li>
         <li><a href="#" id="btn-cities-drawer">Cities ▾</a></li>
       </ul>
     </nav>
@@ -128,97 +133,139 @@
     @endif
   </header>
 
-  <!-- ══ SECTION 1: CULTURE & HERITAGE ═══════════════════════════ -->
+  <!-- ══ SECTION 1: CULTURE & HERITAGE (Tiles Style 1: 1 Tall Left + 4 Right 2x2) ══ -->
   <section id="sec-culture" class="section-head">
     <div class="section-head-title">— Culture &amp; Heritage —</div>
   </section>
   <div class="rm-container">
     <div class="rm-tiles-1" id="tiles-section-1">
-      @foreach($gridStories->slice(0, 2) as $story)
-        <div class="rm-tile rm-tile-1" style="background-image: url('{{ $story->cover_image }}');">
-          <div class="rm-tile-overlay"></div>
-          <div class="rm-tile-content">
+      @foreach($cultureStories->take(5) as $idx => $story)
+        <div class="tile-card {{ $idx === 0 ? 'tile-tall' : '' }}" onclick="location.href='{{ url('/article/' . $story->id) }}'">
+          <img class="tile-card-img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
+          <div class="tile-card-overlay"></div>
+          <div class="tile-card-body">
             <div class="cat-italic">{{ $story->category->name ?? 'Heritage' }}</div>
-            <h2 class="rm-tile-title">{{ $story->title }}</h2>
-            <a href="{{ url('/article/' . $story->id) }}" class="btn-pill">View Post</a>
+            @if($idx === 0)
+              <h2 class="tile-title">{{ $story->title }}</h2>
+              <a href="{{ url('/article/' . $story->id) }}" class="btn-pill">View Post</a>
+            @else
+              <h3 class="tile-title">{{ $story->title }}</h3>
+            @endif
           </div>
         </div>
       @endforeach
     </div>
   </div>
 
-  <!-- ══ SECTION 2: CULINARY & TASTE ═════════════════════════════ -->
+  <!-- ══ SECTION 2: CULINARY & TASTE (Tiles Style 2: 2 Left + 1 Center Tall + 2 Right) ══ -->
   <section id="sec-food" class="section-head">
     <div class="section-head-title">— Culinary &amp; Taste —</div>
   </section>
   <div class="rm-container">
     <div class="rm-tiles-2" id="tiles-section-2">
-      @foreach($gridStories->slice(2, 2) as $story)
-        <div class="rm-tile rm-tile-2" style="background-image: url('{{ $story->cover_image }}');">
-          <div class="rm-tile-overlay"></div>
-          <div class="rm-tile-content">
+      @foreach($culinaryStories->take(5) as $idx => $story)
+        {{-- Index 2 is the 3rd child, which is placed in the center column spanning 2 rows --}}
+        <div class="tile-card {{ $idx === 2 ? 'tile-tall' : '' }}" onclick="location.href='{{ url('/article/' . $story->id) }}'">
+          <img class="tile-card-img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
+          <div class="tile-card-overlay"></div>
+          <div class="tile-card-body">
             <div class="cat-italic">{{ $story->category->name ?? 'Living' }}</div>
-            <h2 class="rm-tile-title">{{ $story->title }}</h2>
-            <a href="{{ url('/article/' . $story->id) }}" class="btn-pill">View Post</a>
+            @if($idx === 2)
+              <h2 class="tile-title">{{ $story->title }}</h2>
+              <a href="{{ url('/article/' . $story->id) }}" class="btn-pill">View Post</a>
+            @else
+              <h3 class="tile-title">{{ $story->title }}</h3>
+            @endif
           </div>
         </div>
       @endforeach
     </div>
   </div>
 
-  <!-- ══ SECTION 3: FASHION & CRAFT ══════════════════════════════ -->
+  <!-- ══ SECTION 3: FASHION & CRAFT (Tiles Style 3: 2 Asymmetric Top + 3 Equal Bottom) ══ -->
   <section id="sec-fashion" class="section-head">
     <div class="section-head-title">— Fashion &amp; Craft —</div>
   </section>
   <div class="rm-container">
     <div class="rm-tiles-3-top" id="tiles-section-3-top">
-      @if($story = $gridStories->skip(4)->first())
-        <div class="rm-tile rm-tile-3-hero" style="background-image: url('{{ $story->cover_image }}');">
-          <div class="rm-tile-overlay"></div>
-          <div class="rm-tile-content">
+      @foreach($fashionStories->take(2) as $story)
+        <div class="tile-card" onclick="location.href='{{ url('/article/' . $story->id) }}'">
+          <img class="tile-card-img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
+          <div class="tile-card-overlay"></div>
+          <div class="tile-card-body">
             <div class="cat-italic">{{ $story->category->name ?? 'Fashion' }}</div>
-            <h2 class="rm-tile-title">{{ $story->title }}</h2>
-            <a href="{{ url('/article/' . $story->id) }}" class="btn-pill">View Post</a>
+            <h3 class="tile-title">{{ $story->title }}</h3>
           </div>
         </div>
-      @endif
+      @endforeach
     </div>
-  </div>
-
-  <!-- ══ SECTION 4: DOCUMENTED CITIZENS & PEOPLE ═══════════════════ -->
-  <section id="sec-street" class="section-head">
-    <div class="section-head-title">— {{ $cityName }} People &amp; Voices —</div>
-  </section>
-  <div class="rm-container">
-    <div class="rm-grid-cards" id="grid-section-4">
-      @foreach($people->take(4) as $person)
-        <div class="rm-card" onclick="location.href='{{ url('/stories') }}'" style="cursor:pointer;">
-          <div class="rm-card-img" style="background-image: url('{{ $person->portrait_image ?: $person->cover_image }}');"></div>
-          <div class="rm-card-content">
-            <div class="cat-italic">{{ $person->category->name ?? strtoupper($person->type) }}</div>
-            <h3 class="rm-card-title">{{ $person->name }}</h3>
-            <p style="font-size:0.85rem;color:#ccc;margin-top:4px;">{{ $person->profession }}</p>
-            <a href="{{ url('/stories') }}" class="btn-pill">View Profile</a>
+    <div class="rm-tiles-3-bottom" id="tiles-section-3-bottom">
+      @foreach($fashionStories->skip(2)->take(3) as $story)
+        <div class="tile-card" onclick="location.href='{{ url('/article/' . $story->id) }}'">
+          <img class="tile-card-img" src="{{ $story->cover_image }}" alt="{{ $story->title }}" loading="lazy">
+          <div class="tile-card-overlay"></div>
+          <div class="tile-card-body">
+            <div class="cat-italic">{{ $story->category->name ?? 'Craft' }}</div>
+            <h3 class="tile-title">{{ $story->title }}</h3>
           </div>
         </div>
       @endforeach
     </div>
   </div>
 
-  <!-- ══ SECTION 5: BLOG STREAM ════════════════════════════════ -->
-  <section id="sec-blog" class="section-head" style="padding-top:80px;">
+  <!-- ══ SECTION 4: DOCUMENTED CITIZENS & PEOPLE (3x2 Grid with Share Footers) ══ -->
+  <section id="sec-people" class="section-head">
+    <div class="section-head-title">— {{ $cityName }} People &amp; Voices —</div>
+  </section>
+  <div class="rm-container">
+    <div class="rm-grid-cards" id="grid-section-4">
+      @foreach($people->take(6) as $person)
+        <div class="rm-grid-card" onclick="location.href='{{ url('/stories') }}'">
+          <img class="rm-grid-card-img" src="{{ $person->portrait_image ?: $person->cover_image }}" alt="{{ $person->name }}" loading="lazy">
+          <div class="rm-grid-card-overlay"></div>
+          <div class="rm-grid-card-body">
+            <div class="cat-italic">{{ $person->category->name ?? strtoupper($person->type) }}</div>
+            <h3 class="rm-grid-card-title">{{ $person->name }}</h3>
+            <div class="post-share-inline">
+              <span class="share-txt">Share &rarr;</span>
+              <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Facebook</a>
+              <a href="https://twitter.com/intent/tweet?url={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">X</a>
+              <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url('/stories')) }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">Pinterest</a>
+            </div>
+          </div>
+        </div>
+      @endforeach
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5: BLOG STREAM (50/50 Horizontal Split Cards with Video Badge) ══ -->
+  <section id="sec-dispatches" class="section-head" style="padding-top:80px;">
     <div class="section-head-title" style="letter-spacing:5px;font-size:0.95rem;color:#ffffff;">EDITORIAL DISPATCHES</div>
   </section>
   <div class="rm-container-blog">
     <div class="rm-blog-stream" id="blog-stream">
-      @foreach($gridStories->take(3) as $art)
-        <article class="rm-blog-post">
-          <div class="rm-blog-img" style="background-image: url('{{ $art->cover_image }}');"></div>
-          <div class="rm-blog-body">
-            <div class="cat-italic">{{ $art->category->name ?? 'Dispatch' }}</div>
-            <h2 class="rm-blog-title"><a href="{{ url('/article/' . $art->id) }}">{{ $art->title }}</a></h2>
-            <p class="rm-blog-excerpt">{{ Str::limit($art->excerpt, 140) }}</p>
-            <a href="{{ url('/article/' . $art->id) }}" class="btn-pill">Continue Reading</a>
+      @foreach($blogStories->take(4) as $art)
+        <article class="rm-blog-card">
+          <div class="rm-blog-media" onclick="location.href='{{ url('/article/' . $art->id) }}'" style="cursor:pointer;">
+            <img src="{{ $art->cover_image }}" alt="{{ $art->title }}" loading="lazy">
+            <div class="rm-media-badge"><i class="fas fa-video"></i></div>
+          </div>
+          <div class="rm-blog-content">
+            <div>
+              <div class="cat-italic">{{ $art->category->name ?? 'Dispatch' }}</div>
+              <h2 class="rm-blog-title"><a href="{{ url('/article/' . $art->id) }}">{{ $art->title }}</a></h2>
+              <p class="rm-blog-excerpt">
+                <span class="bullet">&#10070;</span>
+                <span>{{ Str::limit($art->excerpt ?: strip_tags($art->content), 150) }}</span>
+              </p>
+              <a href="{{ url('/article/' . $art->id) }}" class="btn-pill">View Post</a>
+            </div>
+            <div class="post-share-inline">
+              <span class="share-txt">Share &rarr;</span>
+              <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url('/article/' . $art->id)) }}" target="_blank" rel="noopener">Facebook</a>
+              <a href="https://twitter.com/intent/tweet?url={{ urlencode(url('/article/' . $art->id)) }}&text={{ urlencode($art->title) }}" target="_blank" rel="noopener">X</a>
+              <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url('/article/' . $art->id)) }}" target="_blank" rel="noopener">Pinterest</a>
+            </div>
           </div>
         </article>
       @endforeach
@@ -241,8 +288,8 @@
         <a href="#sec-culture">Culture</a>
         <a href="#sec-food">Food</a>
         <a href="#sec-fashion">Fashion</a>
-        <a href="#sec-street">People</a>
-        <a href="#sec-blog">Blog</a>
+        <a href="#sec-people">People</a>
+        <a href="#sec-dispatches">Dispatches</a>
         <a href="{{ url('/') }}">All India Edition</a>
       </div>
       <div class="rm-footer-copy">

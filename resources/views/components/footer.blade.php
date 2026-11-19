@@ -30,12 +30,12 @@
 
     <!-- Social Media Links (Page 32 & 38) -->
     <div class="vogue-footer__social" style="margin-bottom:35px;">
-      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      <a href="https://x.com" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-      <a href="https://threads.net" target="_blank" rel="noopener" aria-label="Threads"><i class="fa-brands fa-threads"></i></a>
-      <a href="https://pinterest.com" target="_blank" rel="noopener" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+      <a href="https://instagram.com/cityicons.in" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://facebook.com/cityicons.in" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://linkedin.com/company/cityicons" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://x.com/cityicons_in" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+      <a href="https://threads.net/@cityicons.in" target="_blank" rel="noopener" aria-label="Threads"><i class="fa-brands fa-threads"></i></a>
+      <a href="https://pinterest.com/cityicons" target="_blank" rel="noopener" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
     </div>
 
     <!-- Navigation Columns Grid -->
@@ -106,16 +106,16 @@
     <!-- City Network Strip -->
     <div class="vogue-footer__cities-title">City Editions Network · India</div>
     <div class="vogue-footer__cities" style="margin-bottom:30px;">
-      <a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-white); font-weight:700;">Bhavnagar (Flagship)</a> ·
-      <a href="{{ url('/mumbai') }}">Mumbai</a> ·
-      <a href="{{ url('/ahmedabad') }}">Ahmedabad</a> ·
-      <a href="{{ url('/surat') }}">Surat</a> ·
-      <a href="{{ url('/rajkot') }}">Rajkot</a> ·
-      <a href="{{ url('/vadodara') }}">Vadodara</a> ·
-      <a href="{{ url('/delhi') }}">Delhi</a> ·
-      <a href="{{ url('/bengaluru') }}">Bengaluru</a> ·
-      <a href="{{ url('/jaipur') }}">Jaipur</a> ·
-      <a href="{{ url('/kolkata') }}">Kolkata</a>
+      @foreach($navCities ?? [] as $cityItem)
+        @php
+          $ciSlug = is_object($cityItem) ? $cityItem->slug : (is_array($cityItem) ? ($cityItem['slug'] ?? '') : (string)$cityItem);
+          $ciName = is_object($cityItem) ? $cityItem->name : (is_array($cityItem) ? ($cityItem['name'] ?? ucfirst($ciSlug)) : ucfirst($ciSlug));
+        @endphp
+        <a href="{{ url('/' . $ciSlug) }}" style="{{ $ciSlug === 'bhavnagar' ? 'color:var(--vogue-white); font-weight:700;' : '' }}">
+          {{ $ciName }}{{ $ciSlug === 'bhavnagar' ? ' (Flagship)' : '' }}
+        </a>
+        @if(!$loop->last) · @endif
+      @endforeach
     </div>
 
     <!-- Final Brand Line & Copyright -->

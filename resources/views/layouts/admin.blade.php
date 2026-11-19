@@ -498,7 +498,7 @@
       </a>
       <a href="{{ route('admin.cities.index') }}" class="nav-item {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}">
         <i class="fa-solid fa-city"></i>
-        <span>Cities (10 Editions)</span>
+        <span>Cities ({{ isset($globalAdminCities) ? $globalAdminCities->count() : 10 }} Editions)</span>
       </a>
 
       <span class="nav-label">Publishing &amp; Growth</span>
@@ -534,6 +534,30 @@
         @yield('header_title', 'Editorial Dashboard')
       </div>
       <div class="header-actions">
+        <!-- Global City Switcher Dropdown -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label for="admin-city-switcher" style="font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-muted); letter-spacing:0.5px; display:flex; align-items:center; gap:4px;">
+            <i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> City:
+          </label>
+          <select id="admin-city-switcher" onchange="window.location.href=this.value" style="padding:6px 12px; border-radius:20px; font-weight:600; font-size:12px; border:1px solid {{ $activeAdminCity ? 'var(--primary)' : 'var(--border-color)' }}; background:{{ $activeAdminCity ? 'var(--primary-light)' : '#ffffff' }}; color:{{ $activeAdminCity ? 'var(--primary-dark)' : 'var(--text-dark)' }}; cursor:pointer; outline:none; transition:all 0.2s;">
+            <option value="{{ route('admin.switch-city', 'all') }}" {{ !$activeAdminCity ? 'selected' : '' }}>
+              🌐 All Cities (National)
+            </option>
+            <optgroup label="City Editions">
+              @foreach($globalAdminCities ?? [] as $cOption)
+                <option value="{{ route('admin.switch-city', $cOption->id) }}" {{ $activeAdminCity && $activeAdminCity->id === $cOption->id ? 'selected' : '' }}>
+                  📍 {{ $cOption->name }} ({{ $cOption->state }})
+                </option>
+              @endforeach
+            </optgroup>
+          </select>
+          @if($activeAdminCity)
+            <a href="{{ route('admin.switch-city', 'all') }}" title="Clear city filter & view all cities" style="font-size:11px; color:#ef4444; text-decoration:none; display:flex; align-items:center; gap:2px; font-weight:600; padding:4px 8px; background:#fee2e2; border-radius:12px;">
+              <i class="fa-solid fa-xmark"></i> Reset
+            </a>
+          @endif
+        </div>
+
         <div class="user-pill">
           <div class="user-avatar">{{ substr(Auth::user()->name ?? 'A', 0, 1) }}</div>
           <span class="user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
@@ -572,6 +596,18 @@
               <div>• {{ $err }}</div>
             @endforeach
           </div>
+        </div>
+      @endif
+
+      @if($activeAdminCity)
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 16px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; font-size:13px; color:#1e40af;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-filter" style="color:#2563eb;"></i>
+            <span>Active Workspace: <strong>{{ $activeAdminCity->name }} Icons</strong> edition. Only content, profiles, and submissions for {{ $activeAdminCity->name }} are displayed.</span>
+          </div>
+          <a href="{{ route('admin.switch-city', 'all') }}" style="color:#2563eb; font-weight:700; text-decoration:underline; font-size:12px;">
+            Reset to All Cities &rarr;
+          </a>
         </div>
       @endif
 

@@ -40,16 +40,15 @@
   <!-- City Editions Directory -->
   <div class="vogue-drawer__title" style="margin-top:20px;">City Editions · Network</div>
   <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
-    <a href="{{ url('/bhavnagar') }}" class="vogue-drawer__city-chip" style="border-color:var(--vogue-red); font-weight:800; color:var(--vogue-red);">Bhavnagar (Flagship)</a>
-    <a href="{{ url('/mumbai') }}" class="vogue-drawer__city-chip">Mumbai</a>
-    <a href="{{ url('/ahmedabad') }}" class="vogue-drawer__city-chip">Ahmedabad</a>
-    <a href="{{ url('/surat') }}" class="vogue-drawer__city-chip">Surat</a>
-    <a href="{{ url('/rajkot') }}" class="vogue-drawer__city-chip">Rajkot</a>
-    <a href="{{ url('/vadodara') }}" class="vogue-drawer__city-chip">Vadodara</a>
-    <a href="{{ url('/delhi') }}" class="vogue-drawer__city-chip">Delhi</a>
-    <a href="{{ url('/bengaluru') }}" class="vogue-drawer__city-chip">Bengaluru</a>
-    <a href="{{ url('/jaipur') }}" class="vogue-drawer__city-chip">Jaipur</a>
-    <a href="{{ url('/kolkata') }}" class="vogue-drawer__city-chip">Kolkata</a>
+    @foreach($navCities ?? [] as $cityItem)
+      @php
+        $ciSlug = is_object($cityItem) ? $cityItem->slug : (is_array($cityItem) ? ($cityItem['slug'] ?? '') : (string)$cityItem);
+        $ciName = is_object($cityItem) ? $cityItem->name : (is_array($cityItem) ? ($cityItem['name'] ?? ucfirst($ciSlug)) : ucfirst($ciSlug));
+      @endphp
+      <a href="{{ url('/' . $ciSlug) }}" class="vogue-drawer__city-chip" style="{{ $ciSlug === 'bhavnagar' ? 'border-color:var(--vogue-red); font-weight:800; color:var(--vogue-red);' : '' }}">
+        {{ $ciName }} {{ $ciSlug === 'bhavnagar' ? '(Flagship)' : '' }}
+      </a>
+    @endforeach
   </div>
 
   <!-- Editorial Policies -->

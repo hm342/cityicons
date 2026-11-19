@@ -26,14 +26,14 @@
     // National Main Site Navigation
     $navItems = [
       ['id' => 'home', 'name' => 'Home', 'url' => url('/')],
-      ['id' => 'cities', 'name' => 'Cities Network', 'url' => url('/#sec-cities')],
+      ['id' => 'cities', 'name' => 'Cities Network', 'url' => url('/#drawer-cities-grid')],
       ['id' => 'bhavnagar', 'name' => 'Bhavnagar (Flagship)', 'url' => url('/bhavnagar')],
-      ['id' => 'stories', 'name' => 'National Stories', 'url' => url('/stories')],
+      ['id' => 'stories', 'name' => 'Stories', 'url' => url('/bhavnagar/stories')],
       ['id' => 'the-list', 'name' => 'The List', 'url' => url('/bhavnagar/the-list')],
       ['id' => 'magazine', 'name' => 'Magazine', 'url' => url('/bhavnagar/magazine')],
-      ['id' => 'featured-brands', 'name' => 'Brands', 'url' => url('/featured-brands')],
+      ['id' => 'featured-brands', 'name' => 'Brands', 'url' => url('/bhavnagar/featured-brands')],
       ['id' => 'about', 'name' => 'About', 'url' => url('/about')],
-      ['id' => 'nominate', 'name' => 'Nominate', 'url' => url('/nominate')],
+      ['id' => 'nominate', 'name' => 'Nominate a Story', 'url' => url('/bhavnagar/nominate')],
     ];
   }
 @endphp

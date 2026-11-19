@@ -13,25 +13,41 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $cityId = session('admin_city_id');
+
+        $articlesQuery = Article::query();
+        $peopleQuery = Person::query();
+        $nominationsQuery = Nomination::query();
+
+        if ($cityId) {
+            $articlesQuery->where('city_id', $cityId);
+            $peopleQuery->where('city_id', $cityId);
+            $activeCity = City::find($cityId);
+            if ($activeCity) {
+                $nominationsQuery->where('nominee_city', 'like', "%{$activeCity->name}%");
+            }
+        }
+
         $stats = [
-            'articles_count'     => Article::count(),
-            'published_articles' => Article::where('status', 'published')->count(),
-            'people_count'       => Person::count(),
-            'icons_count'        => Person::where('type', 'icon')->count(),
-            'rising_count'       => Person::where('type', 'rising')->count(),
-            'voices_count'       => Person::where('type', 'voice')->count(),
-            'nominations_count'  => Nomination::count(),
-            'pending_nominations'=> Nomination::where('status', 'pending')->count(),
-            'subscribers_count'  => Subscriber::where('is_active', true)->count(),
-            'cities_count'       => City::where('is_active', true)->count(),
+            'articles_count'      => (clone $articlesQuery)->count(),
+            'published_articles'  => (clone $articlesQuery)->where('status', 'published')->count(),
+            'people_count'        => (clone $peopleQuery)->count(),
+            'icons_count'         => (clone $peopleQuery)->where(function ($q) {
+                $q->where('type', 'icon')->orWhereNull('type');
+            })->count(),
+            'rising_count'        => (clone $peopleQuery)->where('type', 'rising')->count(),
+            'nominations_count'   => (clone $nominationsQuery)->count(),
+            'pending_nominations' => (clone $nominationsQuery)->where('status', 'pending')->count(),
+            'subscribers_count'   => Subscriber::where('is_active', true)->count(),
+            'cities_count'        => City::where('is_active', true)->count(),
         ];
 
-        $recentArticles = Article::with(['category', 'city'])
+        $recentArticles = (clone $articlesQuery)->with(['category', 'city'])
             ->latest()
             ->take(6)
             ->get();
 
-        $recentNominations = Nomination::latest('submitted_at')
+        $recentNominations = (clone $nominationsQuery)->latest('submitted_at')
             ->take(6)
             ->get();
 

@@ -1,15 +1,15 @@
 @extends('layouts.admin')
 
-@section('header_title', 'People Directory (Icons, Rising Stars, Voices)')
+@section('header_title', 'People Directory (Icons & Rising Stars)')
 
 @section('content')
 
   <div class="card">
     <div class="card-header">
       <div>
-        <h2 class="card-title">Documented People &amp; Cultural Custodians</h2>
+        <h2 class="card-title">Documented People Directory</h2>
         <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
-          Manage city icons, rising innovators, and cultural voices featured across CityIcons.
+          Manage city icons and rising innovators featured across CityIcons.
         </div>
       </div>
       <a href="{{ route('admin.people.create') }}" class="btn btn-primary">
@@ -22,16 +22,15 @@
       <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, profession, organization..." class="form-control" style="flex:1; min-width:200px;">
       
       <select name="type" class="form-control" style="width:180px;">
-        <option value="">All Tiers (Icons/Rising/Voices)</option>
+        <option value="">All Tiers (Icons / Rising)</option>
         <option value="icon" {{ request('type') === 'icon' ? 'selected' : '' }}>Icons (Flagship)</option>
         <option value="rising" {{ request('type') === 'rising' ? 'selected' : '' }}>Rising Stars</option>
-        <option value="voice" {{ request('type') === 'voice' ? 'selected' : '' }}>Voices (Custodians)</option>
       </select>
 
       <select name="city_id" class="form-control" style="width:180px;">
-        <option value="">All Cities</option>
+        <option value="">{{ $activeCityId ? 'Active: ' . ($cities->firstWhere('id', $activeCityId)->name ?? '') : 'All Cities' }}</option>
         @foreach($cities as $city)
-          <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
+          <option value="{{ $city->id }}" {{ (request('city_id') ?? $activeCityId) == $city->id ? 'selected' : '' }}>
             {{ $city->name }}
           </option>
         @endforeach

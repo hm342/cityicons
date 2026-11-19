@@ -106,53 +106,6 @@ class DirectoryController extends Controller
     }
 
     /**
-     * Display City-scoped Voices Directory (e.g. /bhavnagar/voices).
-     */
-    public function cityVoices($citySlug, Request $request)
-    {
-        $city = City::where('slug', strtolower($citySlug))->first();
-        if (!$city) {
-            $city = City::where('slug', 'bhavnagar')->firstOrFail();
-        }
-
-        $categories = Category::orderBy('name')->get();
-
-        $query = Person::with(['category', 'city', 'tags'])
-            ->published()
-            ->where('city_id', $city->id)
-            ->where('type', 'voice')
-            ->orderBy('sort_order')
-            ->latest();
-
-        if ($request->filled('category')) {
-            $catSlug = $request->category;
-            $query->whereHas('category', function ($q) use ($catSlug) {
-                $q->where('slug', $catSlug);
-            });
-        }
-
-        $people = $query->paginate(12)->withQueryString();
-        if ($people->isEmpty() && !$request->filled('category')) {
-            $people = Person::with(['category', 'city', 'tags'])
-                ->published()
-                ->where('city_id', $city->id)
-                ->orderBy('sort_order')
-                ->latest()
-                ->paginate(12);
-        }
-
-        return view('pages.voices', compact('city', 'people', 'categories'));
-    }
-
-    /**
-     * Fallback redirect for /voices -> /bhavnagar/voices
-     */
-    public function voices(Request $request)
-    {
-        return redirect('/bhavnagar/voices');
-    }
-
-    /**
      * Display City-scoped The List monthly archive (e.g. /bhavnagar/the-list).
      */
     public function cityTheList($citySlug, Request $request)

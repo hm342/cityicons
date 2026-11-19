@@ -29,15 +29,15 @@
           Explore clearly disclosed commercial features and collaborations produced with participating brands, businesses, institutions and organisations.
         </p>
         <p style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-red);">
-          Commercial participation does not influence selection for Icons, Rising or Voices.
+          Commercial participation does not influence selection for Icons or Rising.
         </p>
       </div>
 
       <div style="display:flex; gap:10px;">
-        <a href="{{ url('/featured-brands') }}" style="display:inline-block; border:1px solid var(--vogue-black); padding:10px 18px; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black);">
+        <a href="{{ url('/bhavnagar/featured-brands') }}" style="display:inline-block; border:1px solid var(--vogue-black); padding:10px 18px; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black);">
           Explore Brands
         </a>
-        <a href="{{ url('/featured-brands#advertise') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; padding:10px 18px; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
+        <a href="{{ url('/bhavnagar/featured-brands') }}" style="display:inline-block; background:var(--vogue-black); color:#ffffff; padding:10px 18px; font-size:0.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
           Advertise With Us
         </a>
       </div>

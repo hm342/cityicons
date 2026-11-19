@@ -31,9 +31,9 @@
       </select>
 
       <select name="city_id" class="form-control" style="width:180px;">
-        <option value="">All Cities / National</option>
+        <option value="">{{ $activeCityId ? 'Active: ' . ($cities->firstWhere('id', $activeCityId)->name ?? '') : 'All Cities / National' }}</option>
         @foreach($cities as $city)
-          <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
+          <option value="{{ $city->id }}" {{ (request('city_id') ?? $activeCityId) == $city->id ? 'selected' : '' }}>
             {{ $city->name }}
           </option>
         @endforeach

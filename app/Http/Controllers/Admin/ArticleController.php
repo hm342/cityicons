@@ -29,7 +29,10 @@ class ArticleController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        if ($request->filled('city_id')) {
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId) {
+            $query->where('city_id', $activeCityId);
+        } elseif ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
 
@@ -41,7 +44,7 @@ class ArticleController extends Controller
         $categories = Category::orderBy('name')->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
-        return view('admin.articles.index', compact('articles', 'categories', 'cities'));
+        return view('admin.articles.index', compact('articles', 'categories', 'cities', 'activeCityId'));
     }
 
     public function create()
@@ -49,8 +52,9 @@ class ArticleController extends Controller
         $categories = Category::orderBy('name')->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
+        $selectedCityId = session('admin_city_id');
 
-        return view('admin.articles.create', compact('categories', 'cities', 'tags'));
+        return view('admin.articles.create', compact('categories', 'cities', 'tags', 'selectedCityId'));
     }
 
     public function store(Request $request)
@@ -65,7 +69,7 @@ class ArticleController extends Controller
             'category_id'      => ['nullable', 'exists:categories,id'],
             'city_id'          => ['nullable', 'exists:cities,id'],
             'type'             => ['required', 'in:article,story,in-bhavnagar,the-list'],
-            'section'          => ['required', 'in:icons,rising,voices,general'],
+            'section'          => ['required', 'in:icons,rising,general'],
             'status'           => ['required', 'in:draft,published,archived'],
             'is_cover'         => ['boolean'],
             'is_featured'      => ['boolean'],
@@ -134,7 +138,7 @@ class ArticleController extends Controller
             'category_id'      => ['nullable', 'exists:categories,id'],
             'city_id'          => ['nullable', 'exists:cities,id'],
             'type'             => ['required', 'in:article,story,in-bhavnagar,the-list'],
-            'section'          => ['required', 'in:icons,rising,voices,general'],
+            'section'          => ['required', 'in:icons,rising,general'],
             'status'           => ['required', 'in:draft,published,archived'],
             'is_cover'         => ['boolean'],
             'is_featured'      => ['boolean'],

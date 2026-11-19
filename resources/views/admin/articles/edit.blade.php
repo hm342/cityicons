@@ -92,7 +92,6 @@
               <option value="general" {{ old('section', $article->section) === 'general' ? 'selected' : '' }}>General Editorial</option>
               <option value="icons" {{ old('section', $article->section) === 'icons' ? 'selected' : '' }}>Icons Flagship Feature</option>
               <option value="rising" {{ old('section', $article->section) === 'rising' ? 'selected' : '' }}>Rising Stars Spotlight</option>
-              <option value="voices" {{ old('section', $article->section) === 'voices' ? 'selected' : '' }}>Voices Cultural Essay</option>
             </select>
           </div>
 

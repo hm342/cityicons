@@ -34,6 +34,9 @@
             <tr>
               <td>
                 <strong style="color:var(--text-dark); font-size:14px;">{{ $brand->name }}</strong>
+                <span class="badge" style="background:{{ $brand->city ? '#fef3c7' : '#e0e7ff' }}; color:{{ $brand->city ? '#92400e' : '#3730a3' }}; font-size:10px; margin-left:6px;">
+                  {{ $brand->city ? $brand->city->name : 'National' }}
+                </span>
                 <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
                   {{ Str::limit($brand->description, 60) }}
                 </div>

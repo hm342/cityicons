@@ -310,7 +310,7 @@
             Explore clearly disclosed commercial features and collaborations produced with participating brands, businesses, institutions and organisations.
           </p>
           <p style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--vogue-red);">
-            Commercial participation does not influence selection for Icons, Rising or Voices.
+            Commercial participation does not influence selection for Icons or Rising.
           </p>
         </div>
 

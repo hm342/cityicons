@@ -25,7 +25,7 @@
       <div>
         <div style="font-size:24px; font-weight:800; color:var(--text-dark); line-height:1.1;">{{ $stats['people_count'] }}</div>
         <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Documented People</div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">{{ $stats['icons_count'] }} Icons · {{ $stats['rising_count'] }} Rising · {{ $stats['voices_count'] }} Voices</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">{{ $stats['icons_count'] }} Icons · {{ $stats['rising_count'] }} Rising</div>
       </div>
     </div>
 

@@ -29,7 +29,10 @@ class PersonController extends Controller
             $query->where('type', $request->type);
         }
 
-        if ($request->filled('city_id')) {
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId) {
+            $query->where('city_id', $activeCityId);
+        } elseif ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
 
@@ -40,7 +43,7 @@ class PersonController extends Controller
         $people = $query->paginate(15)->withQueryString();
         $cities = City::where('is_active', true)->orderBy('name')->get();
 
-        return view('admin.people.index', compact('people', 'cities'));
+        return view('admin.people.index', compact('people', 'cities', 'activeCityId'));
     }
 
     public function create()
@@ -48,8 +51,9 @@ class PersonController extends Controller
         $categories = Category::orderBy('name')->get();
         $cities = City::where('is_active', true)->orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
+        $selectedCityId = session('admin_city_id');
 
-        return view('admin.people.create', compact('categories', 'cities', 'tags'));
+        return view('admin.people.create', compact('categories', 'cities', 'tags', 'selectedCityId'));
     }
 
     public function store(Request $request)

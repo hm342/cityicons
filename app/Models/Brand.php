@@ -10,6 +10,7 @@ class Brand extends Model
     use HasFactory;
 
     protected $fillable = [
+        'city_id',
         'name', 'slug', 'logo_image', 'website_url',
         'description', 'disclosure_text',
         'is_active', 'is_featured', 'sort_order',
@@ -19,4 +20,9 @@ class Brand extends Model
         'is_active'   => 'boolean',
         'is_featured' => 'boolean',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

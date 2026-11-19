@@ -77,9 +77,8 @@
             <select id="type" name="type" class="form-control" style="font-weight:700;">
               <option value="icon" {{ old('type') === 'icon' ? 'selected' : '' }}>ICON — Flagship Living Legend</option>
               <option value="rising" {{ old('type') === 'rising' ? 'selected' : '' }}>RISING — Next-Gen Innovator</option>
-              <option value="voice" {{ old('type') === 'voice' ? 'selected' : '' }}>VOICE — Cultural / Social Custodian</option>
             </select>
-            <div class="form-text">Determines whether profile appears in Icons, Rising, or Voices page.</div>
+            <div class="form-text">Determines whether profile appears in Icons or Rising page.</div>
           </div>
 
           <div class="form-group">
@@ -137,7 +136,7 @@
             <label class="form-label" for="city_id">City</label>
             <select id="city_id" name="city_id" class="form-control">
               @foreach($cities as $c)
-                <option value="{{ $c->id }}" {{ old('city_id') == $c->id || (old('city_id') == '' && $c->slug == 'bhavnagar') ? 'selected' : '' }}>
+                <option value="{{ $c->id }}" {{ old('city_id', $selectedCityId ?? '') == $c->id || (old('city_id', $selectedCityId ?? '') == '' && $c->slug == 'bhavnagar') ? 'selected' : '' }}>
                   {{ $c->name }} ({{ $c->state }})
                 </option>
               @endforeach

@@ -20,30 +20,24 @@ class CityFrontendController extends Controller
         $cityName = $city->name;
 
         // 1. Hero Cover Article / Hero Story
-        $heroArticle = Article::with(['category', 'tags'])
+        $heroArticle = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->where('is_featured', true)
             ->latest()
-            ->first();
-
-        if (!$heroArticle) {
-            $heroArticle = Article::with(['category', 'tags'])
+            ->first()
+            ?? Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->where('city_id', $city->id)
                 ->latest()
-                ->first();
-        }
-
-        if (!$heroArticle) {
-            $heroArticle = Article::with(['category', 'tags'])
+                ->first()
+            ?? Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->latest()
                 ->first();
-        }
 
         // 2. Featured Icons (4 people: established professionals, creators, changemakers)
-        $featuredIcons = Person::with(['category'])
+        $featuredIcons = Person::with(['category', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->where(function ($q) {
@@ -55,7 +49,7 @@ class CityFrontendController extends Controller
             ->get();
 
         if ($featuredIcons->count() < 4) {
-            $moreIcons = Person::with(['category'])
+            $moreIcons = Person::with(['category', 'city'])
                 ->published()
                 ->whereNotIn('id', $featuredIcons->pluck('id'))
                 ->orderBy('sort_order')
@@ -66,7 +60,7 @@ class CityFrontendController extends Controller
         }
 
         // 3. Rising (4 emerging individuals building what comes next)
-        $risingPeople = Person::with(['category'])
+        $risingPeople = Person::with(['category', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->where('type', 'rising')
@@ -76,10 +70,10 @@ class CityFrontendController extends Controller
             ->get();
 
         if ($risingPeople->count() < 4) {
-            $moreRising = Person::with(['category'])
+            $excludeIds = array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray());
+            $moreRising = Person::with(['category', 'city'])
                 ->published()
-                ->where('type', 'rising')
-                ->whereNotIn('id', $risingPeople->pluck('id'))
+                ->whereNotIn('id', $excludeIds)
                 ->orderBy('sort_order')
                 ->latest()
                 ->take(4 - $risingPeople->count())
@@ -87,69 +81,28 @@ class CityFrontendController extends Controller
             $risingPeople = $risingPeople->concat($moreRising);
         }
 
-        if ($risingPeople->count() < 4) {
-            $fallbackRising = Person::with(['category'])
-                ->published()
-                ->whereNotIn('id', array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray()))
-                ->orderBy('sort_order')
-                ->take(4 - $risingPeople->count())
-                ->get();
-            $risingPeople = $risingPeople->concat($fallbackRising);
-        }
-
-        // 4. Voices (4 conversation profiles / reflections)
-        $voicesPeople = Person::with(['category'])
+        // 4. Stories (4 long-form profiles, city stories and editorial features)
+        $excludeArticleIds = $heroArticle ? [$heroArticle->id] : [];
+        $stories = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
-            ->where('type', 'voice')
-            ->orderBy('sort_order')
-            ->latest()
-            ->take(4)
-            ->get();
-
-        if ($voicesPeople->count() < 4) {
-            $moreVoices = Person::with(['category'])
-                ->published()
-                ->where('type', 'voice')
-                ->whereNotIn('id', $voicesPeople->pluck('id'))
-                ->orderBy('sort_order')
-                ->latest()
-                ->take(4 - $voicesPeople->count())
-                ->get();
-            $voicesPeople = $voicesPeople->concat($moreVoices);
-        }
-
-        if ($voicesPeople->count() < 4) {
-            $fallbackVoices = Person::with(['category'])
-                ->published()
-                ->whereNotIn('id', array_merge($featuredIcons->pluck('id')->toArray(), $risingPeople->pluck('id')->toArray(), $voicesPeople->pluck('id')->toArray()))
-                ->orderBy('sort_order')
-                ->take(4 - $voicesPeople->count())
-                ->get();
-            $voicesPeople = $voicesPeople->concat($fallbackVoices);
-        }
-
-        // 5. Stories (4 long-form profiles, city stories and editorial features)
-        $stories = Article::with(['category', 'tags'])
-            ->published()
-            ->where('city_id', $city->id)
-            ->whereNotIn('id', $heroArticle ? [$heroArticle->id] : [])
+            ->whereNotIn('id', $excludeArticleIds)
             ->latest()
             ->take(4)
             ->get();
 
         if ($stories->count() < 4) {
-            $moreStories = Article::with(['category', 'tags'])
+            $moreStories = Article::with(['category', 'tags', 'city'])
                 ->published()
-                ->whereNotIn('id', array_merge($heroArticle ? [$heroArticle->id] : [], $stories->pluck('id')->toArray()))
+                ->whereNotIn('id', array_merge($excludeArticleIds, $stories->pluck('id')->toArray()))
                 ->latest()
                 ->take(4 - $stories->count())
                 ->get();
             $stories = $stories->concat($moreStories);
         }
 
-        // 6. The List (Monthly archive preview: names presented alphabetically)
-        $listPeople = Person::with(['category'])
+        // 5. The List (Monthly archive preview: names presented alphabetically)
+        $listPeople = Person::with(['category', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->orderBy('name', 'asc')
@@ -157,18 +110,19 @@ class CityFrontendController extends Controller
             ->get();
 
         if ($listPeople->isEmpty()) {
-            $listPeople = Person::with(['category'])
+            $listPeople = Person::with(['category', 'city'])
                 ->published()
                 ->orderBy('name', 'asc')
                 ->take(8)
                 ->get();
         }
 
-        // 7. Magazine Edition (Latest curated digital magazine)
-        $magazine = MagazineEdition::where('is_active', true)->latest()->first() ?: MagazineEdition::latest()->first();
+        // 6. Magazine Edition (Latest curated digital magazine)
+        $magazine = MagazineEdition::where('is_active', true)->latest()->first() 
+            ?? MagazineEdition::latest()->first();
 
-        // 8. In Bhavnagar / In [City] (Selective coverage of events, exhibitions, cultural moments)
-        $inCityStories = Article::with(['category', 'tags'])
+        // 7. In [City] (Selective coverage of events, exhibitions, cultural moments)
+        $inCityStories = Article::with(['category', 'tags', 'city'])
             ->published()
             ->where('city_id', $city->id)
             ->whereHas('category', function ($q) {
@@ -179,28 +133,20 @@ class CityFrontendController extends Controller
             ->get();
 
         if ($inCityStories->count() < 4) {
-            $fallbackInCity = Article::with(['category', 'tags'])
-                ->published()
-                ->where('city_id', $city->id)
-                ->whereNotIn('id', $inCityStories->pluck('id'))
-                ->latest()
-                ->take(4 - $inCityStories->count())
-                ->get();
-            $inCityStories = $inCityStories->concat($fallbackInCity);
-        }
-
-        if ($inCityStories->count() < 4) {
-            $natInCity = Article::with(['category', 'tags'])
+            $moreInCity = Article::with(['category', 'tags', 'city'])
                 ->published()
                 ->whereNotIn('id', $inCityStories->pluck('id'))
                 ->latest()
                 ->take(4 - $inCityStories->count())
                 ->get();
-            $inCityStories = $inCityStories->concat($natInCity);
+            $inCityStories = $inCityStories->concat($moreInCity);
         }
 
-        // 9. Featured Brands (Credible brands & clearly disclosed collaborations)
+        // 8. Featured Brands (Credible brands & clearly disclosed collaborations)
         $brands = Brand::where('is_active', true)
+            ->where(function ($q) use ($city) {
+                $q->where('city_id', $city->id)->orWhereNull('city_id');
+            })
             ->orderBy('sort_order')
             ->take(4)
             ->get();
@@ -212,7 +158,6 @@ class CityFrontendController extends Controller
             'heroArticle',
             'featuredIcons',
             'risingPeople',
-            'voicesPeople',
             'stories',
             'listPeople',
             'magazine',

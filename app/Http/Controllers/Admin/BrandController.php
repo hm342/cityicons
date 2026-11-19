@@ -11,18 +11,26 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::orderBy('sort_order')->get();
+        $query = Brand::with('city')->orderBy('sort_order');
+        if (session('admin_city_id')) {
+            $query->where(function ($q) {
+                $q->where('city_id', session('admin_city_id'))->orWhereNull('city_id');
+            });
+        }
+        $brands = $query->get();
         return view('admin.brands.index', compact('brands'));
     }
 
     public function create()
     {
-        return view('admin.brands.create');
+        $cities = \App\Models\City::orderBy('name')->get();
+        return view('admin.brands.create', compact('cities'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'city_id'         => ['nullable', 'exists:cities,id'],
             'name'            => ['required', 'string', 'max:255'],
             'logo_image_file' => ['nullable', 'image', 'max:2048'],
             'logo_image_url'  => ['nullable', 'url'],
@@ -55,7 +63,8 @@ class BrandController extends Controller
     public function edit($id)
     {
         $brand = Brand::findOrFail($id);
-        return view('admin.brands.edit', compact('brand'));
+        $cities = \App\Models\City::orderBy('name')->get();
+        return view('admin.brands.edit', compact('brand', 'cities'));
     }
 
     public function update(Request $request, $id)
@@ -63,6 +72,7 @@ class BrandController extends Controller
         $brand = Brand::findOrFail($id);
 
         $validated = $request->validate([
+            'city_id'         => ['nullable', 'exists:cities,id'],
             'name'            => ['required', 'string', 'max:255'],
             'logo_image_file' => ['nullable', 'image', 'max:2048'],
             'logo_image_url'  => ['nullable', 'url'],

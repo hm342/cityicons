@@ -19,6 +19,14 @@ class NominationController extends Controller
             $query->where('status', $request->status);
         }
 
+        $activeCityId = session('admin_city_id');
+        if ($activeCityId) {
+            $activeCity = City::find($activeCityId);
+            if ($activeCity) {
+                $query->where('nominee_city', 'like', "%{$activeCity->name}%");
+            }
+        }
+
         if ($request->filled('search')) {
             $s = $request->search;
             $query->where(function ($q) use ($s) {

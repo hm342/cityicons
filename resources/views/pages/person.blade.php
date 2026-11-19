@@ -1,4 +1,11 @@
-<x-layouts.app title="{{ $person->name }} — {{ $person->category ? $person->category->name : 'Icon' }} · Bhavnagar Icons">
+@php
+  $cSlug = $person->city ? $person->city->slug : 'bhavnagar';
+  $cName = $person->city ? $person->city->name : 'Bhavnagar';
+  $tierSlug = $person->type === 'rising' ? 'rising' : 'icons';
+  $tierName = $person->type === 'rising' ? 'Rising' : 'Icons';
+@endphp
+
+<x-layouts.app title="{{ $person->name }} — {{ $person->category ? $person->category->name : 'Icon' }} · {{ $cName }} Icons" :city="$person->city">
 
   <article class="person-profile-page" style="padding-top:36px; padding-bottom:var(--section-gap);">
     <div class="vogue-container">
@@ -7,9 +14,9 @@
       <nav aria-label="Breadcrumb" style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-muted); margin-bottom:28px;">
         <a href="{{ url('/') }}" style="color:var(--vogue-muted);">Home</a>
         <span style="margin:0 8px;">/</span>
-        <a href="{{ url('/' . ($person->type === 'voice' ? 'voices' : ($person->type === 'rising' ? 'rising' : 'icons'))) }}" style="color:var(--vogue-muted);">
-          {{ $person->type === 'voice' ? 'Voices' : ($person->type === 'rising' ? 'Rising' : 'Icons') }}
-        </a>
+        <a href="{{ url('/' . $cSlug) }}" style="color:var(--vogue-muted);">{{ $cName }}</a>
+        <span style="margin:0 8px;">/</span>
+        <a href="{{ url('/' . $cSlug . '/' . $tierSlug) }}" style="color:var(--vogue-muted);">{{ $tierName }}</a>
         <span style="margin:0 8px;">/</span>
         <span style="color:var(--vogue-red);">{{ $person->name }}</span>
       </nav>
@@ -22,7 +29,7 @@
           </span>
           <span style="color:var(--vogue-muted);">·</span>
           <span style="font-size:0.6875rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; background:var(--vogue-black); color:#fff; padding:3px 10px; border-radius:2px;">
-            {{ strtoupper($person->type === 'voice' ? 'Voice' : ($person->type === 'rising' ? 'Rising Star' : 'Icon')) }}
+            {{ strtoupper($person->type === 'rising' ? 'Rising Star' : 'Flagship Icon') }}
           </span>
           <span style="color:var(--vogue-muted);">·</span>
           <span style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-muted);">
@@ -149,7 +156,7 @@
 
               <dt style="font-size:0.6875rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--vogue-muted);">Archival Tier</dt>
               <dd style="font-weight:700; color:var(--vogue-red); margin-bottom:14px; text-transform:uppercase;">
-                {{ $person->type === 'voice' ? 'Voices (Conversations)' : ($person->type === 'rising' ? 'Rising Stars' : 'Flagship Icon') }}
+                {{ $person->type === 'rising' ? 'Rising Stars' : 'Flagship Icon' }}
               </dd>
             </dl>
 
@@ -242,11 +249,11 @@
             <div>
               <span class="vogue-rubric vogue-rubric--red">ARCHIVAL CONTINUITY</span>
               <h2 style="font-family:var(--font-didot); font-size:clamp(1.6rem, 2.5vw, 2.2rem); font-weight:400; margin:4px 0 0;">
-                More {{ $person->type === 'voice' ? 'Voices' : ($person->type === 'rising' ? 'Rising Stars' : 'Documented Icons') }}
+                More {{ $person->type === 'rising' ? 'Rising Stars' : 'Documented Icons' }}
               </h2>
             </div>
-            <a href="{{ url('/' . ($person->type === 'voice' ? 'voices' : ($person->type === 'rising' ? 'rising' : 'icons'))) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black);">
-              View All {{ $person->type === 'voice' ? 'Voices' : ($person->type === 'rising' ? 'Rising' : 'Icons') }} &rarr;
+            <a href="{{ url('/' . $cSlug . '/' . $tierSlug) }}" style="font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--vogue-black);">
+              View All {{ $person->type === 'rising' ? 'Rising' : 'Icons' }} &rarr;
             </a>
           </div>
 

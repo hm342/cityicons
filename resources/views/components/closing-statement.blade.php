@@ -1,3 +1,5 @@
+@props(['cityName' => 'Bhavnagar'])
+
 <!-- ══ CLOSING BRAND STATEMENT (As Specified in Section 1 of PDF) ══ -->
 <section class="city-edition-section" style="margin-bottom:var(--section-gap);">
   <div class="vogue-container">
@@ -9,7 +11,7 @@
         Some deserve permanence.
       </div>
       <p style="font-family:var(--font-garamond); font-size:1.25rem; color:#333333; max-width:700px; margin:0 auto 14px;">
-        Bhavnagar Icons documents the people helping shape the identity and future of the city.
+        {{ $cityName === 'India' ? "CityIcons documents the people and stories helping shape the identity and future of India's cities." : $cityName . ' Icons documents the people helping shape the identity and future of the city.' }}
       </p>
       <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--vogue-muted);">
         Selected with purpose. Documented with responsibility.

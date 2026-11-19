@@ -72,7 +72,7 @@
       'num' => '16',
       'content' => '
         <p>Bhavnagar Icons maintains a non-partisan editorial position.</p>
-        <p>Active political officeholders, party representatives and individuals currently campaigning for political office are not eligible for Icons, Rising or Voices selection.</p>
+        <p>Active political officeholders, party representatives and individuals currently campaigning for political office are not eligible for Icons or Rising selection.</p>
         <p>They may appear only where necessary within factual civic or public-interest reporting. Such coverage does not represent endorsement, recognition or editorial status.</p>
         <p>Past political involvement may be reviewed on a case-by-case basis when the proposed story concerns a separate and independently established body of work.</p>
         <p>Editorial coverage of civic matters does not represent support for any political party, candidate or ideology.</p>
@@ -109,7 +109,7 @@
           <li><strong>Advertisement</strong></li>
           <li><strong>Event Partner</strong></li>
         </ul>
-        <p>Payment provides agreed commercial visibility. It does not provide editorial selection, Icon status, Rising status, Voices status or inclusion in The List.</p>
+        <p>Payment provides agreed commercial visibility. It does not provide editorial selection, Icon status, Rising status or inclusion in The List.</p>
         <p>Advertising clients and commercial partners do not receive control over independent editorial coverage.</p>
         <p>Commercial partners may review paid content for factual and brand accuracy before publication. Final publication remains subject to our content standards.</p>
       '
@@ -154,7 +154,7 @@
       'content' => '
         <p>By accessing or using this website, you agree to these Terms of Use. In these Terms, "CityIcons", "Bhavnagar Icons", "we", "us" and "our" refer to the operator of cityicons.in.</p>
         <h3>No Award or Official Status</h3>
-        <p>Publication by Bhavnagar Icons does not confer an award, legal title, certification, membership or official status. Icons, Rising and Voices are editorial categories.</p>
+        <p>Publication by Bhavnagar Icons does not confer an award, legal title, certification, membership or official status. Icons and Rising are editorial categories.</p>
         <h3>Governing Jurisdiction</h3>
         <p>These terms are governed by the applicable laws of India. Any dispute will be subject to the jurisdiction of the competent courts in Bhavnagar, Gujarat.</p>
         <p><small>Last updated: 18 November 2026</small></p>

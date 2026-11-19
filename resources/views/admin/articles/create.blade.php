@@ -87,7 +87,6 @@
               <option value="general" selected>General Editorial</option>
               <option value="icons">Icons Flagship Feature</option>
               <option value="rising">Rising Stars Spotlight</option>
-              <option value="voices">Voices Cultural Essay</option>
             </select>
           </div>
 
@@ -137,7 +136,7 @@
             <select id="city_id" name="city_id" class="form-control">
               <option value="">National / All Cities</option>
               @foreach($cities as $c)
-                <option value="{{ $c->id }}" {{ old('city_id') == $c->id ? 'selected' : '' }}>
+                <option value="{{ $c->id }}" {{ old('city_id', $selectedCityId ?? '') == $c->id ? 'selected' : '' }}>
                   {{ $c->name }} ({{ $c->state }})
                 </option>
               @endforeach

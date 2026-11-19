@@ -1,22 +1,22 @@
 @props([
-  'title' => 'Voices: Conversations Worth Preserving',
+  'title' => 'Weddings & Celebrations · Heritage India',
   'exploreUrl' => null,
   'people' => null,
   'articles' => null,
 ])
 
 @php
-  $exploreUrl = $exploreUrl ?? url('/voices');
-  $items = $people ?? $articles;
+  $exploreUrl = $exploreUrl ?? url('/bhavnagar/stories');
+  $items = $articles ?? $people;
 @endphp
 
-<!-- ══ VOICES / 4-COLUMN CURATED GRID ══ -->
+<!-- ══ 4-COLUMN CURATED GRID ══ -->
 <section id="sec-weddings" class="vogue-weddings-section">
   <div class="vogue-container">
     <div class="section-hed-bar">
       <h2 class="section-hed-title">{{ $title }}</h2>
       <a href="{{ $exploreUrl }}" class="section-hed-link">
-        <span>Explore All Voices</span>
+        <span>Explore Stories</span>
         <i class="fas fa-arrow-right"></i>
       </a>
     </div>

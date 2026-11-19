@@ -66,11 +66,6 @@ class Person extends Model
         return $query->where('type', 'rising');
     }
 
-    public function scopeVoices(Builder $query): Builder
-    {
-        return $query->where('type', 'voice');
-    }
-
     public function scopeForTheList(Builder $query, int $year, int $month): Builder
     {
         return $query->where('year', $year)->where('month', $month);

@@ -34,4 +34,9 @@ class City extends Model
     {
         return $this->hasMany(Person::class);
     }
+
+    public function brands(): HasMany
+    {
+        return $this->hasMany(Brand::class);
+    }
 }

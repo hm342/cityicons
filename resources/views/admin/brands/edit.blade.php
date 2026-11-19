@@ -23,6 +23,18 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label" for="city_id">City Edition (Optional - Leave blank for National)</label>
+          <select id="city_id" name="city_id" class="form-control">
+            <option value="">National / All India (All Cities)</option>
+            @foreach($cities as $c)
+              <option value="{{ $c->id }}" {{ old('city_id', $brand->city_id) == $c->id ? 'selected' : '' }}>
+                {{ $c->name }} ({{ $c->state }})
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-label" for="website_url">Official Website URL</label>
           <input type="url" id="website_url" name="website_url" value="{{ old('website_url', $brand->website_url) }}" class="form-control">
         </div>

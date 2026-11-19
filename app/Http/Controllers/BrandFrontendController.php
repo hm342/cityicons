@@ -19,6 +19,9 @@ class BrandFrontendController extends Controller
         }
 
         $brands = Brand::where('is_active', true)
+            ->where(function ($q) use ($city) {
+                $q->where('city_id', $city->id)->orWhereNull('city_id');
+            })
             ->orderBy('sort_order')
             ->get();
 

@@ -25,11 +25,8 @@
           </button>
         </div>
 
-        <!-- Center: City Brand Logo with Script Accent -->
-        <a href="{{ url('/' . $cityId) }}" class="rm-logo" aria-label="{{ $cityName }} Icons">
-          <span class="rm-logo-text">{{ strtolower($cityName) }}</span>
-          <span class="rm-logo-script">Icons</span>
-        </a>
+        <!-- Center: City Brand Editorial Logo -->
+        <x-city-logo :city="$city" theme="white" />
 
         <!-- Right: Nominate Pill & Search Button -->
         <div class="rm-header-right">

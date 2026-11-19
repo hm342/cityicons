@@ -16,13 +16,7 @@
   <div class="vogue-container">
     <div class="section-hed-bar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
       <div style="display:flex; align-items:center; gap:16px;">
-        @if($cityId === 'bhavnagar')
-          <a href="{{ $exploreUrl }}" style="display:inline-block; text-decoration:none;">
-            <img src="{{ asset('images/logo-bhavnagar.png') }}" alt="Bhavnagar Icons" style="height:36px; width:auto; display:block; object-fit:contain;">
-          </a>
-        @else
-          <h2 class="section-hed-title">{{ $cityName }}</h2>
-        @endif
+        <x-city-logo :city="$cityId" theme="dark" size="sm" :href="$exploreUrl" />
       </div>
       <a href="{{ $exploreUrl }}" class="section-hed-link">
         <span>Explore {{ $cityName }}</span>

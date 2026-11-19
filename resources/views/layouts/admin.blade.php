@@ -445,6 +445,78 @@
       color: var(--text-muted);
       margin-top: 4px;
     }
+
+    /* Admin Pagination Styling */
+    .cityicons-pagination-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 12px 0;
+    }
+    .pagination-info {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .pagination-info strong {
+      color: var(--text-dark);
+    }
+    .cityicons-pagination {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .cityicons-pagination .page-item {
+      display: inline-block;
+      margin: 0;
+    }
+    .cityicons-pagination .page-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dark);
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .cityicons-pagination .page-link:hover {
+      background: var(--bg-body);
+      border-color: #c8c8cf;
+    }
+    .cityicons-pagination .page-item.active .page-link {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+    .cityicons-pagination .page-item.disabled .page-link {
+      color: #aaa;
+      background: #fafafa;
+      border-color: #eee;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .cityicons-pagination-nav svg,
+    .cityicons-pagination svg,
+    nav[role="navigation"] svg {
+      width: 14px !important;
+      height: 14px !important;
+      max-width: 14px !important;
+      max-height: 14px !important;
+      display: inline-block !important;
+    }
   </style>
   @stack('styles')
 </head>

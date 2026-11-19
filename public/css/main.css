@@ -2638,30 +2638,121 @@ body.rm-dark-theme img,
   border-color: #ffffff;
 }
 
-/* Pagination in Dark Theme */
-.rm-pagination {
+/* ════════════════════════════════════════════════════════════
+   UNIVERSAL CITYICONS & REAL MOMENTS PAGINATION
+   ════════════════════════════════════════════════════════════ */
+.rm-pagination,
+.cityicons-pagination-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  width: 100%;
+  clear: both;
+}
+
+.pagination-info {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-dim, #787878);
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.pagination-info strong {
+  color: var(--text-white, #ffffff);
+  font-weight: 600;
+}
+
+.cityicons-pagination,
+.rm-pagination .pagination,
+.pagination {
   display: flex;
   align-items: center;
   justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
   gap: 8px;
-  margin-top: 48px;
+  flex-wrap: wrap;
 }
 
-.rm-pagination a, .rm-pagination span {
-  padding: 8px 16px;
+.cityicons-pagination .page-item,
+.rm-pagination .page-item,
+.pagination .page-item {
+  display: inline-flex;
+  list-style: none;
+  margin: 0;
+}
+
+.cityicons-pagination .page-link,
+.rm-pagination .page-link,
+.pagination .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 16px;
   background: #242424;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   color: #ffffff;
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
   font-weight: 600;
   border-radius: 4px;
   text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  line-height: 1;
 }
 
-.rm-pagination .active span, .rm-pagination span[aria-current="page"] {
-  background: var(--vogue-red);
-  border-color: var(--vogue-red);
+.cityicons-pagination .page-link:hover,
+.rm-pagination .page-link:hover,
+.pagination .page-link:hover {
+  background: #333333;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
+
+.cityicons-pagination .page-item.active .page-link,
+.rm-pagination .page-item.active .page-link,
+.pagination .page-item.active .page-link,
+.cityicons-pagination .page-item[aria-current="page"] .page-link {
+  background: var(--vogue-red, #e51a24) !important;
+  border-color: var(--vogue-red, #e51a24) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.cityicons-pagination .page-item.disabled .page-link,
+.rm-pagination .page-item.disabled .page-link,
+.pagination .page-item.disabled .page-link {
+  background: #181818;
+  border-color: rgba(255, 255, 255, 0.04);
+  color: #555555;
+  cursor: not-allowed;
+  transform: none;
+  pointer-events: none;
+}
+
+/* Strict SVG safety constraint: Prevents any SVG chevron from blowing up */
+.rm-pagination svg,
+.cityicons-pagination-nav svg,
+.pagination svg,
+nav[role="navigation"] svg {
+  width: 14px !important;
+  height: 14px !important;
+  max-width: 14px !important;
+  max-height: 14px !important;
+  display: inline-block !important;
+  vertical-align: middle;
+}
+
 
 /* ════════════════════════════════════════════════════════════
    8. RESPONSIVE BREAKPOINTS

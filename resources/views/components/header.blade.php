@@ -7,7 +7,7 @@
 
 <!-- ══ 1. SITE MASTER HEADER ════════════════════════════════ -->
 <!-- Left: Menu | Center: CITYICONS (City Edition) | Right: Nominate a Story & Search -->
-<header class="site-master-header">
+<header class="site-master-header {{ $cSlug ? 'site-master-header--subcity' : '' }}">
   <div class="vogue-container">
     <div class="header-main-grid">
       <!-- Left: Menu Toggle -->

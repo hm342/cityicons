@@ -217,8 +217,8 @@ button {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 24px 30px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+  padding: 10px 24px 6px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
 }
 
 .rm-header-row {
@@ -230,16 +230,16 @@ button {
 .rm-header-left {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .rm-menu-btn {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   cursor: pointer;
-  padding: 6px;
+  padding: 4px;
   transition: opacity 0.2s;
 }
 
@@ -251,30 +251,40 @@ button {
 .rm-logo {
   display: inline-flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
+}
+
+.rm-logo-img {
+  height: clamp(24px, 2.8vw, 30px);
+  max-height: 32px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .rm-logo-text {
   font-family: var(--font-sans);
-  font-size: 1.6rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.5px;
+  line-height: 1;
 }
 
 .rm-logo-script {
   font-family: var(--font-script);
-  font-size: 2.3rem;
+  font-size: 1.55rem;
   font-weight: 700;
   color: #ffffff;
   margin-left: 2px;
+  line-height: 1;
 }
 
 .rm-header-right {
   display: flex;
   align-items: center;
-  gap: 18px;
-  font-size: 1rem;
+  gap: 14px;
+  font-size: 0.9rem;
 }
 
 .rm-header-right a, .rm-header-right button {
@@ -289,7 +299,7 @@ button {
 /* Submenu Bar under Logo */
 .rm-subnav {
   position: absolute;
-  top: 80px;
+  top: 48px;
   left: 0;
   right: 0;
   z-index: 95;
@@ -301,22 +311,31 @@ button {
   display: flex;
   align-items: center;
   list-style: none;
-  gap: 26px;
+  gap: 16px;
   background: transparent;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .rm-subnav-list li a {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.85);
   transition: color 0.2s;
 }
 
 .rm-subnav-list li a:hover {
   color: #ffffff;
+}
+
+.rm-offcanvas .rm-logo-img {
+  height: 34px;
+  max-height: 38px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Hero Background Slide */

@@ -40,7 +40,7 @@
 @endphp
 
 <!-- ══ OFFICIAL MAIN MENU BAR (Sticky Subnavigation) ═══════════ -->
-<nav class="city-navbar">
+<nav class="city-navbar {{ $cSlug ? 'city-navbar--subcity' : '' }}">
   <div class="vogue-container">
     <ul class="city-navbar__list" id="city-nav-list">
       @foreach ($navItems as $item)

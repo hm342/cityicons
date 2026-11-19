@@ -253,6 +253,65 @@ button {
   display: block;
 }
 
+.cityicon-logo-img {
+  height: clamp(32px, 3.8vw, 42px);
+  max-height: 44px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.cityicon-header-tagline {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--vogue-black);
+  margin-top: 4px;
+}
+
+/* ── SUBCITY SITES COMPACT HEADER ── */
+.site-master-header--subcity .header-main-grid {
+  padding: 8px 0 6px;
+}
+
+.site-master-header--subcity .cityicon-logo-img {
+  height: 26px;
+  max-height: 28px;
+}
+
+.site-master-header--subcity .cityicon-header-tagline {
+  font-size: 0.625rem;
+  letter-spacing: 2px;
+  margin-top: 1px;
+}
+
+.site-master-header--subcity .menu-toggle-btn {
+  font-size: 0.7rem;
+  padding: 4px 0;
+}
+
+.site-master-header--subcity .btn-header-subscribe {
+  padding: 6px 14px;
+  font-size: 0.625rem;
+  letter-spacing: 1.2px;
+}
+
+.site-master-header--subcity .btn-header-search {
+  font-size: 0.95rem;
+  padding: 4px;
+}
+
+/* Subcity Sticky Navigation */
+.city-navbar--subcity .city-navbar__item a {
+  padding: 8px 12px;
+  font-size: 0.6875rem;
+  letter-spacing: 1.2px;
+}
+
 /* Right: Subscribe & Search */
 .header-right {
   display: flex;

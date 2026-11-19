@@ -67,32 +67,29 @@ Route::get('/policies/{slug?}', function ($slug = 'editorial') {
     return view('pages.policy', ['slug' => strtolower($slug)]);
 })->name('policy.show');
 
-// ── 5. CITY EDITIONS NETWORK (BHAVNAGAR, MUMBAI, ETC.) ────────
-Route::get('/cities/{city}', [CityFrontendController::class, 'show'])->name('city.show');
+// ── 5. LEGACY CITY ALIASES & REDIRECTS (Redirect /cities/{city} -> /{city}) ──
+Route::get('/cities/{city}', function ($city) {
+    return redirect('/' . strtolower($city), 301);
+});
 
 Route::get('/cities/{city}.html', function ($city) {
-    return redirect()->route('city.show', ['city' => $city]);
-});
-
-// Shorthand direct routes for Bhavnagar subsite & singular /city/... aliases
-Route::get('/bhavnagar', function () {
-    return redirect()->route('city.show', ['city' => 'bhavnagar']);
-})->name('bhavnagar');
-
-Route::get('/bhavnagar.html', function () {
-    return redirect()->route('city.show', ['city' => 'bhavnagar']);
-});
-
-Route::get('/bhavnagar-icons', function () {
-    return redirect()->route('city.show', ['city' => 'bhavnagar']);
+    return redirect('/' . strtolower($city), 301);
 });
 
 Route::get('/city/{city}', function ($city) {
-    return redirect()->route('city.show', ['city' => $city]);
+    return redirect('/' . strtolower($city), 301);
 });
 
 Route::get('/city/{city}.html', function ($city) {
-    return redirect()->route('city.show', ['city' => $city]);
+    return redirect('/' . strtolower($city), 301);
+});
+
+Route::get('/bhavnagar.html', function () {
+    return redirect('/bhavnagar', 301);
+});
+
+Route::get('/bhavnagar-icons', function () {
+    return redirect('/bhavnagar', 301);
 });
 
 // ── 6. ARTICLE READING VIEW ───────────────────────────────────
@@ -158,3 +155,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     });
 });
+
+// ── 8. DIRECT ROOT-LEVEL CITY EDITIONS (e.g. /bhavnagar, /mumbai, /surat, /ahmedabad) ──
+Route::get('/{city}', [CityFrontendController::class, 'show'])
+    ->where('city', '^(?!admin|storage|up|icons|rising|voices|stories|the-list|magazine|in-bhavnagar|featured-brands|about|nominate|contact|search|policies|article|newsletter)[a-zA-Z0-9\-]+$')
+    ->name('city.show');
+

@@ -71,7 +71,7 @@
                 <a href="{{ route('admin.cities.edit', $city->id) }}" class="btn btn-secondary btn-sm" title="Edit Edition">
                   <i class="fa-solid fa-pen-to-square"></i> Edit
                 </a>
-                <a href="{{ $city->slug === 'bhavnagar' ? url('/') : url('/cities/' . $city->slug) }}" target="_blank" class="btn btn-secondary btn-sm" title="View Public Page">
+                <a href="{{ url('/' . $city->slug) }}" target="_blank" class="btn btn-secondary btn-sm" title="View Public Page">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </a>
               </td>

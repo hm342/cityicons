@@ -7,7 +7,7 @@
       <a href="{{ url('/') }}" style="display:inline-block; margin-bottom:12px;" aria-label="CityIcons Home">
         <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="City Icons" style="height:clamp(48px, 5.5vw, 68px); width:auto; display:block; margin:0 auto; object-fit:contain;">
       </a>
-      <a href="{{ url('/cities/bhavnagar') }}" style="display:inline-block; text-decoration:none;" title="Enter Bhavnagar Icons Subsite">
+      <a href="{{ url('/bhavnagar') }}" style="display:inline-block; text-decoration:none;" title="Enter Bhavnagar Icons Subsite">
         <div style="font-family:var(--font-sans); font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--vogue-red); margin-bottom:6px;">
           Bhavnagar Icons · Flagship Edition <i class="fas fa-arrow-right" style="font-size:9px; margin-left:3px;"></i>
         </div>
@@ -44,7 +44,7 @@
           <li><a href="{{ url('/the-list') }}">The List</a></li>
           <li><a href="{{ url('/magazine') }}">Magazine</a></li>
           <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
-          <li><a href="{{ url('/cities/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
+          <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
           <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
         </ul>
       </div>
@@ -99,16 +99,16 @@
     <!-- City Network Strip -->
     <div class="vogue-footer__cities-title">City Editions Network · India</div>
     <div class="vogue-footer__cities" style="margin-bottom:30px;">
-      <a href="{{ url('/') }}" style="color:var(--vogue-white); font-weight:700;">Bhavnagar (Flagship)</a> ·
-      <a href="{{ url('/cities/mumbai') }}">Mumbai</a> ·
-      <a href="{{ url('/cities/ahmedabad') }}">Ahmedabad</a> ·
-      <a href="{{ url('/cities/surat') }}">Surat</a> ·
-      <a href="{{ url('/cities/rajkot') }}">Rajkot</a> ·
-      <a href="{{ url('/cities/vadodara') }}">Vadodara</a> ·
-      <a href="{{ url('/cities/delhi') }}">Delhi</a> ·
-      <a href="{{ url('/cities/bengaluru') }}">Bengaluru</a> ·
-      <a href="{{ url('/cities/jaipur') }}">Jaipur</a> ·
-      <a href="{{ url('/cities/kolkata') }}">Kolkata</a>
+      <a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-white); font-weight:700;">Bhavnagar (Flagship)</a> ·
+      <a href="{{ url('/mumbai') }}">Mumbai</a> ·
+      <a href="{{ url('/ahmedabad') }}">Ahmedabad</a> ·
+      <a href="{{ url('/surat') }}">Surat</a> ·
+      <a href="{{ url('/rajkot') }}">Rajkot</a> ·
+      <a href="{{ url('/vadodara') }}">Vadodara</a> ·
+      <a href="{{ url('/delhi') }}">Delhi</a> ·
+      <a href="{{ url('/bengaluru') }}">Bengaluru</a> ·
+      <a href="{{ url('/jaipur') }}">Jaipur</a> ·
+      <a href="{{ url('/kolkata') }}">Kolkata</a>
     </div>
 
     <!-- Final Brand Line & Copyright -->

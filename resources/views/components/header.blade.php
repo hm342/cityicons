@@ -20,7 +20,7 @@
         <a href="{{ url('/') }}" class="cityicon-main-logo" aria-label="CityIcons Home">
           <img src="{{ asset('images/logo-cityicons.png') }}" alt="City Icons" class="cityicon-logo-img">
         </a>
-        <a href="{{ url('/cities/bhavnagar') }}" class="cityicon-header-tagline" title="Enter Bhavnagar Icons Subsite" style="text-decoration:none; transition:color 0.2s ease;">
+        <a href="{{ url('/bhavnagar') }}" class="cityicon-header-tagline" title="Enter Bhavnagar Icons Subsite" style="text-decoration:none; transition:color 0.2s ease;">
           Bhavnagar Icons <span style="color:var(--vogue-red); margin:0 4px;">·</span> Flagship Edition <i class="fas fa-arrow-right" style="font-size:8px; margin-left:3px; opacity:0.7;"></i>
         </a>
       </div>

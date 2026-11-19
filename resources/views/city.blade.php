@@ -28,7 +28,7 @@
     <button class="rm-offcanvas-close" id="btn-close-offcanvas">&times;</button>
     <div class="rm-logo" style="margin-bottom:20px;">
       @if($cityId === 'bhavnagar')
-        <a href="{{ url('/cities/bhavnagar') }}" style="display:inline-block; text-decoration:none;">
+        <a href="{{ url('/bhavnagar') }}" style="display:inline-block; text-decoration:none;">
           <img src="{{ asset('images/logo-bhavnagar.png') }}" alt="Bhavnagar Icons" class="rm-logo-img">
         </a>
       @else
@@ -49,7 +49,7 @@
     <div class="rm-offcanvas-title">City Editions</div>
     <div class="rm-city-grid">
       @foreach(['bhavnagar', 'mumbai', 'surat', 'ahmedabad', 'rajkot', 'vadodara', 'delhi', 'bengaluru', 'jaipur', 'kolkata'] as $c)
-        <a href="{{ url('/cities/' . $c) }}" class="rm-city-link {{ $cityId === $c ? 'active' : '' }}">{{ ucfirst($c) }}</a>
+        <a href="{{ url('/' . $c) }}" class="rm-city-link {{ $cityId === $c ? 'active' : '' }}">{{ ucfirst($c) }}</a>
       @endforeach
     </div>
   </aside>
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Center: Logo -->
-        <a href="{{ url('/cities/' . $cityId) }}" class="rm-logo" aria-label="{{ $cityName }} Icons">
+        <a href="{{ url('/' . $cityId) }}" class="rm-logo" aria-label="{{ $cityName }} Icons">
           @if($cityId === 'bhavnagar')
             <img src="{{ asset('images/logo-bhavnagar-white.png') }}" alt="Bhavnagar Icons" class="rm-logo-img">
           @else
@@ -275,7 +275,7 @@
   <!-- ══ FOOTER ═══════════════════════════════════════════════ -->
   <footer class="rm-footer">
     <div class="rm-container">
-      <a href="{{ url('/cities/' . $cityId) }}" class="rm-footer-logo" aria-label="{{ $cityName }} Icons">
+      <a href="{{ url('/' . $cityId) }}" class="rm-footer-logo" aria-label="{{ $cityName }} Icons">
         @if($cityId === 'bhavnagar')
           <img src="{{ asset('images/logo-bhavnagar-white.png') }}" alt="Bhavnagar Icons" class="rm-footer-logo-img">
         @else

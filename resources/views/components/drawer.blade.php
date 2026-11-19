@@ -22,7 +22,7 @@
     <li><a href="{{ url('/the-list') }}">The List</a></li>
     <li><a href="{{ url('/magazine') }}">Magazine</a></li>
     <li><a href="{{ url('/in-bhavnagar') }}">In Bhavnagar (Dispatch)</a></li>
-    <li><a href="{{ url('/cities/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
+    <li><a href="{{ url('/bhavnagar') }}" style="color:var(--vogue-red); font-weight:700;">Bhavnagar City Subsite</a></li>
     <li><a href="{{ url('/featured-brands') }}">Featured Brands</a></li>
     <li><a href="{{ url('/about') }}">About Platform</a></li>
     <li><a href="{{ url('/nominate') }}" style="color:var(--vogue-red); font-weight:700;">Nominate a Story</a></li>
@@ -31,16 +31,16 @@
   <!-- City Editions Directory -->
   <div class="vogue-drawer__title" style="margin-top:20px;">City Editions · Network</div>
   <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
-    <a href="{{ url('/cities/bhavnagar') }}" class="vogue-drawer__city-chip" style="border-color:var(--vogue-red); font-weight:800; color:var(--vogue-red);">Bhavnagar (Flagship)</a>
-    <a href="{{ url('/cities/mumbai') }}" class="vogue-drawer__city-chip">Mumbai</a>
-    <a href="{{ url('/cities/ahmedabad') }}" class="vogue-drawer__city-chip">Ahmedabad</a>
-    <a href="{{ url('/cities/surat') }}" class="vogue-drawer__city-chip">Surat</a>
-    <a href="{{ url('/cities/rajkot') }}" class="vogue-drawer__city-chip">Rajkot</a>
-    <a href="{{ url('/cities/vadodara') }}" class="vogue-drawer__city-chip">Vadodara</a>
-    <a href="{{ url('/cities/delhi') }}" class="vogue-drawer__city-chip">Delhi</a>
-    <a href="{{ url('/cities/bengaluru') }}" class="vogue-drawer__city-chip">Bengaluru</a>
-    <a href="{{ url('/cities/jaipur') }}" class="vogue-drawer__city-chip">Jaipur</a>
-    <a href="{{ url('/cities/kolkata') }}" class="vogue-drawer__city-chip">Kolkata</a>
+    <a href="{{ url('/bhavnagar') }}" class="vogue-drawer__city-chip" style="border-color:var(--vogue-red); font-weight:800; color:var(--vogue-red);">Bhavnagar (Flagship)</a>
+    <a href="{{ url('/mumbai') }}" class="vogue-drawer__city-chip">Mumbai</a>
+    <a href="{{ url('/ahmedabad') }}" class="vogue-drawer__city-chip">Ahmedabad</a>
+    <a href="{{ url('/surat') }}" class="vogue-drawer__city-chip">Surat</a>
+    <a href="{{ url('/rajkot') }}" class="vogue-drawer__city-chip">Rajkot</a>
+    <a href="{{ url('/vadodara') }}" class="vogue-drawer__city-chip">Vadodara</a>
+    <a href="{{ url('/delhi') }}" class="vogue-drawer__city-chip">Delhi</a>
+    <a href="{{ url('/bengaluru') }}" class="vogue-drawer__city-chip">Bengaluru</a>
+    <a href="{{ url('/jaipur') }}" class="vogue-drawer__city-chip">Jaipur</a>
+    <a href="{{ url('/kolkata') }}" class="vogue-drawer__city-chip">Kolkata</a>
   </div>
 
   <!-- Editorial Policies -->

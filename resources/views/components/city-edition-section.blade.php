@@ -7,7 +7,7 @@
 ])
 
 @php
-  $exploreUrl = $exploreUrl ?? url('/cities/' . $cityId);
+  $exploreUrl = $exploreUrl ?? url('/' . $cityId);
   $items = $people ?? $articles;
   $leadItem = $items && $items->count() > 0 ? $items->first() : null;
   $gridItems = $items && $items->count() > 1 ? $items->slice(1, 6) : collect();

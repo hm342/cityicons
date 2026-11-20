@@ -76,6 +76,19 @@
         </div>
       </div>
 
+      <!-- Analytics & Tracking -->
+      <div class="card">
+        <h2 class="card-title" style="margin-bottom:20px;">
+          <i class="fa-solid fa-chart-line" style="color:var(--primary); margin-right:8px;"></i> Analytics &amp; Tracking
+        </h2>
+
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" for="google_analytics_id">Google Analytics 4 Measurement ID (GA4)</label>
+          <input type="text" id="google_analytics_id" name="google_analytics_id" value="{{ old('google_analytics_id', $settings['google_analytics_id'] ?? env('GOOGLE_ANALYTICS_ID', '')) }}" class="form-control" placeholder="G-XXXXXXXXXX" style="font-family:monospace; max-width:320px;">
+          <div class="form-text">Enter your Google Analytics 4 Measurement ID (e.g. <code>G-XXXXXXXXXX</code>). When saved, tracking is active across all city and national pages. You can also configure it in <code>.env</code> using <code>GOOGLE_ANALYTICS_ID</code>.</div>
+        </div>
+      </div>
+
       <div style="margin-bottom:40px;">
         <button type="submit" class="btn btn-primary" style="padding:14px 32px; font-size:14px;">
           <i class="fa-solid fa-check"></i> Save All Platform Settings

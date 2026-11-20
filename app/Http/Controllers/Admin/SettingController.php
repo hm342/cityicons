@@ -27,6 +27,7 @@ class SettingController extends Controller
         }
 
         Cache::forget('site_settings');
+        Cache::forget('site_ga_id');
 
         return back()->with('success', 'Site settings updated successfully.');
     }

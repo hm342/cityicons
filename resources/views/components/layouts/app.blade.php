@@ -43,6 +43,7 @@
     }
   </style>
   @stack('styles')
+  <x-google-analytics />
 </head>
 <body class="{{ $darkTheme ? 'rm-dark-theme' : '' }}">
   <!-- Global Top Progress Bar -->

@@ -17,7 +17,11 @@
   <div class="vogue-overlay" id="vogue-overlay"></div>
   <aside class="vogue-drawer" id="vogue-drawer">
     <button class="vogue-drawer__close" id="btn-close-drawer" aria-label="Close menu">&times;</button>
-    <div style="font-family:var(--font-didot); font-size:2.8rem; letter-spacing:6px; margin-bottom:20px;">CITYICONS</div>
+    <div style="margin-bottom:24px;">
+      <a href="{{ url('/') }}" aria-label="CityIcons Home" style="display:inline-block;">
+        <img src="{{ asset('images/logo-cityicons.png') }}" alt="CityIcons" style="height:46px; width:auto; display:block; object-fit:contain;">
+      </a>
+    </div>
     
     <div class="vogue-drawer__title">City Editions</div>
     <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
@@ -53,9 +57,11 @@
           </button>
         </div>
 
-        <!-- Center: CITYICON (Only CITYICON) -->
+        <!-- Center: CITYICONS Official Brand Masthead -->
         <div class="header-center">
-          <a href="{{ url('/') }}" class="cityicon-main-logo">CITYICONS</a>
+          <a href="{{ url('/') }}" class="cityicon-main-logo" aria-label="CityIcons Home">
+            <img src="{{ asset('images/logo-cityicons.png') }}" alt="CityIcons" class="cityicon-logo-img">
+          </a>
         </div>
 
         <!-- Right: Subscribe & Search -->
@@ -90,8 +96,10 @@
             <img src="{{ $coverArticle->cover_image }}" alt="{{ $coverArticle->title }}" loading="eager">
             <!-- Top gradient for contrast -->
             <div class="hero-big-banner__top-shade"></div>
-            <!-- Right side top CITYICONS name inside the image -->
-            <div class="hero-big-banner__brand-stamp">CITYICONS</div>
+            <!-- Right side top CITYICONS brand stamp inside the image -->
+            <div class="hero-big-banner__brand-stamp">
+              <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="CityIcons" style="height:clamp(26px, 3.2vw, 38px); width:auto; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.75)); display:block;">
+            </div>
             <!-- Bottom gradient shade for text readability -->
             <div class="hero-big-banner__bottom-shade"></div>
 
@@ -345,7 +353,9 @@
   <footer class="vogue-footer">
     <div class="vogue-container">
       <div class="vogue-footer__logo-wrap">
-        <div class="vogue-footer-logo">CITYICONS</div>
+        <a href="{{ url('/') }}" aria-label="CityIcons Home" style="display:inline-block;">
+          <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="CityIcons" class="vogue-footer-logo-img">
+        </a>
       </div>
 
       <div class="vogue-footer__social">

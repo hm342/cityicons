@@ -253,23 +253,25 @@ button {
 }
 
 .cityicon-main-logo {
-  font-family: var(--font-didot);
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
-  font-weight: 400;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  color: var(--vogue-black);
-  line-height: 0.95;
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 1;
 }
 
 .cityicon-logo-img {
-  height: clamp(32px, 3.8vw, 42px);
-  max-height: 44px;
+  height: clamp(38px, 4.5vw, 54px);
+  max-height: 56px;
   width: auto;
   display: block;
   margin: 0 auto;
   object-fit: contain;
+  transition: opacity 0.2s ease;
+}
+
+.cityicon-main-logo:hover .cityicon-logo-img {
+  opacity: 0.88;
 }
 
 .cityicon-header-tagline {
@@ -1195,6 +1197,20 @@ button {
   text-transform: uppercase;
   color: var(--vogue-white);
   line-height: 1;
+}
+
+.vogue-footer-logo-img {
+  height: clamp(48px, 5.5vw, 68px);
+  max-height: 72px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+}
+
+.vogue-footer-logo-img:hover {
+  opacity: 0.88;
 }
 
 .vogue-footer__social {

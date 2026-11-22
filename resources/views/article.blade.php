@@ -48,9 +48,11 @@
           </div>
           <div class="post-share-inline" style="margin-top:0;">
             <span class="share-txt">Share:</span>
-            <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank" rel="noopener"><i class="fab fa-x-twitter"></i></a>
-            <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener"><i class="fab fa-pinterest-p"></i></a>
+            <a href="https://api.whatsapp.com/send?text={{ urlencode($article->title . ' — ' . url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp" style="color:#25d366;"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank" rel="noopener" aria-label="Share on X"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on Pinterest"><i class="fab fa-pinterest-p"></i></a>
           </div>
         </div>
       </header>

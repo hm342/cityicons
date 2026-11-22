@@ -5,40 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CITYICON — India's Premier City Magazine. Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities.">
   <title>CITYICONS — India's City Magazine</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700&family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+  
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
   <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <meta property="og:title" content="CITYICONS — India's Premier City Magazine">
+  <meta property="og:description" content="Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities.">
+  <meta property="og:image" content="{{ asset('images/logo-cityicons.png') }}">
+  <meta property="og:type" content="website">
+  
   <x-google-analytics />
 </head>
 <body>
 
   <!-- ══ OFFCANVAS SLIDEOUT DRAWER ════════════════════════════ -->
-  <div class="vogue-overlay" id="vogue-overlay"></div>
-  <aside class="vogue-drawer" id="vogue-drawer">
-    <button class="vogue-drawer__close" id="btn-close-drawer" aria-label="Close menu">&times;</button>
-    <div style="margin-bottom:24px;">
-      <a href="{{ url('/') }}" aria-label="CityIcons Home" style="display:inline-block;">
-        <img src="{{ asset('images/logo-cityicons.png') }}" alt="CityIcons" style="height:46px; width:auto; display:block; object-fit:contain;">
-      </a>
-    </div>
-    
-    <div class="vogue-drawer__title">City Editions</div>
-    <div class="vogue-drawer__city-grid" id="drawer-cities-grid">
-      @foreach($cities as $c)
-        <a href="{{ url('/' . $c->slug) }}" class="vogue-drawer__city-chip">{{ $c->name }}</a>
-      @endforeach
-    </div>
-
-    <div class="vogue-drawer__title" style="margin-top:30px;">Quick Jump</div>
-    <ul class="vogue-drawer__menu">
-      <li><a href="#hero-banner">Cover Story</a></li>
-      <li><a href="#sec-bhavnagar">Bhavnagar Edition</a></li>
-      <li><a href="#sec-mumbai">Mumbai Edition</a></li>
-      <li><a href="#sec-ahmedabad">Ahmedabad Cinema</a></li>
-      <li><a href="#sec-weddings">Weddings &amp; Celebrations</a></li>
-    </ul>
-  </aside>
+  <x-drawer />
 
   <!-- ══ 1. SITE MASTER HEADER ════════════════════════════════ -->
   <!-- Left: Menu | Center: CITYICON | Right: Subscribe & Search -->
@@ -66,7 +53,7 @@
 
         <!-- Right: Subscribe & Search -->
         <div class="header-right">
-          <a href="{{ url('/bhavnagar/nominate') }}" class="btn-header-subscribe">Subscribe</a>
+          <a href="{{ url('/nominate') }}" class="btn-header-subscribe" style="background:var(--vogue-red); color:#fff; border-color:var(--vogue-red); font-weight:800; letter-spacing:1.5px;">Nominate a Story</a>
           <button class="btn-header-search" id="btn-open-search" aria-label="Search">
             <i class="fas fa-search"></i>
           </button>
@@ -350,83 +337,17 @@
   </main>
 
   <!-- ══ 9. SITE FOOTER ═══════════════════════════════════════ -->
-  <footer class="vogue-footer">
-    <div class="vogue-container">
-      <div class="vogue-footer__logo-wrap">
-        <a href="{{ url('/') }}" aria-label="CityIcons Home" style="display:inline-block;">
-          <img src="{{ asset('images/logo-cityicons-white.png') }}" alt="CityIcons" class="vogue-footer-logo-img">
-        </a>
-      </div>
-
-      <div class="vogue-footer__social">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
-      </div>
-
-      <div class="vogue-footer__cities-title">City Editions of India</div>
-      <div class="vogue-footer__cities" id="footer-cities-list">
-        @foreach($cities as $idx => $c)
-          <a href="{{ url('/' . $c->slug) }}">{{ $c->name }}</a>@if(!$loop->last) · @endif
-        @endforeach
-      </div>
-
-      <div class="vogue-footer__legal">
-        &copy; {{ date('Y') }} CITYICON MAGAZINE. ALL RIGHTS RESERVED.<br>
-        Curating India's finest in fashion, culture, living, and architecture across our city editions.
-      </div>
-    </div>
-  </footer>
+  <x-footer />
 
   <!-- ══ SEARCH MODAL OVERLAY ═════════════════════════════════ -->
-  <div class="vogue-search-modal" id="vogue-search-modal">
-    <div class="vogue-search-wrap">
-      <button class="vogue-search-close" id="btn-close-search" aria-label="Close search">&times;</button>
-      <form action="{{ url('/search') }}" method="GET">
-        <input type="text" name="q" class="vogue-search-input" id="vogue-search-input" placeholder="Search CITYICON stories..." autofocus>
-      </form>
-    </div>
-  </div>
+  <x-search-modal />
 
-  <script>
-    // Offcanvas Drawer
-    (function() {
-      const drawer = document.getElementById('vogue-drawer');
-      const overlay = document.getElementById('vogue-overlay');
-      const btnOpen = document.getElementById('btn-open-drawer');
-      const btnClose = document.getElementById('btn-close-drawer');
-      const open = () => { drawer?.classList.add('open'); overlay?.classList.add('open'); };
-      const close = () => { drawer?.classList.remove('open'); overlay?.classList.remove('open'); };
-      btnOpen?.addEventListener('click', open);
-      btnClose?.addEventListener('click', close);
-      overlay?.addEventListener('click', close);
-    })();
+  <!-- Floating Back-to-Top Button -->
+  <button class="rm-back-to-top" id="rm-back-to-top" aria-label="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
-    // Search Modal
-    (function() {
-      const modal = document.getElementById('vogue-search-modal');
-      const btnOpen = document.getElementById('btn-open-search');
-      const btnClose = document.getElementById('btn-close-search');
-      btnOpen?.addEventListener('click', () => {
-        modal?.classList.add('open');
-        setTimeout(() => document.getElementById('vogue-search-input')?.focus(), 150);
-      });
-      btnClose?.addEventListener('click', () => modal?.classList.remove('open'));
-      modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
-    })();
-
-    // Horizontal Carousel Tracks
-    (function() {
-      const newsTrack = document.getElementById('city-news-track');
-      document.getElementById('btn-strip-prev')?.addEventListener('click', () => newsTrack?.scrollBy({ left: -320, behavior: 'smooth' }));
-      document.getElementById('btn-strip-next')?.addEventListener('click', () => newsTrack?.scrollBy({ left: 320, behavior: 'smooth' }));
-
-      const ahmdTrack = document.getElementById('ahmedabad-cinema-track');
-      document.getElementById('btn-ahmd-prev')?.addEventListener('click', () => ahmdTrack?.scrollBy({ left: -320, behavior: 'smooth' }));
-      document.getElementById('btn-ahmd-next')?.addEventListener('click', () => ahmdTrack?.scrollBy({ left: 320, behavior: 'smooth' }));
-    })();
-  </script>
+  <!-- Client-Side Engine -->
+  <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

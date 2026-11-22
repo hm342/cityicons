@@ -177,6 +177,7 @@
             <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:16px; margin-top:16px;">
               <div class="post-share-inline" style="margin-top:0;">
                 <span class="share-txt">Share Profile:</span>
+                <a href="https://api.whatsapp.com/send?text={{ urlencode($person->name . ' — ' . $cName . ' Icons: ' . url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp" style="color:#25d366;"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($person->name . ' — ' . $cName . ' Icons') }}" target="_blank" rel="noopener" aria-label="Share on X"><i class="fab fa-x-twitter"></i></a>
                 <a href="https://linkedin.com/sharing/share-offsite/?url={{ urlencode(url()->current()) }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>

@@ -1,7 +1,7 @@
 @php
-  $cName = isset($city) ? (is_object($city) ? $city->name : ucfirst($city)) : 'Bhavnagar';
-  $cSlug = isset($city) ? (is_object($city) ? $city->slug : strtolower($city)) : 'bhavnagar';
-  $isCitySpecific = !empty($cSlug);
+  $isCitySpecific = !empty($city);
+  $cName = $isCitySpecific ? (is_object($city) ? $city->name : ucfirst($city)) : 'CityIcons';
+  $cSlug = $isCitySpecific ? (is_object($city) ? $city->slug : strtolower($city)) : '';
 @endphp
 
 <x-layouts.app :title="'Nominate A Story — ' . ($isCitySpecific ? $cName . ' Icons' : 'CityIcons Network') . ' · CITYICONS'" :city="$city ?? null" :darkTheme="true" :transparentHeader="true">
@@ -14,7 +14,7 @@
       
       <!-- Page Header -->
       <div class="rm-page-header">
-        <span class="section-head-title">{{ strtoupper($cName) }} · EDITORIAL NOMINATION</span>
+        <span class="section-head-title">{{ $isCitySpecific ? strtoupper($cName) : 'ALL-INDIA' }} · EDITORIAL NOMINATION</span>
         <h1 class="rm-page-header-title">Nominate A Story{{ $isCitySpecific ? ' for ' . $cName : '' }}</h1>
         <p class="rm-page-header-sub">Help us discover people worth documenting.</p>
         <p class="rm-page-header-desc">

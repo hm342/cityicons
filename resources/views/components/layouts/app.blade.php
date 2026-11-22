@@ -14,10 +14,19 @@
   <meta name="description" content="{{ $description ?? "CITYICON — India's Premier City Magazine. Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities." }}">
   <title>{{ $title ?? "CITYICONS — India's City Magazine" }}</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700&family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+  
   <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/logo-cityicons-square.png') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+  
+  <meta property="og:title" content="{{ $title ?? "CITYICONS — India's City Magazine" }}">
+  <meta property="og:description" content="{{ $description ?? "Curating the best stories in Fashion, Living Culture, Food, and Heritage across India's cities." }}">
+  <meta property="og:image" content="{{ asset('images/logo-cityicons.png') }}">
+  <meta property="og:type" content="website">
   <style>
     /* Global Smooth AJAX Filter & Navigation Progress Bar */
     #site-progress-bar {

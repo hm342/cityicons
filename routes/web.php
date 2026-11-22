@@ -45,6 +45,15 @@ Route::get('/policies/{slug?}', function ($slug = 'editorial') {
     return view('pages.policy', ['slug' => strtolower($slug)]);
 })->name('policy.show');
 
+// National Editorial Archives & Portals
+Route::get('/nominate', [PublicNominationController::class, 'cityNominate'])->name('nominate');
+Route::get('/stories', [ArticleFrontendController::class, 'stories'])->name('stories');
+Route::get('/icons', [DirectoryController::class, 'icons'])->name('icons');
+Route::get('/rising', [DirectoryController::class, 'rising'])->name('rising');
+Route::get('/the-list', [DirectoryController::class, 'theList'])->name('the-list');
+Route::get('/magazine', [MagazineFrontendController::class, 'index'])->name('magazine');
+Route::get('/featured-brands', [BrandFrontendController::class, 'index'])->name('brands');
+
 Route::post('/nominate', [PublicNominationController::class, 'store'])->name('nominate.submit');
 Route::post('/newsletter', [PublicNewsletterController::class, 'store'])->name('newsletter.submit');
 Route::post('/subscribe', [PublicNewsletterController::class, 'store'])->name('subscribe.submit');

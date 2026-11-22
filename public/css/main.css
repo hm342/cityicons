@@ -12,7 +12,7 @@
    9. Footer: Vogue style with all cities directory
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700&family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+/* Fonts are preconnected and loaded asynchronously via HTML <head> for optimal Web Vitals */
 
 /* ── DESIGN TOKENS ────────────────────────────────────────── */
 :root {
@@ -379,6 +379,14 @@ button {
   gap: 0;
   overflow-x: auto;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 960px) {
+  .city-navbar__list {
+    justify-content: flex-start;
+    padding: 0 12px;
+  }
 }
 
 .city-navbar__list::-webkit-scrollbar {
@@ -1307,11 +1315,18 @@ button {
 
 .vogue-drawer__close {
   align-self: flex-end;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2rem;
   line-height: 1;
   color: var(--vogue-black);
   cursor: pointer;
   margin-bottom: 20px;
+  background: transparent;
+  border: none;
 }
 
 .vogue-drawer__title {
@@ -1393,9 +1408,16 @@ button {
   position: absolute;
   top: -60px;
   right: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 2.2rem;
   color: var(--vogue-black);
   cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
 .vogue-search-input {

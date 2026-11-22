@@ -75,13 +75,16 @@ class PublicNominationController extends Controller
     }
 
     /**
-     * Display city-scoped nomination page (e.g. /bhavnagar/nominate).
+     * Display nomination page (National / All-India if null, or city-scoped e.g. /bhavnagar/nominate).
      */
-    public function cityNominate($citySlug)
+    public function cityNominate($citySlug = null)
     {
-        $city = \App\Models\City::where('slug', strtolower($citySlug))->first();
-        if (!$city) {
-            $city = \App\Models\City::where('slug', 'bhavnagar')->first();
+        $city = null;
+        if ($citySlug) {
+            $city = \App\Models\City::where('slug', strtolower($citySlug))->first();
+            if (!$city) {
+                $city = \App\Models\City::where('slug', 'bhavnagar')->first();
+            }
         }
 
         return view('pages.nominate', ['active' => 'nominate', 'city' => $city]);

@@ -80,6 +80,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ── 4B. CINEMA SECTION CAROUSEL TRACK ────────────────────────
+  const ahmdTrack = document.getElementById('ahmedabad-cinema-track');
+  const btnAhmdPrev = document.getElementById('btn-ahmd-prev');
+  const btnAhmdNext = document.getElementById('btn-ahmd-next');
+
+  if (ahmdTrack) {
+    if (btnAhmdPrev) {
+      btnAhmdPrev.addEventListener('click', () => {
+        ahmdTrack.scrollBy({ left: -320, behavior: 'smooth' });
+      });
+    }
+    if (btnAhmdNext) {
+      btnAhmdNext.addEventListener('click', () => {
+        ahmdTrack.scrollBy({ left: 320, behavior: 'smooth' });
+      });
+    }
+  }
+
   // ── 5. REAL MOMENTS HERO SLIDER ───────────────────────────────
   const rmSlider = document.getElementById('rm-hero-slider');
   if (rmSlider) {
@@ -296,6 +314,16 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // ── 10. GLOBAL IMAGE ERROR & FALLBACK RESILIENCE ────────────────
+  document.querySelectorAll('img').forEach((img) => {
+    img.addEventListener('error', function() {
+      if (this.dataset.fallbackApplied) return;
+      this.dataset.fallbackApplied = 'true';
+      this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500' width='800' height='500'%3E%3Crect width='800' height='500' fill='%231a1a1a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555555' font-family='sans-serif' font-size='16' letter-spacing='3'%3ECITYICONS EDITORIAL ARCHIVE%3C/text%3E%3C/svg%3E";
+      this.style.objectFit = 'cover';
+    });
+  });
 });
 
 

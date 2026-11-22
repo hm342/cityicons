@@ -64,6 +64,11 @@ class BrandController extends Controller
         return redirect()->route('admin.brands.index')->with('success', 'Brand partner added.');
     }
 
+    public function show($id)
+    {
+        return redirect()->route('admin.brands.edit', $id);
+    }
+
     public function edit($id)
     {
         $brand = Brand::findOrFail($id);

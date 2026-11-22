@@ -69,6 +69,11 @@ class MagazineEditionController extends Controller
         return redirect()->route('admin.magazine-editions.index')->with('success', 'Magazine edition published.');
     }
 
+    public function show($id)
+    {
+        return redirect()->route('admin.magazine-editions.edit', $id);
+    }
+
     public function edit($id)
     {
         $edition = MagazineEdition::with('city')->findOrFail($id);

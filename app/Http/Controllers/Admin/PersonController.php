@@ -115,6 +115,11 @@ class PersonController extends Controller
         return redirect()->route('admin.people.index')->with('success', 'Profile created successfully.');
     }
 
+    public function show($id)
+    {
+        return redirect()->route('admin.people.edit', $id);
+    }
+
     public function edit($id)
     {
         $person = Person::with('tags')->findOrFail($id);

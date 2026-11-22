@@ -118,6 +118,11 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('success', 'Article created successfully.');
     }
 
+    public function show($id)
+    {
+        return redirect()->route('admin.articles.edit', $id);
+    }
+
     public function edit($id)
     {
         $article = Article::with('tags')->findOrFail($id);

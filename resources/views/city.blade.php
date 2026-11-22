@@ -413,7 +413,7 @@
           
           <!-- Magazine 3D Cover Mockup -->
           <div style="text-align:center;">
-            <img src="{{ $magazine && $magazine->cover_image ? $magazine->cover_image : asset('images/magazine-cover-sample.jpg') }}" 
+            <img src="{{ $magazine && $magazine->cover_image ? $magazine->cover_image : 'https://images.unsplash.com/photo-1706285654021-4b2f69f0e773?w=1000&q=85' }}" 
                  alt="{{ $cityName }} Magazine" 
                  style="max-width:320px; width:100%; border-radius:4px; box-shadow:0 18px 40px rgba(0,0,0,0.6); margin:0 auto; display:block;">
           </div>

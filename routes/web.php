@@ -47,6 +47,7 @@ Route::get('/policies/{slug?}', function ($slug = 'editorial') {
 
 Route::post('/nominate', [PublicNominationController::class, 'store'])->name('nominate.submit');
 Route::post('/newsletter', [PublicNewsletterController::class, 'store'])->name('newsletter.submit');
+Route::post('/subscribe', [PublicNewsletterController::class, 'store'])->name('subscribe.submit');
 
 // ── 3. UNIVERSAL READERS (PERSON PROFILES & ARTICLES) ───────────
 Route::get('/person/{slug}', [DirectoryController::class, 'showPerson'])->name('person.show');
@@ -90,8 +91,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // City Switcher Workspace
-        Route::get('/switch-city/{id?}', [CityController::class, 'switchCity'])->name('switch-city');
+        // City Switcher Workspace (Supports GET navigation links & POST forms/AJAX)
+        Route::match(['get', 'post'], '/switch-city/{id?}', [CityController::class, 'switchCity'])->name('switch-city');
 
         // Articles & Stories
         Route::resource('articles', ArticleController::class);
